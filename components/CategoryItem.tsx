@@ -7,7 +7,7 @@ interface CategoryItemProps {
 
 const CategoryItem = ({ title, children } : CategoryItemProps) => {
   return (
-    <div className='flex flex-col items-center gap-y-2 cursor-pointer'>
+    <div className='flex flex-col items-center gap-y-2 cursor-pointer hover:bg-gray-100 py-2 rounded-lg'>
         { children }
         <h3>{ title }</h3>
     </div>

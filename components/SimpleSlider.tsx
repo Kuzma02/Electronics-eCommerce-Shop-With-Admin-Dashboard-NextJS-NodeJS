@@ -14,7 +14,7 @@ function SimpleSlider() {
     slidesToScroll: 1
   };
   return (
-    <div className="slider-container max-w-screen-2xl mx-auto px-16 max-md:px-10">
+    <div className="slider-container max-w-screen-2xl mx-auto px-16 max-md:px-7">
       <Slider {...settings}>
         <div className="h-[500px] max-lg:h-[400px] max-md:h-[250px] max-[500px]:h-[200px] max-[400px]:h-[150px]">
           <img src="/slider image 1.webp" alt="slider 1" className="h-full" />
