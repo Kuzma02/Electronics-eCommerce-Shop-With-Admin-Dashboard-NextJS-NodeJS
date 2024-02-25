@@ -11,10 +11,13 @@
   "dependencies": {
     "@headlessui/react": "^1.7.18",
     "@tailwindcss/typography": "^0.5.10",
+    "@types/react-slick": "^0.23.13",
     "next": "14.1.0",
     "react": "^18",
     "react-dom": "^18",
-    "react-icons": "^5.0.1"
+    "react-icons": "^5.0.1",
+    "react-slick": "^0.30.2",
+    "slick-carousel": "^1.8.1"
   },
   "devDependencies": {
     "@types/node": "^20",
