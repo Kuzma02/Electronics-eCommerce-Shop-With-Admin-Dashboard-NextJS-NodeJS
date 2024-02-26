@@ -8,7 +8,7 @@ const Footer = () => {
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
-      <div className="mx-auto max-w-screen-2xl px-6 lg:px-8 max-sm:pt-10">
+      <div className="mx-auto max-w-screen-2xl px-6 lg:px-8 max-sm:pt-10 pb-5">
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
           <Image
             src="/logo v1.png"
