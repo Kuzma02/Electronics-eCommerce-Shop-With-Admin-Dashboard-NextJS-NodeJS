@@ -3,7 +3,7 @@ import { FaCheck } from "react-icons/fa6";
 
 const ColorInput = () => {
   return (
-    <div className="flex flex-col gap-y-2">
+    <div className="flex flex-col gap-y-2 items-center">
       <p className="text-xl">
         Color: <span className="text-lg font-normal">silver</span>
       </p>

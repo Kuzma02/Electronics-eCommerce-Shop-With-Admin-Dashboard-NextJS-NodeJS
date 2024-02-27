@@ -14,10 +14,10 @@ import { FaSquarePinterest } from "react-icons/fa6";
 
 const SingleProductPage = () => {
   return (
-    <div className="max-w-screen-2xl mx-auto flex justify-center gap-x-16 pt-10">
+    <div className="max-w-screen-2xl mx-auto flex justify-center gap-x-16 pt-10 max-lg:flex-col items-center gap-y-5 px-5">
       <div>
         <Image src="/laptop 1.webp" width={500} height={500} alt="main image" />
-        <div className="flex justify-around mt-5">
+        <div className="flex justify-around mt-5 flex-wrap">
           <Image
             src="/laptop 1.webp"
             width={100}
@@ -44,7 +44,7 @@ const SingleProductPage = () => {
           />
         </div>
       </div>
-      <div className="flex flex-col gap-y-7 text-black">
+      <div className="flex flex-col gap-y-7 text-black max-[500px]:text-center">
         <SingleProductRating />
         <h1 className="text-3xl">Tablet keyboard</h1>
         <p className="text-xl font-semibold">$52.00</p>
@@ -52,11 +52,11 @@ const SingleProductPage = () => {
         <StockAvailabillity stock={94} />
         <ColorInput />
         <QuantityInput />
-        <div className="flex gap-x-5">
-          <button className="btn w-[200px] text-lg border border-black border-2 font-normal bg-white text-black hover:bg-black hover:text-white hover:border-black rounded-md transition-colors uppercase ease-in">
+        <div className="flex gap-x-5 max-[500px]:flex-col max-[500px]:items-center max-[500px]:gap-y-1">
+          <button className="btn w-[200px] text-lg border border-black border-2 font-normal bg-white text-black hover:bg-black hover:text-white hover:border-black rounded-md transition-colors uppercase ease-in max-[500px]:w-full">
             Add to cart
           </button>
-          <button className="btn w-[200px] text-lg border border-black hover:border-black border-2 font-normal bg-custom-yellow text-black hover:bg-black hover:text-white rounded-md transition-colors uppercase ease-in">
+          <button className="btn w-[200px] text-lg border border-black hover:border-black border-2 font-normal bg-custom-yellow text-black hover:bg-black hover:text-white rounded-md transition-colors uppercase ease-in max-[500px]:w-full">
             Buy Now
           </button>
         </div>

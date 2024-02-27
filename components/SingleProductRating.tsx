@@ -3,7 +3,7 @@ import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 
 const SingleProductRating = () => {
   return (
-    <div className="flex text-2xl items-center">
+    <div className="flex text-2xl items-center max-[500px]:justify-center">
       <AiFillStar className="text-custom-yellow" />
       <AiFillStar className="text-custom-yellow" />
       <AiFillStar className="text-custom-yellow" />
