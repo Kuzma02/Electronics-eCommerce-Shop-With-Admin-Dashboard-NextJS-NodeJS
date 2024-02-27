@@ -17,7 +17,7 @@ const SingleProductPage = () => {
     <div className="max-w-screen-2xl mx-auto flex justify-center gap-x-16 pt-10 max-lg:flex-col items-center gap-y-5 px-5">
       <div>
         <Image src="/laptop 1.webp" width={500} height={500} alt="main image" />
-        <div className="flex justify-around mt-5 flex-wrap">
+        <div className="flex justify-around mt-5 flex-wrap gap-y-1 max-[500px]:justify-center max-[500px]:gap-x-1">
           <Image
             src="/laptop 1.webp"
             width={100}
@@ -60,7 +60,7 @@ const SingleProductPage = () => {
             Buy Now
           </button>
         </div>
-        <div className="flex flex-col gap-y-2">
+        <div className="flex flex-col gap-y-2 max-[500px]:items-center">
           <p className="flex items-center gap-x-2">
             <FaHeart className="text-lg text-custom-black" />
             <span className="text-lg">WISHLIST</span>
