@@ -4,6 +4,7 @@ import {
   StockAvailabillity,
   UrgencyText,
   SingleProductRating,
+  ProductTabs,
 } from "@/components";
 import Image from "next/image";
 import React from "react";
@@ -14,7 +15,8 @@ import { FaSquarePinterest } from "react-icons/fa6";
 
 const SingleProductPage = () => {
   return (
-    <div className="max-w-screen-2xl mx-auto flex justify-center gap-x-16 pt-10 max-lg:flex-col items-center gap-y-5 px-5">
+    <div className="max-w-screen-2xl mx-auto">
+    <div className="flex justify-center gap-x-16 pt-10 max-lg:flex-col items-center gap-y-5 px-5">
       <div>
         <Image src="/laptop 1.webp" width={500} height={500} alt="main image" />
         <div className="flex justify-around mt-5 flex-wrap gap-y-1 max-[500px]:justify-center max-[500px]:gap-x-1">
@@ -83,12 +85,14 @@ const SingleProductPage = () => {
               width={50}
               height={50}
               alt="mastercard icon"
+              className="h-auto w-auto"
             />
             <Image
               src="/ae.svg"
               width={50}
               height={50}
               alt="americal express icon"
+              className="h-auto w-auto"
             />
             <Image src="/paypal.svg" width={50} height={50} alt="paypal icon" />
             <Image
@@ -96,16 +100,27 @@ const SingleProductPage = () => {
               width={50}
               height={50}
               alt="diners club icon"
+              className="h-auto w-auto"
             />
             <Image
               src="/discover.svg"
               width={50}
               height={50}
               alt="discover icon"
+              className="h-auto w-auto"
             />
           </div>
         </div>
       </div>
+
+      
+
+    </div>
+    <div className="py-16">
+    <ProductTabs />
+
+    </div>
+
     </div>
   );
 };
