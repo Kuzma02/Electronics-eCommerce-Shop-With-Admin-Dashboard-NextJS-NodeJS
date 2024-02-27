@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import RatingPercentElement from "./RatingPercentElement";
+import SingleReview from "./SingleReview";
 
 const ProductTabs = () => {
   const [currentProductTab, setCurrentProductTab] = useState<number>(0);
@@ -68,6 +70,15 @@ const ProductTabs = () => {
             </table>
           </div>
         )}
+
+        { currentProductTab === 2 && (
+          <>
+          <RatingPercentElement />
+          <SingleReview />
+          <SingleReview />
+          <SingleReview />
+          </>
+        ) }
       </div>
     </div>
   );
