@@ -22,7 +22,7 @@ const CustomButton = ({
   return (
     <button
       type={`${buttonType}`}
-      className={`${customWidth !== "no" && `w-${customWidth}`} rounded-md border border-black border-1 bg-custom-yellow px-${paddingX} py-${paddingY} text-${textSize} font-bold text-black shadow-sm hover:bg-black hover:text-custom-yellow focus:outline-none focus:ring-2`}
+      className={`btn ${customWidth !== "no" && `w-${customWidth}`} rounded-md border border-black border-1 bg-custom-yellow px-${paddingX} py-${paddingY} text-${textSize} font-bold text-black shadow-sm hover:bg-black hover:text-custom-yellow focus:outline-none focus:ring-2`}
     >
       {text}
     </button>
