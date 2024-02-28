@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 import { FaHeadphones } from "react-icons/fa6";
 import { FaRegEnvelope } from "react-icons/fa6";
@@ -23,13 +24,17 @@ const HeaderTop = () => {
             <FaLocationDot className="text-black" />
             <span>Store location</span>
           </li>
-          <li className="flex items-center gap-x-2">
-            <FaRegUser className="text-black" />
-            <span>Login</span>
+          <li className="flex items-center">
+            <Link href="/login" className="flex items-center gap-x-2">
+              <FaRegUser className="text-black" />
+              <span>Login</span>
+            </Link>
           </li>
-          <li className="flex items-center gap-x-2">
-            <FaRegUser className="text-black" />
-            <span>Register</span>
+          <li className="flex items-center">
+            <Link href="register" className="flex items-center gap-x-2">
+              <FaRegUser className="text-black" />
+              <span>Register</span>
+            </Link>
           </li>
         </ul>
       </div>

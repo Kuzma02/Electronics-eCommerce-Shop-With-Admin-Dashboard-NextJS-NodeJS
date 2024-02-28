@@ -2,6 +2,7 @@ import Image from 'next/image'
 import React from 'react'
 import { AiFillStar } from "react-icons/ai";
 import { AiOutlineStar } from "react-icons/ai";
+import CustomButton from './CustomButton';
 
 
 const ProductItem = () => {
@@ -17,7 +18,7 @@ const ProductItem = () => {
         <AiFillStar />
         <AiOutlineStar />
         </div>
-        <button className='btn bg-custom-yellow text-black w-full hover:bg-black hover:text-custom-yellow'>Add to cart</button>
+        <CustomButton textSize="sm" buttonType="button" customWidth="full" text="Add to cart" paddingX={0} paddingY={3}  />
     </div>
   )
 }
