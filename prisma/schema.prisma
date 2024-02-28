@@ -16,7 +16,14 @@ datasource db {
 model Product {
   id          String @id @default(uuid())
   title       String
+  mainImage   String
   price       Int    @default(0)
   rating      Int    @default(0)
   description String
+}
+
+model Image {
+  imageID   String @id @default(uuid())
+  articleID String
+  image     String
 }

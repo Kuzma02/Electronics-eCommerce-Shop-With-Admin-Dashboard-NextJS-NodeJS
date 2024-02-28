@@ -3,11 +3,8 @@ import { revalidatePath } from "next/cache";
 import prisma from "./db";
 import { redirect } from "next/navigation";
 
-
 export const getAllTasks = async () => {
-  return await prisma.product.findMany({
-
-  });
+  return await prisma.product.findMany({});
 };
 
 // export const createTask = async (formData: FormData) => {
@@ -36,7 +33,6 @@ export const getAllTasks = async () => {
 //     },
 //   });
 // };
-
 
 // export const updateTask = async (formData) => {
 //     const id = formData.get("id");
