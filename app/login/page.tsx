@@ -1,4 +1,5 @@
 "use client";
+import { CustomButton } from "@/components";
 import React from "react";
 import { FcGoogle } from "react-icons/fc";
 
@@ -79,12 +80,7 @@ const LoginPage = () => {
             </div>
 
             <div>
-              <button
-                type="submit"
-                className="flex w-full justify-center rounded-md bg-custom-yellow text-black border-custom-yellow border-1 px-3 py-1.5 text-sm font-semibold leading-6 shadow-sm hover:bg-black hover:text-custom-yellow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                Sign in
-              </button>
+              <CustomButton buttonType="submit" text="Sign in" paddingX={3} paddingY={1.5} customWidth="full" textSize="sm" />
             </div>
           </form>
 

@@ -1,4 +1,5 @@
 "use client";
+import { CustomButton } from "@/components";
 import Image from "next/image";
 import React from "react";
 
@@ -14,8 +15,7 @@ const RegisterPage = () => {
       <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-[480px]">
         <div className="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
           <form className="space-y-6">
-
-          <div>
+            <div>
               <label
                 htmlFor="name"
                 className="block text-sm font-medium leading-6 text-gray-900"
@@ -126,12 +126,15 @@ const RegisterPage = () => {
             </div>
 
             <div>
-              <button
-                type="submit"
-                className="flex w-full border border-black justify-center rounded-md bg-custom-yellow text-black px-3 py-1.5 text-sm font-semibold leading-6 hover:text-custom-yellow shadow-sm hover:bg-black transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
-              >
-                Sign up
-              </button>
+              <CustomButton
+                buttonType="submit"
+                text="Sign up"
+                paddingX={3}
+                paddingY={1.5}
+                customWidth="full"
+                textSize="sm"
+              />
+
               <p className="text-red-600 text-center text-[16px] my-4">
                 {false && "error"}
               </p>
