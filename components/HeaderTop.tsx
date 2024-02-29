@@ -31,7 +31,7 @@ const HeaderTop = () => {
             </Link>
           </li>
           <li className="flex items-center">
-            <Link href="register" className="flex items-center gap-x-2">
+            <Link href="/register" className="flex items-center gap-x-2">
               <FaRegUser className="text-black" />
               <span>Register</span>
             </Link>

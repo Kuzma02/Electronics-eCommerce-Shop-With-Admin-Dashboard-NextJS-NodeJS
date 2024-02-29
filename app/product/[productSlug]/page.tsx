@@ -8,19 +8,30 @@ import {
   SingleReview,
 } from "@/components";
 import Image from "next/image";
+import { notFound } from "next/navigation";
 import React from "react";
 import { FaHeart } from "react-icons/fa6";
 import { FaSquareFacebook } from "react-icons/fa6";
 import { FaSquareXTwitter } from "react-icons/fa6";
 import { FaSquarePinterest } from "react-icons/fa6";
 
-const SingleProductPage = () => {
+const SingleProductPage = async ({params} : SingleProductPageProps) => {
+  const data = await fetch(`http://localhost:3000/api/products/${params.productSlug}`);
+  const product = await data.json();
+
+  console.log(product);
+  
+  
+  if(!product || product.error){
+    notFound();
+  }
+  
   return (
     <div className="max-w-screen-2xl mx-auto">
       <div className="flex justify-center gap-x-16 pt-10 max-lg:flex-col items-center gap-y-5 px-5">
         <div>
           <Image
-            src="/laptop 1.webp"
+            src={`/${product?.mainImage}`}
             width={500}
             height={500}
             alt="main image"
@@ -59,8 +70,8 @@ const SingleProductPage = () => {
         </div>
         <div className="flex flex-col gap-y-7 text-black max-[500px]:text-center">
           <SingleProductRating />
-          <h1 className="text-3xl">Tablet keyboard</h1>
-          <p className="text-xl font-semibold">$52.00</p>
+          <h1 className="text-3xl">{ product?.title }</h1>
+          <p className="text-xl font-semibold">${ product?.price }</p>
           <UrgencyText stock={94} />
           <StockAvailabillity stock={94} />
           <ColorInput />
