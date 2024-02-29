@@ -25,3 +25,6 @@ export { default as ProductTabs } from "./ProductTabs";
 export { default as RatingPercentElement } from "./RatingPercentElement";
 export { default as SingleReview } from "./SingleReview";
 export { default as CustomButton } from "./CustomButton";
+export { default as QuantityInputCart } from "./QuantityInputCart";
+export { default as AddToCartSingleProductBtn } from "./AddToCartSingleProductBtn";
+export { default as BuyNowSingleProductBtn } from "./BuyNowSingleProductBtn";

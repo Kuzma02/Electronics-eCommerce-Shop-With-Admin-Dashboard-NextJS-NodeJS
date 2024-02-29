@@ -5,7 +5,8 @@ import {
   UrgencyText,
   SingleProductRating,
   ProductTabs,
-  SingleReview,
+  AddToCartSingleProductBtn,
+  BuyNowSingleProductBtn,
 } from "@/components";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -15,17 +16,16 @@ import { FaSquareFacebook } from "react-icons/fa6";
 import { FaSquareXTwitter } from "react-icons/fa6";
 import { FaSquarePinterest } from "react-icons/fa6";
 
-const SingleProductPage = async ({params} : SingleProductPageProps) => {
-  const data = await fetch(`http://localhost:3000/api/products/${params.productSlug}`);
+const SingleProductPage = async ({ params }: SingleProductPageProps) => {
+  const data = await fetch(
+    `http://localhost:3000/api/products/${params.productSlug}`
+  );
   const product = await data.json();
 
-  console.log(product);
-  
-  
-  if(!product || product.error){
+  if (!product || product.error) {
     notFound();
   }
-  
+
   return (
     <div className="max-w-screen-2xl mx-auto">
       <div className="flex justify-center gap-x-16 pt-10 max-lg:flex-col items-center gap-y-5 px-5">
@@ -70,19 +70,16 @@ const SingleProductPage = async ({params} : SingleProductPageProps) => {
         </div>
         <div className="flex flex-col gap-y-7 text-black max-[500px]:text-center">
           <SingleProductRating />
-          <h1 className="text-3xl">{ product?.title }</h1>
-          <p className="text-xl font-semibold">${ product?.price }</p>
+          <h1 className="text-3xl">{product?.title}</h1>
+          <p className="text-xl font-semibold">${product?.price}</p>
           <UrgencyText stock={94} />
           <StockAvailabillity stock={94} />
           <ColorInput />
           <QuantityInput />
+
           <div className="flex gap-x-5 max-[500px]:flex-col max-[500px]:items-center max-[500px]:gap-y-1">
-            <button className="btn w-[200px] text-lg border border-black border-2 font-normal bg-white text-black hover:bg-black hover:text-white hover:border-black rounded-md transition-colors uppercase ease-in max-[500px]:w-full">
-              Add to cart
-            </button>
-            <button className="btn w-[200px] text-lg border border-black hover:border-black border-2 font-normal bg-custom-yellow text-black hover:bg-black hover:text-white rounded-md transition-colors uppercase ease-in max-[500px]:w-full">
-              Buy Now
-            </button>
+            <AddToCartSingleProductBtn product={product} />
+            <BuyNowSingleProductBtn />
           </div>
           <div className="flex flex-col gap-y-2 max-[500px]:items-center">
             <p className="flex items-center gap-x-2">
