@@ -8,7 +8,7 @@ interface AddToCartSingleProductBtnProps {
 } 
 
 const AddToCartSingleProductBtn = ({ product, quantityCount } : AddToCartSingleProductBtnProps) => {
-  const { addToCart } = useProductStore();
+  const { addToCart, calculateTotals } = useProductStore();
 
   const handleAddToCart = () => {
     addToCart({
@@ -18,6 +18,7 @@ const AddToCartSingleProductBtn = ({ product, quantityCount } : AddToCartSingleP
       image: product?.mainImage,
       amount: quantityCount
     });
+    calculateTotals();
   };
   return (
     <button

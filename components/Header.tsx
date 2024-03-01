@@ -3,11 +3,13 @@ import HeaderTop from "./HeaderTop";
 import Image from "next/image";
 import SearchInput from "./SearchInput";
 import { FaHeart } from "react-icons/fa6";
-import { FaCartShopping } from "react-icons/fa6";
 import { FaCodeCompare } from "react-icons/fa6";
 import Link from "next/link";
 
+import CartElement from "./CartElement";
+
 const Header = () => {
+
   return (
     <header>
       <HeaderTop />
@@ -35,14 +37,7 @@ const Header = () => {
               2
             </span>
           </div>
-          <div className="relative">
-            <Link href="/cart">
-              <FaCartShopping className="text-2xl text-black" />
-              <span className="block w-5 h-5 bg-custom-yellow text-black rounded-full flex justify-center items-center absolute  top-[-10px] right-[-20px]">
-                2
-              </span>
-            </Link>
-          </div>
+          <CartElement />
         </div>
       </div>
     </header>

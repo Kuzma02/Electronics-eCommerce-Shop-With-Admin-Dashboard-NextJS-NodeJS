@@ -8,7 +8,12 @@ import { useProductStore } from "../_zustand/store";
 import Link from "next/link";
 
 const CartPage = () => {
-  const { products, removeFromCart } = useProductStore();
+  const { products, removeFromCart,calculateTotals,  total } = useProductStore();
+
+  const handleRemoveItem = (id: number) => {
+    removeFromCart(id); 
+    calculateTotals();
+  }
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -65,7 +70,7 @@ const CartPage = () => {
                         <QuantityInputCart product={product} />
                         <div className="absolute right-0 top-0">
                           <button
-                            onClick={() => removeFromCart(product.id)}
+                            onClick={() => handleRemoveItem(product.id)}
                             type="button"
                             className="-m-2 inline-flex p-2 text-gray-400 hover:text-gray-500"
                           >
@@ -112,7 +117,7 @@ const CartPage = () => {
             <dl className="mt-6 space-y-4">
               <div className="flex items-center justify-between">
                 <dt className="text-sm text-gray-600">Subtotal</dt>
-                <dd className="text-sm font-medium text-gray-900">$99.00</dd>
+                <dd className="text-sm font-medium text-gray-900">${ total }</dd>
               </div>
               <div className="flex items-center justify-between border-t border-gray-200 pt-4">
                 <dt className="flex items-center text-sm text-gray-600">
@@ -142,13 +147,13 @@ const CartPage = () => {
                     <FaCircleQuestion className="h-5 w-5" aria-hidden="true" />
                   </a>
                 </dt>
-                <dd className="text-sm font-medium text-gray-900">$8.32</dd>
+                <dd className="text-sm font-medium text-gray-900">${ total / 5 }</dd>
               </div>
               <div className="flex items-center justify-between border-t border-gray-200 pt-4">
                 <dt className="text-base font-medium text-gray-900">
                   Order total
                 </dt>
-                <dd className="text-base font-medium text-gray-900">$112.32</dd>
+                <dd className="text-base font-medium text-gray-900">${ total === 0 ? 0 : (total + total/5 + 5) }</dd>
               </div>
             </dl>
 
