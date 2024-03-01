@@ -14,6 +14,8 @@ export type State = {
 
 export type Actions = {
   addToCart: (newProduct: ProductInCart) => void;
+  removeFromCart: (id: number) => void;
+  updateCartAmount: (id: number, quantity: number) => void;
 };
 
 export const useProductStore = create<State & Actions>((set) => ({
@@ -35,4 +37,41 @@ export const useProductStore = create<State & Actions>((set) => ({
       
     });
   },
+
+  removeFromCart: (id) => {
+    set((state) => {
+
+      state.products = state.products.filter((product: ProductInCart) => product.id !== id);
+      return { products: state.products };
+    });
+  },
+
+  updateCartAmount: (id, amount) => {
+    set((state) => {
+      const cartItem = state.products.find((item) => item.id === id)!;
+      
+      if(!cartItem){
+        return { products: [...state.products] };
+      }else{
+        state.products.map(product => {
+          if(product.id === cartItem.id){
+            product.amount = amount;
+          }
+        })
+        
+      }
+
+      
+      return { products: [...state.products] };
+    });
+  },
+
+  /**
+   updateCartAmount: (state, action) => {
+            const cartItem = state.cartItems.find(item => item.id === action.payload.id);
+            cartItem.amount = Number(action.payload.amount);
+            cartSlice.caseReducers.calculateTotals(state);
+        },
+   */
+
 }));

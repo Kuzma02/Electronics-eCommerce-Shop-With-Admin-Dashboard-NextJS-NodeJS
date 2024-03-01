@@ -8,7 +8,7 @@ import { useProductStore } from "../_zustand/store";
 import Link from "next/link";
 
 const CartPage = () => {
-  const { products } = useProductStore();
+  const { products, removeFromCart } = useProductStore();
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -65,6 +65,7 @@ const CartPage = () => {
                         <QuantityInputCart product={product} />
                         <div className="absolute right-0 top-0">
                           <button
+                            onClick={() => removeFromCart(product.id)}
                             type="button"
                             className="-m-2 inline-flex p-2 text-gray-400 hover:text-gray-500"
                           >

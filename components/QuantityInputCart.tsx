@@ -1,17 +1,22 @@
 "use client";
-import { ProductInCart } from "@/app/_zustand/store";
+import { ProductInCart, useProductStore } from "@/app/_zustand/store";
 import React, { useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { FaMinus } from "react-icons/fa6";
 
 const QuantityInputCart = ({ product } : { product: ProductInCart }) => {
   const [quantityCount, setQuantityCount] = useState<number>(product.amount);
+  const { updateCartAmount } = useProductStore();
 
   const handleQuantityChange = (actionName: string): void => {
     if (actionName === "plus") {
-      setQuantityCount(quantityCount + 1);
+      setQuantityCount(() => quantityCount + 1);
+      updateCartAmount(product.id, quantityCount + 1);
+
+      
     } else if (actionName === "minus" && quantityCount !== 1) {
-      setQuantityCount(quantityCount - 1);
+      setQuantityCount(() => quantityCount - 1);
+      updateCartAmount(product.id, quantityCount - 1);
     }
   };
 
