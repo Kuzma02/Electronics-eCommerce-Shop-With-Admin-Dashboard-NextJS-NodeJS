@@ -16,6 +16,7 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/react-slick": "^0.23.13",
     "bcryptjs": "^2.4.3",
+    "nanoid": "^5.0.6",
     "next": "14.1.0",
     "next-auth": "^4.24.6",
     "react": "^18",

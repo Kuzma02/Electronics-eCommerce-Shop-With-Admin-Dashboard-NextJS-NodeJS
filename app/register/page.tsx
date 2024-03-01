@@ -1,9 +1,84 @@
 "use client";
 import { CustomButton } from "@/components";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
-import React from "react";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const RegisterPage = () => {
+  const [error, setError] = useState("");
+  const router = useRouter();
+  const { data: session, status: sessionStatus } = useSession();
+
+  useEffect(() => {
+    if (sessionStatus === "authenticated") {
+      router.replace("/dashboard");
+    }
+  }, [sessionStatus, router]);
+
+  const isValidEmail = (email: string) => {
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    return emailRegex.test(email);
+  };
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    const email = e.target[2].value;
+    const password = e.target[3].value;
+    const confirmPassword = e.target[4].value;
+
+    if (!isValidEmail(email)) {
+      setError("Email is invalid");
+      toast.error("Email is invalid");
+      return;
+    }
+
+    if (!password || password.length < 8) {
+      setError("Password is invalid");
+      toast.error("Password is invalid");
+      return;
+    }
+
+    if (confirmPassword !== password) {
+      setError("Passwords are not equal");
+      toast.error("Passwords are not equal")
+      return;
+    }
+
+
+
+    try {
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+      console.log(res.status);
+      
+      if (res.status === 400) {
+        toast.error("This email is already registered")
+        setError("The email already in use");
+      }
+      if (res.status === 200) {
+        setError("");
+        toast.success("Registration successful");
+        router.push("/login");
+      }
+    } catch (error) {
+      toast.error("Error, try again")
+      setError("Error, try again");
+      console.log(error);
+    }
+  };
+
+  if (sessionStatus === "loading") {
+    return <h1>Loading...</h1>;
+  }
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="flex justify-center flex-col items-center">
@@ -14,7 +89,7 @@ const RegisterPage = () => {
 
       <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-[480px]">
         <div className="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
-          <form className="space-y-6">
+          <form className="space-y-6"  onSubmit={handleSubmit}>
             <div>
               <label
                 htmlFor="name"
@@ -136,8 +211,8 @@ const RegisterPage = () => {
               />
 
               <p className="text-red-600 text-center text-[16px] my-4">
-                {false && "error"}
-              </p>
+                  {error && error}
+                </p>
             </div>
           </form>
         </div>

@@ -1,9 +1,64 @@
 "use client";
 import { CustomButton } from "@/components";
-import React from "react";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
 
 const LoginPage = () => {
+  const router = useRouter();
+  const [error, setError] = useState("");
+  // const session = useSession();
+  const { data: session, status: sessionStatus } = useSession();
+
+  useEffect(() => {
+    if (sessionStatus === "authenticated") {
+      router.replace("/");
+    }
+  }, [sessionStatus, router]);
+
+  const isValidEmail = (email: string) => {
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    return emailRegex.test(email);
+  };
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    const email = e.target[0].value;
+    const password = e.target[1].value;
+
+    if (!isValidEmail(email)) {
+      setError("Email is invalid");
+      toast.error("Email is invalid");
+      return;
+    }
+
+    if (!password || password.length < 8) {
+      setError("Password is invalid");
+      toast.error("Password is invalid");
+      return;
+    }
+
+    const res = await signIn("credentials", {
+      redirect: false,
+      email,
+      password,
+    });
+
+    if (res?.error) {
+      setError("Invalid email or password");
+      toast.error("Invalid email or password");
+      if (res?.url) router.replace("/");
+    } else {
+      setError("");
+      toast.success("Successful login");
+    }
+  };
+
+  if (sessionStatus === "loading") {
+    return <h1>Loading...</h1>;
+  }
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -14,7 +69,7 @@ const LoginPage = () => {
 
       <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-[480px]">
         <div className="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
-          <form className="space-y-6" action="#" method="POST">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label
                 htmlFor="email"
@@ -80,7 +135,14 @@ const LoginPage = () => {
             </div>
 
             <div>
-              <CustomButton buttonType="submit" text="Sign in" paddingX={3} paddingY={1.5} customWidth="full" textSize="sm" />
+              <CustomButton
+                buttonType="submit"
+                text="Sign in"
+                paddingX={3}
+                paddingY={1.5}
+                customWidth="full"
+                textSize="sm"
+              />
             </div>
           </form>
 
@@ -100,14 +162,21 @@ const LoginPage = () => {
             </div>
 
             <div className="mt-6 grid grid-cols-2 gap-4">
-              <button className="flex w-full items-center border border-gray-300 justify-center gap-3 rounded-md bg-white px-3 py-1.5 text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+              <button
+                className="flex w-full items-center border border-gray-300 justify-center gap-3 rounded-md bg-white px-3 py-1.5 text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                onClick={() => {
+                  signIn("google");
+                }}
+              >
                 <FcGoogle />
                 <span className="text-sm font-semibold leading-6">Google</span>
               </button>
 
-              <a
-                href="#"
+              <button
                 className="flex w-full items-center justify-center gap-3 rounded-md bg-[#24292F] px-3 py-1.5 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#24292F]"
+                onClick={() => {
+                  signIn("github");
+                }}
               >
                 <svg
                   className="h-5 w-5"
@@ -122,8 +191,11 @@ const LoginPage = () => {
                   />
                 </svg>
                 <span className="text-sm font-semibold leading-6">GitHub</span>
-              </a>
+              </button>
             </div>
+            <p className="text-red-600 text-center text-[16px] my-4">
+              {error && error}
+            </p>
           </div>
         </div>
       </div>

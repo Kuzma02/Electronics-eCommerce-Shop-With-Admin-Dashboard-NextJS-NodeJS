@@ -1,11 +1,20 @@
+"use client";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
+import toast from "react-hot-toast";
 import { FaHeadphones } from "react-icons/fa6";
 import { FaRegEnvelope } from "react-icons/fa6";
 import { FaLocationDot } from "react-icons/fa6";
 import { FaRegUser } from "react-icons/fa6";
 
 const HeaderTop = () => {
+  const { data: session }: any = useSession();
+
+  const handleLogout = () => {
+    setTimeout(() => signOut(), 1000);
+    toast.success("Logout successful!");
+  }
   return (
     <div className="h-10 text-black bg-gray-100 px-10 max-md:px-5 max-md:h-16">
       <div className="flex justify-between h-full max-md:flex-col max-md:justify-center max-md:items-center max-w-screen-2xl mx-auto">
@@ -24,6 +33,8 @@ const HeaderTop = () => {
             <FaLocationDot className="text-black" />
             <span>Store location</span>
           </li>
+          {!session ? ( 
+          <>
           <li className="flex items-center">
             <Link href="/login" className="flex items-center gap-x-2">
               <FaRegUser className="text-black" />
@@ -36,6 +47,16 @@ const HeaderTop = () => {
               <span>Register</span>
             </Link>
           </li>
+          </>
+          ) :  (<>
+          <span className="ml-10 text-base">{session.user?.email}</span>
+          <li className="flex items-center">
+            <button onClick={() => handleLogout()} className="flex items-center gap-x-2">
+              <FaRegUser className="text-black" />
+              <span>Log out</span>
+            </button>
+          </li>
+          </>)}
         </ul>
       </div>
     </div>
