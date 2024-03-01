@@ -28,3 +28,24 @@ model Image {
   articleID String
   image     String
 }
+
+model User {
+  id       String  @id @default(uuid())
+  email    String  @unique
+  password String?
+}
+
+// const userSchema = new Schema(
+//   {
+//     email: {
+//       type: String,
+//       unique: true,
+//       required: true,
+//     },
+//     password: {
+//       type: String,
+//       required: false,
+//     },
+//   },
+//   { timestamps: true }
+// );

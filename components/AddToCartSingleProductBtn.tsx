@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { useProductStore } from "@/app/_zustand/store";
+import toast from "react-hot-toast";
 
 interface AddToCartSingleProductBtnProps {
   product: Product;
@@ -19,6 +20,7 @@ const AddToCartSingleProductBtn = ({ product, quantityCount } : AddToCartSingleP
       amount: quantityCount
     });
     calculateTotals();
+    toast.success("Product added to the cart");
   };
   return (
     <button
