@@ -7,6 +7,7 @@ import {
   ProductTabs,
   AddToCartSingleProductBtn,
   BuyNowSingleProductBtn,
+  SingleProductDynamicFields,
 } from "@/components";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -74,13 +75,7 @@ const SingleProductPage = async ({ params }: SingleProductPageProps) => {
           <p className="text-xl font-semibold">${product?.price}</p>
           <UrgencyText stock={94} />
           <StockAvailabillity stock={94} />
-          <ColorInput />
-          <QuantityInput />
-
-          <div className="flex gap-x-5 max-[500px]:flex-col max-[500px]:items-center max-[500px]:gap-y-1">
-            <AddToCartSingleProductBtn product={product} />
-            <BuyNowSingleProductBtn />
-          </div>
+          <SingleProductDynamicFields product={product} />
           <div className="flex flex-col gap-y-2 max-[500px]:items-center">
             <p className="flex items-center gap-x-2">
               <FaHeart className="text-lg text-custom-black" />

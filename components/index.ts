@@ -28,3 +28,4 @@ export { default as CustomButton } from "./CustomButton";
 export { default as QuantityInputCart } from "./QuantityInputCart";
 export { default as AddToCartSingleProductBtn } from "./AddToCartSingleProductBtn";
 export { default as BuyNowSingleProductBtn } from "./BuyNowSingleProductBtn";
+export { default as SingleProductDynamicFields } from "./SingleProductDynamicFields";

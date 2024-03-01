@@ -4,8 +4,13 @@ import React, { useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { FaMinus } from "react-icons/fa6";
 
-const QuantityInput = () => {
-  const [quantityCount, setQuantityCount] = useState<number>(1);
+interface QuantityInputProps {
+  quantityCount: number;
+  setQuantityCount: React.Dispatch<React.SetStateAction<number>>;
+}
+
+const QuantityInput = ({quantityCount, setQuantityCount} : QuantityInputProps) => {
+
 
   const handleQuantityChange = (actionName: string): void => {
     if (actionName === "plus") {
