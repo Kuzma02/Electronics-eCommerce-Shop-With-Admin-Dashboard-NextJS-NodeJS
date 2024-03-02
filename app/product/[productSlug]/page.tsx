@@ -17,11 +17,24 @@ import { FaSquareFacebook } from "react-icons/fa6";
 import { FaSquareXTwitter } from "react-icons/fa6";
 import { FaSquarePinterest } from "react-icons/fa6";
 
+interface ImageItem {
+  imageID: string;
+  productID: string;
+  image: string;
+}
+
 const SingleProductPage = async ({ params }: SingleProductPageProps) => {
   const data = await fetch(
-    `http://localhost:3000/api/products/${params.productSlug}`
+    `http://localhost:3000/api/products/${params.productSlug}`,
+    { cache: "no-store" }
   );
   const product = await data.json();
+
+  const imagesData = await fetch(
+    `http://localhost:3000/api/images/${product.id}`,
+    { cache: "no-store" }
+  );
+  const images = await imagesData.json();
 
   if (!product || product.error) {
     notFound();
@@ -39,34 +52,16 @@ const SingleProductPage = async ({ params }: SingleProductPageProps) => {
             className="w-auto h-auto"
           />
           <div className="flex justify-around mt-5 flex-wrap gap-y-1 max-[500px]:justify-center max-[500px]:gap-x-1">
-            <Image
-              src="/laptop 1.webp"
-              width={100}
-              height={100}
-              alt="laptop image"
-              className="w-auto h-auto"
-            />
-            <Image
-              src="/laptop 2.webp"
-              width={100}
-              height={100}
-              alt="laptop image"
-              className="w-auto h-auto"
-            />
-            <Image
-              src="/laptop 3.webp"
-              width={100}
-              height={100}
-              alt="laptop image"
-              className="w-auto h-auto"
-            />
-            <Image
-              src="/laptop 4.webp"
-              width={100}
-              height={100}
-              alt="laptop image"
-              className="w-auto h-auto"
-            />
+            {images?.map((imageItem: ImageItem) => (
+              <Image
+                key={imageItem.imageID}
+                src={`/${imageItem.image}`}
+                width={100}
+                height={100}
+                alt="laptop image"
+                className="w-auto h-auto"
+              />
+            ))}
           </div>
         </div>
         <div className="flex flex-col gap-y-7 text-black max-[500px]:text-center">

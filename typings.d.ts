@@ -6,6 +6,8 @@ interface Product {
     rating: number;
     description: string;
     mainImage: string;
+    manufacturer: string;
+    category: string;
 }
 
 interface SingleProductPageProps {

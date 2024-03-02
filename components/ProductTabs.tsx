@@ -6,6 +6,8 @@ import SingleReview from "./SingleReview";
 
 const ProductTabs = ({ product } : { product: Product }) => {
   const [currentProductTab, setCurrentProductTab] = useState<number>(0);
+  console.log(product);
+  
   return (
     <div className="px-5">
       <div role="tablist" className="tabs tabs-bordered">
@@ -50,13 +52,13 @@ const ProductTabs = ({ product } : { product: Product }) => {
               <tbody>
                 {/* row 1 */}
                 <tr>
-                  <th>Vendor:</th>
-                  <td>Lenovo</td>
+                  <th>Manufacturer:</th>
+                  <td>{ product?.manufacturer }</td>
                 </tr>
                 {/* row 2 */}
                 <tr>
                   <th>Category:</th>
-                  <td>Laptop</td>
+                  <td>{ product?.category || "No category" }</td>
                 </tr>
                 {/* row 3 */}
                 <tr>
