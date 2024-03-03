@@ -3,48 +3,58 @@ import prisma from "@/utils/db";
 
 export async function GET(request: NextRequest) {
   const dividerLocation = request.url.indexOf("?");
-  const queryArray = request.url
-    .substring(dividerLocation + 1, request.url.length)
-    .split("&");
-
-  let filterType;
-  let filterArray = [];
-
-  for (let i = 0; i < queryArray.length; i++) {
-    if (queryArray[i].indexOf("price") !== -1) {
-      filterType = queryArray[i].substring(
-        queryArray[i].indexOf("price"),
-        queryArray[i].indexOf("price") + "price".length
+  let filterObj = {};
+  if(dividerLocation !== -1){
+    const queryArray = request.url
+      .substring(dividerLocation + 1, request.url.length)
+      .split("&");
+  
+    let filterType;
+    let filterArray = [];
+  
+    for (let i = 0; i < queryArray.length; i++) {
+      if (queryArray[i].indexOf("price") !== -1) {
+        filterType = queryArray[i].substring(
+          queryArray[i].indexOf("price"),
+          queryArray[i].indexOf("price") + "price".length
+        );
+      }
+  
+      const filterValue = parseInt(
+        queryArray[i].substring(
+          queryArray[i].indexOf("=") + 1,
+          queryArray[i].length
+        )
       );
+  
+      const filterOperator = queryArray[i].substring(
+        queryArray[i].indexOf("$") + 1,
+        queryArray[i].indexOf("$") + 4
+      );
+  
+      filterArray.push({ filterType, filterOperator, filterValue });
+    }
+  
+    
+    for (let item in filterArray) {
+      filterObj = {
+        [filterArray[item].filterType + ""]: {
+          [filterArray[0].filterOperator]: filterArray[0].filterValue,
+        },
+      };
     }
 
-    const filterValue = parseInt(
-      queryArray[i].substring(
-        queryArray[i].indexOf("=") + 1,
-        queryArray[i].length
-      )
-    );
-
-    const filterOperator = queryArray[i].substring(
-      queryArray[i].indexOf("$") + 1,
-      queryArray[i].indexOf("$") + 4
-    );
-
-    filterArray.push({ filterType, filterOperator, filterValue });
   }
 
-  let filterObj = {};
-  for (let item in filterArray) {
-    filterObj = {
-      [filterArray[item].filterType + ""]: {
-        [filterArray[0].filterOperator]: filterArray[0].filterValue,
-      },
-    };
-  }
+  let users;
+  if(Object.keys(filterObj).length === 0){
+    users = await prisma.product.findMany({});
+  }else{
 
-  const users = await prisma.product.findMany<object>({
-    where: filterObj,
-  });
+    users = await prisma.product.findMany<object>({
+      where: filterObj,
+    });
+  }
   return NextResponse.json(users);
 }
 
