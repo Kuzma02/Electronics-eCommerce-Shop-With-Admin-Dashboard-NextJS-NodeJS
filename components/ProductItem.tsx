@@ -1,13 +1,15 @@
 import Image from "next/image";
 import React from "react";
-import { AiFillStar } from "react-icons/ai";
-import { AiOutlineStar } from "react-icons/ai";
 import CustomButton from "./CustomButton";
 import Link from "next/link";
+import ProductItemRating from "./ProductItemRating";
 
 
 
 const ProductItem = ({product} : {product: Product}) => {
+
+
+
   return (
     <div className="flex flex-col items-center gap-y-2">
       <Link href={`/product/${product.slug}`}>
@@ -17,13 +19,9 @@ const ProductItem = ({product} : {product: Product}) => {
         { product.title }
       </Link>
       <p>${product.price}</p>
-      <div className="flex">
-        <AiFillStar />
-        <AiFillStar />
-        <AiFillStar />
-        <AiFillStar />
-        <AiOutlineStar />
-      </div>
+      
+      <ProductItemRating productRating={product?.rating} />
+
       <CustomButton
         textSize="sm"
         buttonType="button"

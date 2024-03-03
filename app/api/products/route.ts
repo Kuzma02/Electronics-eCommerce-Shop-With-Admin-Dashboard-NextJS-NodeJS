@@ -4,14 +4,14 @@ import prisma from "@/utils/db";
 export async function GET(request: NextRequest) {
   const dividerLocation = request.url.indexOf("?");
   let filterObj = {};
-  if(dividerLocation !== -1){
+  if (dividerLocation !== -1) {
     const queryArray = request.url
       .substring(dividerLocation + 1, request.url.length)
       .split("&");
-  
+
     let filterType;
     let filterArray = [];
-  
+
     for (let i = 0; i < queryArray.length; i++) {
       if (queryArray[i].indexOf("price") !== -1) {
         filterType = queryArray[i].substring(
@@ -19,38 +19,49 @@ export async function GET(request: NextRequest) {
           queryArray[i].indexOf("price") + "price".length
         );
       }
-  
+
+      if (queryArray[i].indexOf("rating") !== -1) {
+        filterType = queryArray[i].substring(
+          queryArray[i].indexOf("rating"),
+          queryArray[i].indexOf("rating") + "rating".length
+        );
+      }
+
       const filterValue = parseInt(
         queryArray[i].substring(
           queryArray[i].indexOf("=") + 1,
           queryArray[i].length
         )
       );
-  
+
       const filterOperator = queryArray[i].substring(
         queryArray[i].indexOf("$") + 1,
         queryArray[i].indexOf("$") + 4
       );
-  
+
       filterArray.push({ filterType, filterOperator, filterValue });
     }
-  
+
+    console.log("Filter array:");
     
+    console.log(filterArray);
+    
+
     for (let item in filterArray) {
-      filterObj = {
+      filterObj = {...filterObj,
         [filterArray[item].filterType + ""]: {
-          [filterArray[0].filterOperator]: filterArray[0].filterValue,
+          [filterArray[item].filterOperator]: filterArray[item].filterValue,
         },
       };
     }
-
   }
-
+  console.log("Filter object:");
+  console.log(filterObj);
+  
   let users;
-  if(Object.keys(filterObj).length === 0){
+  if (Object.keys(filterObj).length === 0) {
     users = await prisma.product.findMany({});
-  }else{
-
+  } else {
     users = await prisma.product.findMany<object>({
       where: filterObj,
     });

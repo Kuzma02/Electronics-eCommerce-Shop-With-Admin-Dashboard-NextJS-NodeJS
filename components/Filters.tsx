@@ -19,7 +19,7 @@ const Filters = () => {
     inStock: { text: "instock", isChecked: true },
     outOfStock: { text: "outofstock", isChecked: true },
     priceFilter: { text: "price", value: 3000 },
-    ratingFilter: { text: "rating", value: "1" },
+    ratingFilter: { text: "rating", value: 0 },
   });
 
   useEffect(() => {
@@ -27,7 +27,7 @@ const Filters = () => {
 
     // params.set("logitech", inputCategory.box1.isChecked);
     // params.set("womenNewEdition", inputCategory.box2.isChecked);
-    // params.set("minRating", inputCategory.ratingFilter.value);
+    params.set("rating", inputCategory.ratingFilter.value);
     params.set("price", inputCategory.priceFilter.value);
     replace(`${pathname}?${params}`);
   }, [inputCategory]);
@@ -231,6 +231,7 @@ const Filters = () => {
             type="range"
             min={0}
             max={3000}
+            step={10}
             value={inputCategory.priceFilter.value}
             className="range range-warning"
             onChange={(e) =>
@@ -253,7 +254,7 @@ const Filters = () => {
         <h3 className="text-xl mb-2">Minimum Rating:</h3>
         <input
           type="range"
-          min={1}
+          min={0}
           max="5"
           value={inputCategory.ratingFilter.value}
           onChange={(e) =>
@@ -266,6 +267,7 @@ const Filters = () => {
           step="1"
         />
         <div className="w-full flex justify-between text-xs px-2">
+          <span>0</span>
           <span>1</span>
           <span>2</span>
           <span>3</span>
