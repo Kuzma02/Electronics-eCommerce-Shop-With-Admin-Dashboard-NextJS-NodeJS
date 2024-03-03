@@ -13,6 +13,7 @@ const demoProducts = [
     slug: "smart-phone-demo",
     manufacturer: "Samsung",
     category: "Smart phones",
+    inStock: true
   },
   {
     id: "2",
@@ -24,6 +25,7 @@ const demoProducts = [
     slug: "slr-camera-demo",
     manufacturer: "Canon",
     category: "Cameras",
+    inStock: true
   },
   {
     id: "3",
@@ -35,6 +37,7 @@ const demoProducts = [
     slug: "mixed-grinder-demo",
     manufacturer: "ZunVolt",
     category: "Mixer grinders",
+    inStock: true
   },
   {
     id: "4",
@@ -46,6 +49,7 @@ const demoProducts = [
     slug: "phone-gimbal-demo",
     manufacturer: "Samsung",
     category: "Phone gimbals",
+    inStock: true
   },
   {
     id: "5",
@@ -57,6 +61,7 @@ const demoProducts = [
     slug: "tablet-keyboard-demo",
     manufacturer: "Samsung",
     category: "Tablet keyboards",
+    inStock: true
   },
   {
     id: "6",
@@ -68,6 +73,7 @@ const demoProducts = [
     slug: "wireless-earbuds-demo",
     manufacturer: "Samsung",
     category: "Earbuds",
+    inStock: true
   },
   {
     id: "7",
@@ -79,6 +85,7 @@ const demoProducts = [
     slug: "party-speakers-demo",
     manufacturer: "SOWO",
     category: "Speakers",
+    inStock: true
   },
   {
     id: "8",
@@ -90,6 +97,7 @@ const demoProducts = [
     slug: "slow-juicer-demo",
     manufacturer: "Bosch",
     category: "Juicers",
+    inStock: true
   },
   {
     id: "9",
@@ -101,6 +109,7 @@ const demoProducts = [
     slug: "wireless-headphones-demo",
     manufacturer: "Sony",
     category: "Headphones",
+    inStock: true
   },
   {
     id: "10",
@@ -112,6 +121,7 @@ const demoProducts = [
     slug: "smart-watch-demo",
     manufacturer: "Samsung",
     category: "Watches",
+    inStock: true
   },
   {
     id: "11",
@@ -123,6 +133,7 @@ const demoProducts = [
     slug: "notebook-horizon-demo",
     manufacturer: "HP",
     category: "Laptops",
+    inStock: true
   },
   {
     id: "12",
@@ -134,6 +145,7 @@ const demoProducts = [
     slug: "mens-trimmer-demo",
     manufacturer: "Gillete",
     category: "Trimmers",
+    inStock: true
   },
   {
     id: "13",
@@ -145,6 +157,7 @@ const demoProducts = [
     slug: "sony-speaker-bluetooth",
     manufacturer: "Sony",
     category: "Speakers",
+    inStock: true
   },
 ];
 

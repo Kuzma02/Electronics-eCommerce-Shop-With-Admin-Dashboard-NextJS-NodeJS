@@ -1,6 +1,6 @@
 import React from "react";
 
-const Checkbox = ({ text } : { text: string }) => {
+const Checkbox = ({ text, stateValue, setStateValue } : { text: string, stateValue: any, setStateValue: any }) => {
   return (
     <div className="form-control">
       <label className="cursor-pointer flex items-center">

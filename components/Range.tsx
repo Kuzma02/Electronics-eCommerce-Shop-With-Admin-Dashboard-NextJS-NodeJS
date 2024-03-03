@@ -4,11 +4,12 @@ import React, { FormEvent, useState } from 'react'
 interface RangeProps {
     min: number;
     max: number;
-    defaultValue: number;
+    priceValue: number;
+    setInputCategory: any;
 }
 
-const Range = ({ min, max, defaultValue } : RangeProps) => {
-    const [ currentRangeValue, setCurrentRangeValue ] = useState<number>(defaultValue);
+const Range = ({ min, max, priceValue, setInputCategory } : RangeProps) => {
+    const [ currentRangeValue, setCurrentRangeValue ] = useState<number>(priceValue);
 
     const handleRange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         setCurrentRangeValue(parseInt(e.target.value));
@@ -16,7 +17,7 @@ const Range = ({ min, max, defaultValue } : RangeProps) => {
 
   return (
     <div>
-        <input type="range" min={min} max={max} value={currentRangeValue} onChange={(e) => handleRange(e)} className="range range-warning" />
+        <input type="range" min={min} max={max} value={priceValue} className="range range-warning" />
         <span>{ `Max price: $${currentRangeValue}` }</span>
     </div>
   )
