@@ -7,7 +7,7 @@ import ProductItem from "./ProductItem";
 const Products = async ({ slug }: any) => {
   const inStockNum = slug?.searchParams?.inStock === "true" ? 1 : 0;
   const outOfStockNum = slug?.searchParams?.outOfStock === "true" ? 1 : 0;
-  let stockMode: string;  
+  let stockMode: string = "lte";  
 
   if (inStockNum === 1) {
     stockMode = "equals";
