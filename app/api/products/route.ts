@@ -39,13 +39,31 @@ export async function GET(request: NextRequest) {
         );
       }
 
+      if (
+        queryArray[i].indexOf("filters") !== -1 &&
+        queryArray[i].indexOf("inStock") !== -1
+      ) {
+        // uzimam "rating" deo. Naravno mogao sam samo da napisem filterType="rating"
+        filterType = queryArray[i].substring(
+          queryArray[i].indexOf("inStock"),
+          queryArray[i].indexOf("inStock") + "inStock".length
+        );
+      }
+
+      if (
+        queryArray[i].indexOf("filters") !== -1 &&
+        queryArray[i].indexOf("outOfStock") !== -1
+      ) {
+        // uzimam "rating" deo. Naravno mogao sam samo da napisem filterType="rating"
+        filterType = queryArray[i].substring(
+          queryArray[i].indexOf("outOfStock"),
+          queryArray[i].indexOf("outOfStock") + "outOfStock".length
+        );
+      }
+
       if (queryArray[i].indexOf("sort") !== -1) {
         // uzimamo vrednost sorta iz querija
         sortByValue = queryArray[i].substring(queryArray[i].indexOf("=") + 1);
-        console.log("Sort in if: " + sortByValue);
-        console.log("qA: " + queryArray[i]);
-        
-        
       }
 
       if (queryArray[i].indexOf("filters") !== -1) {
@@ -60,7 +78,7 @@ export async function GET(request: NextRequest) {
         // uzimam operator npr. lte, gte, gt, lt...
         const filterOperator = queryArray[i].substring(
           queryArray[i].indexOf("$") + 1,
-          queryArray[i].indexOf("$") + 4
+          queryArray[i].indexOf("=") - 1
         );
 
         // sve to dodajemo u filterArray
@@ -86,7 +104,6 @@ export async function GET(request: NextRequest) {
   }
 
   console.log(filterObj);
-  
 
   if (sortByValue === "defaultSort") {
     sortObj = [];

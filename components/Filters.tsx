@@ -18,6 +18,8 @@ const Filters = () => {
   useEffect(() => {
     const params = new URLSearchParams();
 
+    params.set("outOfStock", inputCategory.outOfStock.isChecked);
+    params.set("inStock", inputCategory.inStock.isChecked);
     params.set("rating", inputCategory.ratingFilter.value);
     params.set("price", inputCategory.priceFilter.value);
     params.set("sort", sortBy);

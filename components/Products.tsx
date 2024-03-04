@@ -5,13 +5,34 @@ import React from "react";
 import ProductItem from "./ProductItem";
 
 const Products = async ({ slug }: any) => {
+  const inStockNum = slug?.searchParams?.inStock === "true" ? 1 : 0;
+  const outOfStockNum = slug?.searchParams?.outOfStock === "true" ? 1 : 0;
+  let stockMode: string;  
+
+  if (inStockNum === 1) {
+    stockMode = "equals";
+  }
   
+  if (outOfStockNum === 1) {
+    stockMode = "lt";
+  }
+  if (inStockNum === 1 && outOfStockNum === 1) {
+    stockMode = "lte";
+  } 
+  
+  if(inStockNum === 0 && outOfStockNum === 0){
+    stockMode = "gt";
+  }
+
+  console.log(inStockNum);
+  console.log(outOfStockNum);
+
   const data = await fetch(
     `http://localhost:3000/api/products?filters[price][$lte]=${
       slug?.searchParams?.price || 3000
     }&filters[rating][$gte]=${
       slug?.searchParams?.rating || 0
-    }&sort=${slug?.searchParams?.sort}`
+    }&filters[inStock][$${stockMode}]=1&sort=${slug?.searchParams?.sort}`
   );
   const products = await data.json();
 

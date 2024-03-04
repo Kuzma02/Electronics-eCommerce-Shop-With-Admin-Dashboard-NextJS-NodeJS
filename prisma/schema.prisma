@@ -14,16 +14,16 @@ datasource db {
 }
 
 model Product {
-  id           String  @id @default(uuid())
-  slug         String  @unique
+  id           String @id @default(uuid())
+  slug         String @unique
   title        String
   mainImage    String
-  price        Int     @default(0)
-  rating       Int     @default(0)
+  price        Int    @default(0)
+  rating       Int    @default(0)
   description  String
   manufacturer String
   category     String
-  inStock      Boolean
+  inStock      Int    @default(1)
 }
 
 model Image {

@@ -68,8 +68,8 @@ const SingleProductPage = async ({ params }: SingleProductPageProps) => {
           <SingleProductRating />
           <h1 className="text-3xl">{product?.title}</h1>
           <p className="text-xl font-semibold">${product?.price}</p>
-          <UrgencyText stock={94} />
-          <StockAvailabillity stock={94} />
+          {product?.inStock && <UrgencyText stock={94} />}
+          <StockAvailabillity stock={94} inStock={product?.inStock} />
           <SingleProductDynamicFields product={product} />
           <div className="flex flex-col gap-y-2 max-[500px]:items-center">
             <p className="flex items-center gap-x-2">
