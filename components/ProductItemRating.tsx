@@ -18,12 +18,12 @@ const ProductItemRating = ({ productRating }: { productRating: number }) => {
   }
   return (
     <div className="flex">
-        { rating.map(singleRating => {
+        { rating && rating?.map(singleRating => {
 return (
-    <>
-    {singleRating === "full star" && <AiFillStar key={nanoid()} />}
-    {singleRating === "empty star" && <AiOutlineStar key={nanoid()} />}
-    </>
+    <div  key={nanoid()}>
+    {singleRating === "full star" && <AiFillStar />}
+    {singleRating === "empty star" && <AiOutlineStar />}
+    </div>
     
 )
         }) }

@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     let filterArray = [];
 
     for (let i = 0; i < queryArray.length; i++) {
-      // proveravam da li je u pitanju filter mod i price sort
+      // proveravam da li je u pitanju filter mod i price filter
       if (
         queryArray[i].indexOf("filters") !== -1 &&
         queryArray[i].indexOf("price") !== -1
@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
           queryArray[i].indexOf("price") + "price".length
         );
       }
-      // proveravam da li je u pitanju filter mod i rating sort
+      // proveravam da li je u pitanju filter mod i rating filter
       if (
         queryArray[i].indexOf("filters") !== -1 &&
         queryArray[i].indexOf("rating") !== -1
@@ -36,6 +36,18 @@ export async function GET(request: NextRequest) {
         filterType = queryArray[i].substring(
           queryArray[i].indexOf("rating"),
           queryArray[i].indexOf("rating") + "rating".length
+        );
+      }
+
+      // proveravam da li je u pitanju filter mod i category filter
+      if (
+        queryArray[i].indexOf("filters") !== -1 &&
+        queryArray[i].indexOf("category") !== -1
+      ) {
+        // uzimam "category" deo. Naravno mogao sam samo da napisem filterType="rating"
+        filterType = queryArray[i].substring(
+          queryArray[i].indexOf("category"),
+          queryArray[i].indexOf("category") + "category".length
         );
       }
 
@@ -66,14 +78,25 @@ export async function GET(request: NextRequest) {
         sortByValue = queryArray[i].substring(queryArray[i].indexOf("=") + 1);
       }
 
+      // proveravam da li je u datom queriju filters mod
       if (queryArray[i].indexOf("filters") !== -1) {
-        // uzimam value deo. To je deo gde se nalazi int vrednost querija i konvertujem je u broj jer je po defaultu string
-        const filterValue = parseInt(
-          queryArray[i].substring(
+        let filterValue;
+        //  proveravam da nije filter po categoriji. To radim kako bih izbegao pretvaranje Stringa u Int
+        if (queryArray[i].indexOf("category") === -1) {
+          // uzimam value deo. To je deo gde se nalazi int vrednost querija i konvertujem je u broj jer je po defaultu string
+          filterValue = parseInt(
+            queryArray[i].substring(
+              queryArray[i].indexOf("=") + 1,
+              queryArray[i].length
+            )
+          );
+        } else {
+          // ako je filter po kategorije
+          filterValue = queryArray[i].substring(
             queryArray[i].indexOf("=") + 1,
             queryArray[i].length
-          )
-        );
+          );
+        }
 
         // uzimam operator npr. lte, gte, gt, lt...
         const filterOperator = queryArray[i].substring(
@@ -103,8 +126,6 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  console.log(filterObj);
-
   if (sortByValue === "defaultSort") {
     sortObj = [];
   } else if (sortByValue === "titleAsc") {
@@ -132,9 +153,6 @@ export async function GET(request: NextRequest) {
       },
     ];
   }
-
-  console.log("Sort by: " + sortByValue);
-  console.log(sortObj);
 
   let users;
   if (Object.keys(filterObj).length === 0) {

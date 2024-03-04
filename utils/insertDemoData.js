@@ -12,7 +12,7 @@ const demoProducts = [
     mainImage: "product1.webp",
     slug: "smart-phone-demo",
     manufacturer: "Samsung",
-    category: "Smart phones",
+    category: "smart-phones",
     inStock: 0
   },
   {
@@ -24,7 +24,7 @@ const demoProducts = [
     mainImage: "product2.webp",
     slug: "slr-camera-demo",
     manufacturer: "Canon",
-    category: "Cameras",
+    category: "cameras",
     inStock: 0
   },
   {
@@ -36,7 +36,7 @@ const demoProducts = [
     mainImage: "product3.webp",
     slug: "mixed-grinder-demo",
     manufacturer: "ZunVolt",
-    category: "Mixer grinders",
+    category: "mixer-grinders",
     inStock: 1
   },
   {
@@ -48,7 +48,7 @@ const demoProducts = [
     mainImage: "product4.webp",
     slug: "phone-gimbal-demo",
     manufacturer: "Samsung",
-    category: "Phone gimbals",
+    category: "phone-gimbals",
     inStock: 1
   },
   {
@@ -60,7 +60,7 @@ const demoProducts = [
     mainImage: "product5.webp",
     slug: "tablet-keyboard-demo",
     manufacturer: "Samsung",
-    category: "Tablet keyboards",
+    category: "tablet-keyboards",
     inStock: 1
   },
   {
@@ -72,7 +72,7 @@ const demoProducts = [
     mainImage: "product6.webp",
     slug: "wireless-earbuds-demo",
     manufacturer: "Samsung",
-    category: "Earbuds",
+    category: "earbuds",
     inStock: 1
   },
   {
@@ -84,7 +84,7 @@ const demoProducts = [
     mainImage: "product7.webp",
     slug: "party-speakers-demo",
     manufacturer: "SOWO",
-    category: "Speakers",
+    category: "speakers",
     inStock: 1
   },
   {
@@ -96,7 +96,7 @@ const demoProducts = [
     mainImage: "product8.webp",
     slug: "slow-juicer-demo",
     manufacturer: "Bosch",
-    category: "Juicers",
+    category: "juicers",
     inStock: 1
   },
   {
@@ -108,7 +108,7 @@ const demoProducts = [
     mainImage: "product9.webp",
     slug: "wireless-headphones-demo",
     manufacturer: "Sony",
-    category: "Headphones",
+    category: "headphones",
     inStock: 1
   },
   {
@@ -120,7 +120,7 @@ const demoProducts = [
     mainImage: "product10.webp",
     slug: "smart-watch-demo",
     manufacturer: "Samsung",
-    category: "Watches",
+    category: "watches",
     inStock: 1
   },
   {
@@ -132,7 +132,7 @@ const demoProducts = [
     mainImage: "product11.webp",
     slug: "notebook-horizon-demo",
     manufacturer: "HP",
-    category: "Laptops",
+    category: "laptops",
     inStock: 1
   },
   {
@@ -144,7 +144,7 @@ const demoProducts = [
     mainImage: "product12.webp",
     slug: "mens-trimmer-demo",
     manufacturer: "Gillete",
-    category: "Trimmers",
+    category: "trimmers",
     inStock: 0
   },
   {
@@ -156,7 +156,7 @@ const demoProducts = [
     mainImage: "sony speaker image 1.jpg",
     slug: "sony-speaker-bluetooth",
     manufacturer: "Sony",
-    category: "Speakers",
+    category: "speakers",
     inStock: 1
   },
 ];

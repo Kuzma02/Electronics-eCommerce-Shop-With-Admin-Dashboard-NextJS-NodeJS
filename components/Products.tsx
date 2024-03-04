@@ -24,15 +24,15 @@ const Products = async ({ slug }: any) => {
     stockMode = "gt";
   }
 
-  console.log(inStockNum);
-  console.log(outOfStockNum);
+  console.log(`filters[category][$equals]=${slug?.params?.slug}`);
+  
 
   const data = await fetch(
     `http://localhost:3000/api/products?filters[price][$lte]=${
       slug?.searchParams?.price || 3000
     }&filters[rating][$gte]=${
       slug?.searchParams?.rating || 0
-    }&filters[inStock][$${stockMode}]=1&sort=${slug?.searchParams?.sort}`
+    }&filters[inStock][$${stockMode}]=1&${slug?.params?.slug?.length > 0 ? `filters[category][$equals]=${slug?.params?.slug}&` : ""}sort=${slug?.searchParams?.sort}`
   );
   const products = await data.json();
 
