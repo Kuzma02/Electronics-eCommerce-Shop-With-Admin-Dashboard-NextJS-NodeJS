@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic';
 export const revalidate = 0
 
-import { Breadcrumb, Filters, Pagination, Products } from "@/components";
+import { Breadcrumb, Filters, Pagination, Products, SortBy } from "@/components";
 import React from "react";
 
 const ShopPage = (slug: any) => {
@@ -16,20 +16,7 @@ const ShopPage = (slug: any) => {
             SAMSUNG SMART PHONES
           </h2>
 
-          <div className="flex items-center gap-x-5 max-lg:flex-col max-lg:w-full max-lg:items-start">
-          <h3 className="text-xl">Sort by:</h3>
-          <select
-            defaultValue="defaultSort"
-            className="select border-gray-400 py-2 px-2 border-2 select-bordered w-40 outline-none max-lg:w-full"
-            name="sort"
-          >
-            <option value="defaultSort">Default</option>
-            <option value="newestSort">Newest</option>
-            <option value="oldestSort">Oldest</option>
-            <option value="lowestPriceSort">Lowest Price</option>
-            <option value="highPriceSort">Highest Price</option>
-          </select>
-        </div>
+          <SortBy />
 
           </div>
           <div className="divider"></div>

@@ -11,7 +11,7 @@ const Products = async ({ slug }: any) => {
       slug?.searchParams?.price || 3000
     }&filters[rating][$gte]=${
       slug?.searchParams?.rating || 0
-    }`
+    }&sort=${slug?.searchParams?.sort}`
   );
   const products = await data.json();
 

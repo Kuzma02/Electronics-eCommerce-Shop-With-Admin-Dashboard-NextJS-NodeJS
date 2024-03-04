@@ -31,3 +31,4 @@ export { default as BuyNowSingleProductBtn } from "./BuyNowSingleProductBtn";
 export { default as SingleProductDynamicFields } from "./SingleProductDynamicFields";
 export { default as CartElement } from "./CartElement";
 export { default as ProductItemRating } from "./ProductItemRating";
+export { default as SortBy } from "./SortBy";

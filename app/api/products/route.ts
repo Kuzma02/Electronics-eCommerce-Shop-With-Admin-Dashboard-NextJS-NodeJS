@@ -3,8 +3,11 @@ import prisma from "@/utils/db";
 
 export async function GET(request: NextRequest) {
   const dividerLocation = request.url.indexOf("?");
-  let filterObj = {};
+  let filterObj: any = {};
+  let sortObj = {};
+  let sortByValue: string = "defaultSort";
   if (dividerLocation !== -1) {
+    // queryArray sada sadrzi ceo query deo sto ukljucuje filter i sort queryije
     const queryArray = request.url
       .substring(dividerLocation + 1, request.url.length)
       .split("&");
@@ -13,57 +16,116 @@ export async function GET(request: NextRequest) {
     let filterArray = [];
 
     for (let i = 0; i < queryArray.length; i++) {
-      if (queryArray[i].indexOf("price") !== -1) {
+      // proveravam da li je u pitanju filter mod i price sort
+      if (
+        queryArray[i].indexOf("filters") !== -1 &&
+        queryArray[i].indexOf("price") !== -1
+      ) {
+        // uzimam "price" deo. Naravno mogao sam samo da napisem filterType="price"
         filterType = queryArray[i].substring(
           queryArray[i].indexOf("price"),
           queryArray[i].indexOf("price") + "price".length
         );
       }
-
-      if (queryArray[i].indexOf("rating") !== -1) {
+      // proveravam da li je u pitanju filter mod i rating sort
+      if (
+        queryArray[i].indexOf("filters") !== -1 &&
+        queryArray[i].indexOf("rating") !== -1
+      ) {
+        // uzimam "rating" deo. Naravno mogao sam samo da napisem filterType="rating"
         filterType = queryArray[i].substring(
           queryArray[i].indexOf("rating"),
           queryArray[i].indexOf("rating") + "rating".length
         );
       }
 
-      const filterValue = parseInt(
-        queryArray[i].substring(
-          queryArray[i].indexOf("=") + 1,
-          queryArray[i].length
-        )
-      );
+      if (queryArray[i].indexOf("sort") !== -1) {
+        // uzimamo vrednost sorta iz querija
+        sortByValue = queryArray[i].substring(queryArray[i].indexOf("=") + 1);
+        console.log("Sort in if: " + sortByValue);
+        console.log("qA: " + queryArray[i]);
+        
+        
+      }
 
-      const filterOperator = queryArray[i].substring(
-        queryArray[i].indexOf("$") + 1,
-        queryArray[i].indexOf("$") + 4
-      );
+      if (queryArray[i].indexOf("filters") !== -1) {
+        // uzimam value deo. To je deo gde se nalazi int vrednost querija i konvertujem je u broj jer je po defaultu string
+        const filterValue = parseInt(
+          queryArray[i].substring(
+            queryArray[i].indexOf("=") + 1,
+            queryArray[i].length
+          )
+        );
 
-      filterArray.push({ filterType, filterOperator, filterValue });
+        // uzimam operator npr. lte, gte, gt, lt...
+        const filterOperator = queryArray[i].substring(
+          queryArray[i].indexOf("$") + 1,
+          queryArray[i].indexOf("$") + 4
+        );
+
+        // sve to dodajemo u filterArray
+        // primer izgleda filterArray:
+        /*
+        [
+        { filterType: 'price', filterOperator: 'lte', filterValue: 3000 },
+        { filterType: 'rating', filterOperator: 'gte', filterValue: 0 }
+        ]
+        */
+        filterArray.push({ filterType, filterOperator, filterValue });
+      }
     }
 
-    console.log("Filter array:");
-    
-    console.log(filterArray);
-    
-
     for (let item in filterArray) {
-      filterObj = {...filterObj,
+      filterObj = {
+        ...filterObj,
         [filterArray[item].filterType + ""]: {
           [filterArray[item].filterOperator]: filterArray[item].filterValue,
         },
       };
     }
   }
-  console.log("Filter object:");
+
   console.log(filterObj);
   
+
+  if (sortByValue === "defaultSort") {
+    sortObj = [];
+  } else if (sortByValue === "titleAsc") {
+    sortObj = [
+      {
+        title: "asc",
+      },
+    ];
+  } else if (sortByValue === "titleDesc") {
+    sortObj = [
+      {
+        title: "desc",
+      },
+    ];
+  } else if (sortByValue === "lowPrice") {
+    sortObj = [
+      {
+        price: "asc",
+      },
+    ];
+  } else if (sortByValue === "highPrice") {
+    sortObj = [
+      {
+        price: "desc",
+      },
+    ];
+  }
+
+  console.log("Sort by: " + sortByValue);
+  console.log(sortObj);
+
   let users;
   if (Object.keys(filterObj).length === 0) {
     users = await prisma.product.findMany({});
   } else {
     users = await prisma.product.findMany<object>({
       where: filterObj,
+      orderBy: sortObj,
     });
   }
   return NextResponse.json(users);
