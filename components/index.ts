@@ -32,3 +32,5 @@ export { default as SingleProductDynamicFields } from "./SingleProductDynamicFie
 export { default as CartElement } from "./CartElement";
 export { default as ProductItemRating } from "./ProductItemRating";
 export { default as SortBy } from "./SortBy";
+export { default as WishItem } from "./WishItem";
+export { default as SectionTitle } from "./SectionTitle";
