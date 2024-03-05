@@ -8,6 +8,7 @@ import {
   AddToCartSingleProductBtn,
   BuyNowSingleProductBtn,
   SingleProductDynamicFields,
+  AddToWishlistBtn,
 } from "@/components";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -72,10 +73,7 @@ const SingleProductPage = async ({ params }: SingleProductPageProps) => {
           <StockAvailabillity stock={94} inStock={product?.inStock} />
           <SingleProductDynamicFields product={product} />
           <div className="flex flex-col gap-y-2 max-[500px]:items-center">
-            <p className="flex items-center gap-x-2">
-              <FaHeart className="text-lg text-custom-black" />
-              <span className="text-lg">WISHLIST</span>
-            </p>
+            <AddToWishlistBtn product={product} slug={params.productSlug} />
             <p className="text-lg">
               SKU: <span className="ml-1">abccd-18</span>
             </p>

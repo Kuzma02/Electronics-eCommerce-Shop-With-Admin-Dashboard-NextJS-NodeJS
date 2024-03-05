@@ -1,6 +1,6 @@
 "use client";
 
-import { CustomButton, QuantityInput, QuantityInputCart } from "@/components";
+import { CustomButton, QuantityInput, QuantityInputCart, SectionTitle } from "@/components";
 import Image from "next/image";
 import React from "react";
 import { FaCheck, FaClock, FaCircleQuestion, FaXmark } from "react-icons/fa6";
@@ -17,6 +17,8 @@ const CartPage = () => {
     toast.success("Product removed from the cart");
   }
   return (
+    <>
+    <SectionTitle title="Cart Page" path="Home | Cart" />
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8">
         <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
@@ -173,6 +175,7 @@ const CartPage = () => {
         </form>
       </div>
     </div>
+    </>
   );
 };
 
