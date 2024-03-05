@@ -3,6 +3,7 @@ export const revalidate = 0;
 
 import React from "react";
 import ProductItem from "./ProductItem";
+import { RiH3 } from "react-icons/ri";
 
 const Products = async ({ slug }: any) => {
   const inStockNum = slug?.searchParams?.inStock === "true" ? 1 : 0;
@@ -24,7 +25,6 @@ const Products = async ({ slug }: any) => {
     stockMode = "gt";
   }
 
-  console.log(`filters[category][$equals]=${slug?.params?.slug}`);
   
 
   const data = await fetch(
@@ -48,9 +48,9 @@ const Products = async ({ slug }: any) => {
   */
   return (
     <div className="grid grid-cols-4 justify-items-center gap-x-2 gap-y-5 max-[1300px]:grid-cols-3 max-lg:grid-cols-2 max-[500px]:grid-cols-1">
-      {products.map((product: Product) => (
+      {products.length > 0 ? products.map((product: Product) => (
         <ProductItem key={product.id} product={product} />
-      ))}
+      )) : <h3 className="text-3xl mt-5 text-center w-full col-span-full max-[1000px]:text-2xl max-[500px]:text-lg">No products found for specified query</h3>}
     </div>
   );
 };
