@@ -6,8 +6,8 @@ import IntroducingSection from "./IntroducingSection";
 
 const CategoryMenu = () => {
   return (
-    <div className="py-10 bg-blue-600">
-      <h2 className="text-white text-7xl font-extrabold text-center mt-20">CATEGORIES</h2>
+    <div className="py-10 bg-blue-500">
+      <h2 className="text-white text-7xl font-extrabold text-center mt-20">BROWSE CATEGORIES</h2>
       <div className="max-w-screen-2xl mx-auto py-10 gap-x-5 px-16 max-md:px-10 gap-y-5 grid grid-cols-5 max-md:grid-cols-3 max-sm:grid-cols-2">
         {categoryMenuList.map((item) => (
           <CategoryItem title={item.title} key={item.id} href={item.href}>
