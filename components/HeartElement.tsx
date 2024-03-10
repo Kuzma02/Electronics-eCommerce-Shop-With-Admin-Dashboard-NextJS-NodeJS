@@ -10,7 +10,7 @@ const HeartElement = () => {
     <div className="relative">
       <Link href="/wishlist">
         <FaHeart className="text-2xl text-black" />
-        <span className="block w-5 h-5 bg-custom-yellow text-black rounded-full flex justify-center items-center absolute  top-[-10px] right-[-20px]">
+        <span className="block w-6 h-6 font-bold bg-blue-600 text-white rounded-full flex justify-center items-center absolute top-[-17px] right-[-22px]">
           { wishlist.length }
         </span>
       </Link>
