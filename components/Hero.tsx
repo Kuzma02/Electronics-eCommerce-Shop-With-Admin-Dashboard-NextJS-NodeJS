@@ -4,8 +4,8 @@ import React from "react";
 const Hero = () => {
   return (
     <div className="h-[700px] w-full bg-blue-600 max-lg:h-[900px] max-md:h-[750px]">
-      <div className="grid grid-cols-2 items-center justify-items-center px-10 gap-x-10 max-w-screen-2xl mx-auto h-full max-lg:grid-cols-1 max-lg:py-10 max-lg:gap-y-10">
-        <div className="flex flex-col gap-y-5 max-lg:order-last">
+      <div className="grid grid-cols-3 items-center justify-items-center px-10 gap-x-10 max-w-screen-2xl mx-auto h-full max-lg:grid-cols-1 max-lg:py-10 max-lg:gap-y-10">
+        <div className="flex flex-col gap-y-5 max-lg:order-last col-span-2">
           <h1 className="text-6xl text-white font-bold mb-3 max-xl:text-5xl max-md:text-4xl max-sm:text-3xl">
             THE PRODUCT OF THE FUTURE
           </h1>

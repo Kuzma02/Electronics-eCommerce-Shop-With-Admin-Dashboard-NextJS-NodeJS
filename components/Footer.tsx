@@ -10,7 +10,7 @@ const Footer = () => {
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
-      <div className="mx-auto max-w-screen-2xl px-6 lg:px-8 pt-16 pb-5">
+      <div className="mx-auto max-w-screen-2xl px-6 lg:px-8 pt-24 pb-14">
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
           <Image
             src="/logo v1.png"
@@ -30,7 +30,7 @@ const Footer = () => {
                     <li key={item.name}>
                       <a
                         href={item.href}
-                        className="text-sm font-bold leading-6 text-blue-600 hover:text-gray-100"
+                        className="text-sm leading-6 text-black hover:text-gray-100"
                       >
                         {item.name}
                       </a>
@@ -47,7 +47,7 @@ const Footer = () => {
                     <li key={item.name}>
                       <a
                         href={item.href}
-                        className="text-sm font-bold leading-6 text-blue-600 hover:text-gray-100"
+                        className="text-sm leading-6 text-black hover:text-gray-100"
                       >
                         {item.name}
                       </a>
@@ -66,7 +66,7 @@ const Footer = () => {
                     <li key={item.name}>
                       <a
                         href={item.href}
-                        className="text-sm font-bold leading-6 text-blue-600 hover:text-gray-100"
+                        className="text-sm leading-6 text-black hover:text-gray-100"
                       >
                         {item.name}
                       </a>
@@ -83,7 +83,7 @@ const Footer = () => {
                     <li key={item.name}>
                       <a
                         href={item.href}
-                        className="text-sm leading-6 text-blue-600 font-bold hover:text-gray-100"
+                        className="text-sm leading-6 text-black hover:text-gray-100"
                       >
                         {item.name}
                       </a>
