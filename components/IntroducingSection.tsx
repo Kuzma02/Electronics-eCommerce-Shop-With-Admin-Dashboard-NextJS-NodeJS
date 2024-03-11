@@ -14,7 +14,7 @@ const IntroducingSection = () => {
           <p className="text-white text-center text-2xl font-semibold">
             The best electronics for tech lovers.
           </p>
-          <button className="bg-white text-blue-600 font-bold px-12 py-3 text-xl hover:bg-gray-100 w-96 mt-2">
+          <button className="text-blue-600 bg-white font-bold px-12 py-3 text-xl hover:bg-gray-100 w-96 mt-2">
             SHOP NOW
           </button>
         </div>

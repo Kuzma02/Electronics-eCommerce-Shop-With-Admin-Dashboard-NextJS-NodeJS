@@ -4,11 +4,13 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="bg-white mt-16 max-sm:mt-5" aria-labelledby="footer-heading">
+    <footer className="bg-gray-100" aria-labelledby="footer-heading">
+      <div>
+
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
-      <div className="mx-auto max-w-screen-2xl px-6 lg:px-8 max-sm:pt-10 pb-5">
+      <div className="mx-auto max-w-screen-2xl px-6 lg:px-8 pt-16 pb-5">
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
           <Image
             src="/logo v1.png"
@@ -20,7 +22,7 @@ const Footer = () => {
           <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
             <div className="md:grid md:grid-cols-2 md:gap-8">
               <div>
-                <h3 className="text-sm font-semibold leading-6 text-gray-900">
+                <h3 className="text-lg font-bold leading-6 text-blue-600">
                   Solutions
                 </h3>
                 <ul role="list" className="mt-6 space-y-4">
@@ -28,7 +30,7 @@ const Footer = () => {
                     <li key={item.name}>
                       <a
                         href={item.href}
-                        className="text-sm leading-6 text-gray-600 hover:text-gray-900"
+                        className="text-sm font-bold leading-6 text-blue-600 hover:text-gray-100"
                       >
                         {item.name}
                       </a>
@@ -37,7 +39,7 @@ const Footer = () => {
                 </ul>
               </div>
               <div className="mt-10 md:mt-0">
-                <h3 className="text-sm font-semibold leading-6 text-gray-900">
+                <h3 className="text-base font-bold leading-6 text-blue-600">
                   Support
                 </h3>
                 <ul role="list" className="mt-6 space-y-4">
@@ -45,7 +47,7 @@ const Footer = () => {
                     <li key={item.name}>
                       <a
                         href={item.href}
-                        className="text-sm leading-6 text-gray-600 hover:text-gray-900"
+                        className="text-sm font-bold leading-6 text-blue-600 hover:text-gray-100"
                       >
                         {item.name}
                       </a>
@@ -56,7 +58,7 @@ const Footer = () => {
             </div>
             <div className="md:grid md:grid-cols-2 md:gap-8">
               <div>
-                <h3 className="text-sm font-semibold leading-6 text-gray-900">
+                <h3 className="text-base font-bold leading-6 text-blue-600">
                   Company
                 </h3>
                 <ul role="list" className="mt-6 space-y-4">
@@ -64,7 +66,7 @@ const Footer = () => {
                     <li key={item.name}>
                       <a
                         href={item.href}
-                        className="text-sm leading-6 text-gray-600 hover:text-gray-900"
+                        className="text-sm font-bold leading-6 text-blue-600 hover:text-gray-100"
                       >
                         {item.name}
                       </a>
@@ -73,7 +75,7 @@ const Footer = () => {
                 </ul>
               </div>
               <div className="mt-10 md:mt-0">
-                <h3 className="text-sm font-semibold leading-6 text-gray-900">
+                <h3 className="text-base font-bold leading-6 text-blue-600">
                   Legal
                 </h3>
                 <ul role="list" className="mt-6 space-y-4">
@@ -81,7 +83,7 @@ const Footer = () => {
                     <li key={item.name}>
                       <a
                         href={item.href}
-                        className="text-sm leading-6 text-gray-600 hover:text-gray-900"
+                        className="text-sm leading-6 text-blue-600 font-bold hover:text-gray-100"
                       >
                         {item.name}
                       </a>
@@ -92,6 +94,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </footer>
   );

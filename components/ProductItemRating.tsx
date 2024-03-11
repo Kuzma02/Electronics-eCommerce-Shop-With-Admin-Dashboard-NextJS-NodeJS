@@ -21,8 +21,8 @@ const ProductItemRating = ({ productRating }: { productRating: number }) => {
         { rating && rating?.map(singleRating => {
 return (
     <div  key={nanoid()}>
-    {singleRating === "full star" && <AiFillStar />}
-    {singleRating === "empty star" && <AiOutlineStar />}
+    {singleRating === "full star" && <AiFillStar className="text-yellow-400 text-xl" />}
+    {singleRating === "empty star" && <AiOutlineStar className="text-yellow-400 text-xl" />}
     </div>
     
 )

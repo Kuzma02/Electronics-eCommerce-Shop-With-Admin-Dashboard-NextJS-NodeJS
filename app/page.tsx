@@ -6,9 +6,7 @@ export default function Home() {
     <Hero />
     <IntroducingSection />
     <CategoryMenu />
-    <Incentives />
     <ProductsSection />
-    <Newsletter />
     </>
   );
 }
