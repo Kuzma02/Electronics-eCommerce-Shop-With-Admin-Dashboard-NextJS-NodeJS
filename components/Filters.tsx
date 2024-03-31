@@ -48,7 +48,7 @@ const Filters = () => {
               }
               className="checkbox"
             />
-            <span className="label-text text-lg ml-2">In stock</span>
+            <span className="label-text text-lg ml-2 text-black">In stock</span>
           </label>
         </div>
 
@@ -68,7 +68,7 @@ const Filters = () => {
               }
               className="checkbox"
             />
-            <span className="label-text text-lg ml-2">Out of stock</span>
+            <span className="label-text text-lg ml-2 text-black">Out of stock</span>
           </label>
         </div>
       </div>
