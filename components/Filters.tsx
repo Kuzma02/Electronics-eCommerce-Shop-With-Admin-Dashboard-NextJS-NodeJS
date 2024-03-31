@@ -46,7 +46,7 @@ const Filters = () => {
                   },
                 })
               }
-              className="checkbox checkbox-warning"
+              className="checkbox"
             />
             <span className="label-text text-lg ml-2">In stock</span>
           </label>
@@ -66,7 +66,7 @@ const Filters = () => {
                   },
                 })
               }
-              className="checkbox checkbox-warning"
+              className="checkbox"
             />
             <span className="label-text text-lg ml-2">Out of stock</span>
           </label>
@@ -83,7 +83,7 @@ const Filters = () => {
             max={3000}
             step={10}
             value={inputCategory.priceFilter.value}
-            className="range range-warning"
+            className="range"
             onChange={(e) =>
               setInputCategory({
                 ...inputCategory,
@@ -113,7 +113,7 @@ const Filters = () => {
               ratingFilter: { text: "rating", value: e.target.value },
             })
           }
-          className="range range-warning"
+          className="range range-info"
           step="1"
         />
         <div className="w-full flex justify-between text-xs px-2">

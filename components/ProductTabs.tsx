@@ -9,11 +9,11 @@ const ProductTabs = ({ product } : { product: Product }) => {
   console.log(product);
   
   return (
-    <div className="px-5">
+    <div className="px-5 text-black">
       <div role="tablist" className="tabs tabs-bordered">
         <a
           role="tab"
-          className={`tab text-lg pb-8 max-[500px]:text-base max-[400px]:text-sm max-[370px]:text-xs ${
+          className={`tab text-lg text-black pb-8 max-[500px]:text-base max-[400px]:text-sm max-[370px]:text-xs ${
             currentProductTab === 0 && "tab-active"
           }`}
           onClick={() => setCurrentProductTab(0)}
@@ -22,7 +22,7 @@ const ProductTabs = ({ product } : { product: Product }) => {
         </a>
         <a
           role="tab"
-          className={`tab text-lg pb-8 max-[500px]:text-base max-[400px]:text-sm max-[370px]:text-xs ${
+          className={`tab text-black text-lg pb-8 max-[500px]:text-base max-[400px]:text-sm max-[370px]:text-xs ${
             currentProductTab === 1 && "tab-active"
           }`}
           onClick={() => setCurrentProductTab(1)}
@@ -31,7 +31,7 @@ const ProductTabs = ({ product } : { product: Product }) => {
         </a>
         <a
           role="tab"
-          className={`tab text-lg pb-8 max-[500px]:text-base max-[400px]:text-sm max-[370px]:text-xs ${
+          className={`tab text-black text-lg pb-8 max-[500px]:text-base max-[400px]:text-sm max-[370px]:text-xs ${
             currentProductTab === 2 && "tab-active"
           }`}
           onClick={() => setCurrentProductTab(2)}

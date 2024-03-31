@@ -9,7 +9,7 @@ import { nanoid } from "nanoid";
 const WishlistPage = () => {
   const { wishlist } = useWishlistStore();
   return (
-    <>
+    <div className="bg-white">
       <SectionTitle title="Wishlist" path="Home | Wishlist" />
       {wishlist.length === 0 ? (
         <h3 className="text-center text-4xl py-10 text-black max-lg:text-3xl max-sm:text-2xl max-sm:pt-5 max-[400px]:text-xl">No items found in the wishlist</h3>
@@ -42,7 +42,7 @@ const WishlistPage = () => {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

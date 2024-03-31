@@ -17,7 +17,7 @@ const CartPage = () => {
     toast.success("Product removed from the cart");
   }
   return (
-    <>
+    <div className="bg-white">
     <SectionTitle title="Cart Page" path="Home | Cart" />
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -175,7 +175,7 @@ const CartPage = () => {
         </form>
       </div>
     </div>
-    </>
+    </div>
   );
 };
 

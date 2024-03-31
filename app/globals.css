@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.range{
+    --range-shdw: #3B82F6;
+}
+
+.checkbox:checked, .checkbox[checked="true"], .checkbox[aria-checked="true"] {
+    background-repeat: no-repeat;
+    animation: checkmark var(--animation-input, 0.2s) ease-out;
+    background-color: #3B82F6;
+    background-image: linear-gradient(-45deg, transparent 65%, #3B82F6 65.99%),
+      linear-gradient(45deg, transparent 75%, #3B82F6 75.99%),
+      linear-gradient(-45deg, #3B82F6 40%, transparent 40.99%),
+      linear-gradient(
+        45deg,
+        #3B82F6 30%,
+        white 30.99%,
+        white 40%,
+        transparent 40.99%
+      ),
+      linear-gradient(-45deg, white 50%, #3B82F6 50.99%);
+}
