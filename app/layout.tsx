@@ -25,7 +25,7 @@ export default async function RootLayout({
 
   const session = await getServerSession();
   return (
-    <html lang="en">
+    <html lang="en" data-theme="light">
       <body className={inter.className}>
       <SessionProvider session={session}>
         <Header />

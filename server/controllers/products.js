@@ -166,6 +166,131 @@ async function getAllProducts(request, response) {
     return response.json(users);
 }
 
+async function createProduct(request, response) {
+    try {
+        console.log("Creating product:", request.body);
+        const { slug, title, mainImage, price, rating, description, manufacturer, category, inStock } = request.body;
+        const product = await prisma.product.create({
+            data: {
+                
+                slug,
+                title,
+                mainImage,
+                price,
+                rating,
+                description,
+                manufacturer,
+                category,
+                inStock
+                
+            }
+        });
+        console.log("Product created:", product); // Dodajemo log za proveru
+        return response.status(201).json(product);
+    } catch (error) {
+        console.error("Error creating product:", error); // Dodajemo log za proveru
+        return response.status(500).json({ error: "Error creating product" });
+    }
+}
+
+// Metoda za ažuriranje postojećeg proizvoda
+async function updateProduct(request, response) {
+    try {
+        const { slug } = request.params; // Dobijamo slug iz params
+        console.log("Updating product with slug:", slug); // Dodajemo log za proveru
+        const { title, mainImage, price, rating, description, manufacturer, category, inStock } = request.body;
+        
+        // Pronalazimo proizvod prema slug-u
+        const existingProduct = await prisma.product.findUnique({
+            where: {
+                slug: slug
+            }
+        });
+
+        if (!existingProduct) {
+            return response.status(404).json({ error: "Product not found" });
+        }
+
+        // Ažuriramo pronađeni proizvod
+        const updatedProduct = await prisma.product.update({
+            where: {
+                id: existingProduct.id // Koristimo ID pronađenog proizvoda
+            },
+            data: {
+                title,
+                mainImage,
+                price,
+                rating,
+                description,
+                manufacturer,
+                category,
+                inStock
+            }
+        });
+
+        return response.json(updatedProduct);
+    } catch (error) {
+        return response.status(500).json({ error: "Error updating product" });
+    }
+}
+
+// Metoda za brisanje proizvoda
+async function deleteProduct(request, response) {
+    try {
+        const { slug } = request.params;
+        console.log("Deleting product with slug:", slug); // Dodajemo log za proveru
+        await prisma.product.delete({
+            where: {
+                slug: slug // Koristimo slug umesto id
+            }
+        });
+        return response.status(204).send();
+    } catch (error) {
+        return response.status(500).json({ error: "Error deleting product" });
+    }
+}
+
+async function searchProducts(request, response) {
+    try {
+        const { query } = request.query;
+        if (!query) {
+            return response.status(400).json({ error: "Query parameter is required" });
+        }
+
+        const products = await prisma.product.findMany({
+            where: {
+                OR: [
+                    {
+                        title: {
+                            contains: query
+                        }
+                    },
+                    {
+                        description: {
+                            contains: query
+                        }
+                    },
+                    {
+                        manufacturer: {
+                            contains: query
+                        }
+                    },
+                    {
+                        category: {
+                            contains: query
+                        }
+                    }
+                ]
+            }
+        });
+
+        return response.json(products);
+    } catch (error) {
+        console.error("Error searching products:", error);
+        return response.status(500).json({ error: "Error searching products" });
+    }
+}
+
 async function getProductCategory(request, response) {
     const { slug } = request.params;
     const product = await prisma.product.findUnique({
@@ -180,6 +305,6 @@ async function getProductCategory(request, response) {
     return response.status(200).json(product)
 }
 
-module.exports = { getAllProducts, getProductCategory };
+module.exports = { getAllProducts, getProductCategory, createProduct, updateProduct, deleteProduct, searchProducts };
 
 
