@@ -269,16 +269,6 @@ async function searchProducts(request, response) {
                         description: {
                             contains: query
                         }
-                    },
-                    {
-                        manufacturer: {
-                            contains: query
-                        }
-                    },
-                    {
-                        category: {
-                            contains: query
-                        }
                     }
                 ]
             }

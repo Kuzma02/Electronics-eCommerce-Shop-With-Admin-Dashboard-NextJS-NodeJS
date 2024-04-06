@@ -1,35 +1,55 @@
-import React from "react";
+"use client";
+import { usePathname } from "next/navigation";
+import React, { useEffect } from "react";
 import HeaderTop from "./HeaderTop";
 import Image from "next/image";
 import SearchInput from "./SearchInput";
-import { FaCodeCompare } from "react-icons/fa6";
 import Link from "next/link";
 
 import CartElement from "./CartElement";
 import HeartElement from "./HeartElement";
 
 const Header = () => {
+  const pathname = usePathname();
+
+  useEffect(() => {
+    console.log(pathname);
+  }, [pathname]);
 
   return (
     <header className="bg-white">
       <HeaderTop />
-      <div className="h-32 bg-white flex items-center justify-between px-16 max-[1320px]:px-10 max-md:px-6 max-lg:flex-col max-lg:gap-y-7 max-lg:justify-center max-lg:h-60 max-w-screen-2xl mx-auto">
-        <Link href="/">
-          <Image
-            src="/logo v1.png"
-            width={200}
-            height={200}
-            alt="singitronic logo"
-            className="w-auto h-auto"
-          />
-        </Link>
-        <SearchInput />
-        <div className="flex gap-x-10">
-          
-          <HeartElement />
-          <CartElement />
+      {pathname !== "/admin" && (
+        <div className="h-32 bg-white flex items-center justify-between px-16 max-[1320px]:px-10 max-md:px-6 max-lg:flex-col max-lg:gap-y-7 max-lg:justify-center max-lg:h-60 max-w-screen-2xl mx-auto">
+          <Link href="/">
+            <Image
+              src="/logo v1.png"
+              width={200}
+              height={200}
+              alt="singitronic logo"
+              className="w-auto h-auto"
+            />
+          </Link>
+          <SearchInput />
+          <div className="flex gap-x-10">
+            <HeartElement />
+            <CartElement />
+          </div>
         </div>
-      </div>
+      )}
+      {pathname === "/admin" && (
+        <div className="flex justify-between h-32 bg-white items-center px-16 max-[1320px]:px-10  max-w-screen-2xl mx-auto">
+          <Link href="/">
+            <Image
+              src="/logo v1.png"
+              width={200}
+              height={200}
+              alt="singitronic logo"
+              className="w-auto h-auto"
+            />
+          </Link>
+        </div>
+      )}
     </header>
   );
 };
