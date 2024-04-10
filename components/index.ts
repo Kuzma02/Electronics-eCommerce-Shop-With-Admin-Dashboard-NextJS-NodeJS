@@ -41,3 +41,4 @@ export { default as IntroducingSection } from "./IntroducingSection";
 export { default as Heading } from "./Heading";
 export { default as DashboardSidebar } from "./DashboardSidebar";
 export { default as StatsElement } from "./StatsElement";
+export { default as DashboardProductTable } from "./DashboardProductTable";
