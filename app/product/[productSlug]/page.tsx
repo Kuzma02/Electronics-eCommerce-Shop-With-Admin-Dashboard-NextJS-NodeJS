@@ -26,7 +26,7 @@ interface ImageItem {
 
 const SingleProductPage = async ({ params }: SingleProductPageProps) => {
   const data = await fetch(
-    `http://localhost:3001/api/products/${params.productSlug}`,
+    `http://localhost:3001/api/category/${params.productSlug}`,
     { cache: "no-store" }
   );
   const product = await data.json();

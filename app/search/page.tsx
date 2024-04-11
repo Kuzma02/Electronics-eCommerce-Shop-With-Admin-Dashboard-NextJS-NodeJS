@@ -10,7 +10,9 @@ const SearchPage = async ({ searchParams: { search } }: Props) => {
     `http://localhost:3001/api/search?query=${search || ""}`,
     { cache: "no-store" }
   );
-  const products: any = await data.json();
+  console.log(data);
+  
+  const products = await data.json();
 
   return (
     <div>

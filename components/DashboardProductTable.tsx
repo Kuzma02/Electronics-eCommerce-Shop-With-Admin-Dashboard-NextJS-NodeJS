@@ -1,6 +1,7 @@
 "use client";
 import { nanoid } from "nanoid";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 const DashboardProductTable = () => {
@@ -76,7 +77,7 @@ const DashboardProductTable = () => {
                 </td>
                 <td>${product?.price}</td>
                 <th>
-                  <button className="btn btn-ghost btn-xs">details</button>
+                  <Link href={`/admin/products/${product.id}`} className="btn btn-ghost btn-xs">details</Link>
                 </th>
               </tr>
             ))}

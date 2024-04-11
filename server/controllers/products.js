@@ -196,14 +196,14 @@ async function createProduct(request, response) {
 // Metoda za ažuriranje postojećeg proizvoda
 async function updateProduct(request, response) {
     try {
-        const { slug } = request.params; // Dobijamo slug iz params
-        console.log("Updating product with slug:", slug); // Dodajemo log za proveru
+        const { id } = request.params; // Dobijamo slug iz params
+        console.log("Updating product with id:", id); // Dodajemo log za proveru
         const { title, mainImage, price, rating, description, manufacturer, category, inStock } = request.body;
         
         // Pronalazimo proizvod prema slug-u
         const existingProduct = await prisma.product.findUnique({
             where: {
-                slug: slug
+                id
             }
         });
 
@@ -237,11 +237,11 @@ async function updateProduct(request, response) {
 // Metoda za brisanje proizvoda
 async function deleteProduct(request, response) {
     try {
-        const { slug } = request.params;
-        console.log("Deleting product with slug:", slug); // Dodajemo log za proveru
+        const { id } = request.params;
+        console.log("Deleting product with slug:", id); // Dodajemo log za proveru
         await prisma.product.delete({
             where: {
-                slug: slug // Koristimo slug umesto id
+                id
             }
         });
         return response.status(204).send();
@@ -281,11 +281,11 @@ async function searchProducts(request, response) {
     }
 }
 
-async function getProductCategory(request, response) {
-    const { slug } = request.params;
+async function getProductById(request, response) {
+    const { id } = request.params;
     const product = await prisma.product.findUnique({
         where: {
-          slug: slug
+          id: id
         }
       });
     console.log(product);
@@ -295,6 +295,8 @@ async function getProductCategory(request, response) {
     return response.status(200).json(product)
 }
 
-module.exports = { getAllProducts, getProductCategory, createProduct, updateProduct, deleteProduct, searchProducts };
+
+
+module.exports = { getAllProducts, createProduct, updateProduct, deleteProduct, searchProducts, getProductById };
 
 
