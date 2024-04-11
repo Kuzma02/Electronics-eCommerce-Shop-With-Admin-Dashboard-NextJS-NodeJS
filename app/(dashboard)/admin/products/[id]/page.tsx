@@ -12,6 +12,27 @@ const DashboardProductDetails = ({
 }: DashboardProductDetailsProps) => {
   const [product, setProduct] = useState<any>();
 
+  const uploadFile = async (file: any) => {
+    const formData = new FormData();
+    formData.append("uploadedFile", file);
+
+    try {
+      const response = await fetch("http://localhost:3001/api/main-image", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data.message); // Ispisuje poruku sa servera
+      } else {
+        console.error("Otpremanje fajla nije uspelo.");
+      }
+    } catch (error) {
+      console.error("Došlo je do greške prilikom slanja zahteva:", error);
+    }
+  };
+
   useEffect(() => {
     fetch(`http://localhost:3001/api/products/${id}`)
       .then((res) => {
@@ -76,10 +97,7 @@ const DashboardProductDetails = ({
             <div className="label">
               <span className="label-text">Is product in stock?</span>
             </div>
-            <select
-              className="select select-bordered"
-              value={product?.inStock}
-            >
+            <select className="select select-bordered" value={product?.inStock}>
               <option value={1}>Yes</option>
               <option value={0}>No</option>
             </select>
@@ -90,7 +108,7 @@ const DashboardProductDetails = ({
             type="file"
             className="file-input file-input-bordered file-input-lg w-full max-w-sm"
             onChange={(e: any) => {
-              console.log(e.target.files[0]);
+              uploadFile(e.target.files[0]);
               setProduct({ ...product, mainImage: e.target.files[0].name });
             }}
           />

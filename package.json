@@ -16,6 +16,7 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/react-slick": "^0.23.13",
     "bcryptjs": "^2.4.3",
+    "express-fileupload": "^1.5.0",
     "flowbite-react": "^0.7.2",
     "nanoid": "^5.0.6",
     "next": "14.1.0",
