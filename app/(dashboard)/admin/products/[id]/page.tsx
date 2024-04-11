@@ -1,5 +1,6 @@
 "use client";
 import { CustomButton, DashboardSidebar } from "@/components";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
 interface DashboardProductDetailsProps {
@@ -20,7 +21,6 @@ const DashboardProductDetails = ({
         setProduct(data);
       });
   }, [id]);
-  console.log(product?.inStock);
 
   return (
     <div className="bg-white flex justify-start max-w-screen-2xl mx-auto h-[100vh]">
@@ -74,13 +74,14 @@ const DashboardProductDetails = ({
         <div>
           <label className="form-control w-full max-w-xs">
             <div className="label">
-              <span className="label-text">
-                Is product in stock?
-              </span>
+              <span className="label-text">Is product in stock?</span>
             </div>
-            <select className="select select-bordered">
-              <option value={1} selected={product?.inStock === 1 && true}>Yes</option>
-              <option value={0} selected={product?.inStock === 0 && true}>No</option>
+            <select
+              className="select select-bordered"
+              value={product?.inStock}
+            >
+              <option value={1}>Yes</option>
+              <option value={0}>No</option>
             </select>
           </label>
         </div>
@@ -88,7 +89,10 @@ const DashboardProductDetails = ({
           <input
             type="file"
             className="file-input file-input-bordered file-input-lg w-full max-w-sm"
-            multiple
+            onChange={(e: any) => {
+              console.log(e.target.files[0]);
+              setProduct({ ...product, mainImage: e.target.files[0].name });
+            }}
           />
         </div>
         <div className="flex gap-x-2">

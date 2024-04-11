@@ -13,10 +13,6 @@ import HeartElement from "./HeartElement";
 const Header = () => {
   const pathname = usePathname();
 
-  useEffect(() => {
-    console.log(pathname);
-  }, [pathname]);
-
   return (
     <header className="bg-white">
       <HeaderTop />
