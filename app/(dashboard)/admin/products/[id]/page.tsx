@@ -3,25 +3,25 @@ import { CustomButton, DashboardSidebar } from "@/components";
 import React, { useEffect, useState } from "react";
 
 interface DashboardProductDetailsProps {
-    params: {id: number };
+  params: { id: number };
 }
 
-const DashboardProductDetails = ({ params: {id} }: DashboardProductDetailsProps) => {
-    const [ product, setProduct ] = useState<any>();
-    
-    useEffect(() => {        
-        fetch(`http://localhost:3001/api/products/${id}`)
-          .then((res) => {
-            return res.json();
-          })
-          .then((data) => {
-            setProduct(data);
-          });
-      }, [id]);
+const DashboardProductDetails = ({
+  params: { id },
+}: DashboardProductDetailsProps) => {
+  const [product, setProduct] = useState<any>();
 
-      console.log(product);
-      
-    
+  useEffect(() => {
+    fetch(`http://localhost:3001/api/products/${id}`)
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        setProduct(data);
+      });
+  }, [id]);
+  console.log(product?.inStock);
+
   return (
     <div className="bg-white flex justify-start max-w-screen-2xl mx-auto h-[100vh]">
       <DashboardSidebar />
@@ -34,6 +34,10 @@ const DashboardProductDetails = ({ params: {id} }: DashboardProductDetailsProps)
             <input
               type="text"
               className="input input-bordered w-full max-w-xs"
+              value={product?.title}
+              onChange={(e) =>
+                setProduct({ ...product, title: e.target.value })
+              }
             />
           </label>
         </div>
@@ -45,6 +49,10 @@ const DashboardProductDetails = ({ params: {id} }: DashboardProductDetailsProps)
             <input
               type="text"
               className="input input-bordered w-full max-w-xs"
+              value={product?.price}
+              onChange={(e) =>
+                setProduct({ ...product, price: e.target.value })
+              }
             />
           </label>
         </div>
@@ -56,18 +64,24 @@ const DashboardProductDetails = ({ params: {id} }: DashboardProductDetailsProps)
             <input
               type="text"
               className="input input-bordered w-full max-w-xs"
+              value={product?.manufacturer}
+              onChange={(e) =>
+                setProduct({ ...product, manufacturer: e.target.value })
+              }
             />
           </label>
         </div>
         <div>
           <label className="form-control w-full max-w-xs">
             <div className="label">
-              <span className="label-text">Stock availability:</span>
+              <span className="label-text">
+                Is product in stock?
+              </span>
             </div>
-            <input
-              type="text"
-              className="input input-bordered w-full max-w-xs"
-            />
+            <select className="select select-bordered">
+              <option value={1} selected={product?.inStock === 1 && true}>Yes</option>
+              <option value={0} selected={product?.inStock === 0 && true}>No</option>
+            </select>
           </label>
         </div>
         <div>

@@ -8,6 +8,7 @@ interface Product {
     mainImage: string;
     manufacturer: string;
     category: string;
+    inStock: boolean;
 }
 
 interface SingleProductPageProps {
