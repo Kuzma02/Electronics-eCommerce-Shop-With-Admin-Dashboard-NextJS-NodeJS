@@ -5,6 +5,7 @@ const productImagesRouter = require('./routes/productImages');
 const categoryRouter = require('./routes/category');
 const searchRouter = require('./routes/search');
 const mainImageRouter = require('./routes/mainImages');
+const userRouter = require('./routes/users');
 var cors = require('cors');
 
 // use it before all route definitions
@@ -24,6 +25,7 @@ app.use('/api/products', productsRouter);
 app.use('/api/category', categoryRouter);
 app.use('/api/images', productImagesRouter);
 app.use("/api/main-image", mainImageRouter);
+app.use("/api/users", userRouter);
 app.use('/api/search', searchRouter);
 
 

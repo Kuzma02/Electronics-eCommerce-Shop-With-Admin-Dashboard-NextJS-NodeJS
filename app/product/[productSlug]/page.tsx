@@ -1,19 +1,14 @@
 import {
-  ColorInput,
-  QuantityInput,
   StockAvailabillity,
   UrgencyText,
   SingleProductRating,
   ProductTabs,
-  AddToCartSingleProductBtn,
-  BuyNowSingleProductBtn,
   SingleProductDynamicFields,
   AddToWishlistBtn,
 } from "@/components";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import React from "react";
-import { FaHeart } from "react-icons/fa6";
 import { FaSquareFacebook } from "react-icons/fa6";
 import { FaSquareXTwitter } from "react-icons/fa6";
 import { FaSquarePinterest } from "react-icons/fa6";
@@ -43,6 +38,7 @@ const SingleProductPage = async ({ params }: SingleProductPageProps) => {
 
   return (
     <div className="bg-white">
+
       <div className="max-w-screen-2xl mx-auto">
         <div className="flex justify-center gap-x-16 pt-10 max-lg:flex-col items-center gap-y-5 px-5">
           <div>
