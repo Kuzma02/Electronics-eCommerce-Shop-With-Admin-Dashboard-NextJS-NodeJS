@@ -12,7 +12,7 @@ const AdminDashboardPage = () => {
           <StatsElement />
           <StatsElement />
         </div>
-        <div className="w-full bg-blue-600 text-white h-40 flex flex-col justify-center items-center gap-y-2">
+        <div className="w-full bg-blue-500 text-white h-40 flex flex-col justify-center items-center gap-y-2">
           <h4 className="text-3xl text-gray-100">Number of visitors today</h4>
           <p className="text-3xl font-bold">1200</p>
           <p className="text-green-300 flex gap-x-1 items-center"><FaArrowUp />12.5% Since last month</p>

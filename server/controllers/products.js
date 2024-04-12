@@ -177,11 +177,10 @@ async function createProduct(request, response) {
       title,
       mainImage,
       price,
-      rating,
       description,
       manufacturer,
       category,
-      inStock,
+      inStock
     } = request.body;
     const product = await prisma.product.create({
       data: {
@@ -189,7 +188,7 @@ async function createProduct(request, response) {
         title,
         mainImage,
         price,
-        rating,
+        rating: 5,
         description,
         manufacturer,
         category,

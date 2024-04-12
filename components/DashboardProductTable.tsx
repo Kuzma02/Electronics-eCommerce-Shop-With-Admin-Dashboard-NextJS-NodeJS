@@ -3,6 +3,7 @@ import { nanoid } from "nanoid";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import CustomButton from "./CustomButton";
 
 const DashboardProductTable = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -19,6 +20,21 @@ const DashboardProductTable = () => {
 
   return (
     <div className="overflow-x-auto w-full">
+      <h1 className="text-3xl font-semibold text-center mb-5">All products</h1>
+      <div className="flex justify-end mb-5">
+      <Link href="/admin/products/new">
+      <CustomButton
+        buttonType="button"
+        customWidth="110px"
+        paddingX={10}
+        paddingY={5}
+        textSize="base"
+        text="Add new product"
+      />
+      </Link>
+      </div>
+            
+
       <table className="table">
         {/* head */}
         <thead>
@@ -76,7 +92,12 @@ const DashboardProductTable = () => {
                 </td>
                 <td>${product?.price}</td>
                 <th>
-                  <Link href={`/admin/products/${product.id}`} className="btn btn-ghost btn-xs">details</Link>
+                  <Link
+                    href={`/admin/products/${product.id}`}
+                    className="btn btn-ghost btn-xs"
+                  >
+                    details
+                  </Link>
                 </th>
               </tr>
             ))}
