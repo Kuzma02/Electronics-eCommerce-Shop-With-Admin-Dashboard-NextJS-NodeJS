@@ -16,7 +16,7 @@ const HeaderTop = () => {
     toast.success("Logout successful!");
   }
   return (
-    <div className="h-10 text-white bg-blue-600 px-10 max-md:px-5 max-md:h-16">
+    <div className="h-10 text-white bg-blue-500 px-10 max-md:px-5 max-md:h-16">
       <div className="flex justify-between h-full max-md:flex-col max-md:justify-center max-md:items-center max-w-screen-2xl mx-auto">
         <ul className="flex items-center h-full gap-x-5 max-[370px]:text-sm max-[370px]:gap-x-2">
           <li className="flex items-center gap-x-2 font-semibold">
