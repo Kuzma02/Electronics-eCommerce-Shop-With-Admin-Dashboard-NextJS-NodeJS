@@ -1,11 +1,12 @@
+"use client";
 import { DashboardSidebar } from "@/components";
 import React from "react";
 
 const AdminSingleOrder = () => {
   return (
-    <div className="bg-white flex justify-start max-w-screen-2xl mx-auto h-[150vh]">
+    <div className="bg-white flex justify-start max-w-screen-2xl mx-auto xl:h-[150vh] max-xl:flex-col max-xl:gap-y-5">
       <DashboardSidebar />
-      <div className="flex flex-col gap-y-7 ml-5 w-full">
+      <div className="flex flex-col gap-y-7 xl:ml-5 w-full max-xl:px-5">
         <h1 className="text-3xl font-semibold">Order details</h1>
         <div>
           <label className="form-control w-full max-w-xs">
@@ -18,7 +19,7 @@ const AdminSingleOrder = () => {
             />
           </label>
         </div>
-        <div className="flex gap-x-2">
+        <div className="flex gap-x-2 max-sm:flex-col">
           <div>
             <label className="form-control w-full max-w-xs">
               <div className="label">
@@ -79,7 +80,7 @@ const AdminSingleOrder = () => {
           </label>
         </div>
 
-        <div className="flex gap-x-2">
+        <div className="flex gap-x-2 max-sm:flex-col">
           <div>
             <label className="form-control w-full max-w-xs">
               <div className="label">
@@ -105,7 +106,7 @@ const AdminSingleOrder = () => {
           </div>
         </div>
 
-        <div className="flex gap-x-2">
+        <div className="flex gap-x-2 max-sm:flex-col">
           <div>
             <label className="form-control w-full max-w-xs">
               <div className="label">
@@ -163,7 +164,7 @@ const AdminSingleOrder = () => {
             <textarea className="textarea textarea-bordered h-24"></textarea>
           </label>
         </div>
-        <div className="flex gap-x-2">
+        <div className="flex gap-x-2 max-sm:flex-col">
           <button
             type="button"
             className="uppercase bg-blue-500 px-10 py-5 text-lg border border-black border-gray-300 font-bold text-white shadow-sm hover:bg-blue-600 hover:text-white focus:outline-none focus:ring-2"

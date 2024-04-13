@@ -63,9 +63,9 @@ const AddNewProduct = () => {
   };
 
   return (
-    <div className="bg-white flex justify-start max-w-screen-2xl mx-auto h-[120vh]">
+    <div className="bg-white flex justify-start max-w-screen-2xl mx-auto xl:h-[120vh] max-xl:flex-col max-xl:gap-y-5">
       <DashboardSidebar />
-      <div className="flex flex-col gap-y-7 ml-5 w-full">
+      <div className="flex flex-col gap-y-7 xl:ml-5 max-xl:px-5 w-full">
         <h1 className="text-3xl font-semibold">Add new product</h1>
         <div>
           <label className="form-control w-full max-w-xs">

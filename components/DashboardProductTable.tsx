@@ -19,100 +19,101 @@ const DashboardProductTable = () => {
   }, []);
 
   return (
-    <div className="overflow-x-auto w-full">
+    <div className="w-full">
       <h1 className="text-3xl font-semibold text-center mb-5">All products</h1>
       <div className="flex justify-end mb-5">
-      <Link href="/admin/products/new">
-      <CustomButton
-        buttonType="button"
-        customWidth="110px"
-        paddingX={10}
-        paddingY={5}
-        textSize="base"
-        text="Add new product"
-      />
-      </Link>
+        <Link href="/admin/products/new">
+          <CustomButton
+            buttonType="button"
+            customWidth="110px"
+            paddingX={10}
+            paddingY={5}
+            textSize="base"
+            text="Add new product"
+          />
+        </Link>
       </div>
-            
 
-      <table className="table">
-        {/* head */}
-        <thead>
-          <tr>
-            <th>
-              <label>
-                <input type="checkbox" className="checkbox" />
-              </label>
-            </th>
-            <th>Product</th>
-            <th>Stock Availability</th>
-            <th>Price</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {/* row 1 */}
-          {products &&
-            products.map((product) => (
-              <tr key={nanoid()}>
-                <th>
-                  <label>
-                    <input type="checkbox" className="checkbox" />
-                  </label>
-                </th>
+      <div className="xl:ml-5 w-full max-xl:mt-5 overflow-auto w-full h-[80vh]">
+        <table className="table table-md table-pin-cols">
+          {/* head */}
+          <thead>
+            <tr>
+              <th>
+                <label>
+                  <input type="checkbox" className="checkbox" />
+                </label>
+              </th>
+              <th>Product</th>
+              <th>Stock Availability</th>
+              <th>Price</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {/* row 1 */}
+            {products &&
+              products.map((product) => (
+                <tr key={nanoid()}>
+                  <th>
+                    <label>
+                      <input type="checkbox" className="checkbox" />
+                    </label>
+                  </th>
 
-                <td>
-                  <div className="flex items-center gap-3">
-                    <div className="avatar">
-                      <div className="mask mask-squircle w-12 h-12">
-                        <Image
-                          width={48}
-                          height={48}
-                          src={`/${product?.mainImage}`}
-                          alt="Avatar Tailwind CSS Component"
-                          className="w-auto h-auto"
-                        />
+                  <td>
+                    <div className="flex items-center gap-3">
+                      <div className="avatar">
+                        <div className="mask mask-squircle w-12 h-12">
+                          <Image
+                            width={48}
+                            height={48}
+                            src={`/${product?.mainImage}`}
+                            alt="Avatar Tailwind CSS Component"
+                            className="w-auto h-auto"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <div className="font-bold">{product?.title}</div>
+                        <div className="text-sm opacity-50">
+                          {product?.manufacturer}
+                        </div>
                       </div>
                     </div>
-                    <div>
-                      <div className="font-bold">{product?.title}</div>
-                      <div className="text-sm opacity-50">
-                        {product?.manufacturer}
-                      </div>
-                    </div>
-                  </div>
-                </td>
+                  </td>
 
-                <td>
-                  25
-                  <br />
-                  <span className="badge badge-success text-white badge-sm">
-                    In stock
-                  </span>
-                </td>
-                <td>${product?.price}</td>
-                <th>
-                  <Link
-                    href={`/admin/products/${product.id}`}
-                    className="btn btn-ghost btn-xs"
-                  >
-                    details
-                  </Link>
-                </th>
-              </tr>
-            ))}
-        </tbody>
-        {/* foot */}
-        <tfoot>
-          <tr>
-            <th></th>
-            <th>Product</th>
-            <th>Stock Availability</th>
-            <th>Price</th>
-            <th></th>
-          </tr>
-        </tfoot>
-      </table>
+                  <td>
+                    25
+                    <br />
+                    <span className="badge badge-success text-white badge-sm">
+                      In stock
+                    </span>
+                  </td>
+                  <td>${product?.price}</td>
+                  <th>
+                    <Link
+                      href={`/admin/products/${product.id}`}
+                      className="btn btn-ghost btn-xs"
+                    >
+                      details
+                    </Link>
+                  </th>
+                </tr>
+              ))}
+          </tbody>
+          {/* foot */}
+          <tfoot>
+            <tr>
+              <th></th>
+              <th>Product</th>
+              <th>Stock Availability</th>
+              <th>Price</th>
+              <th></th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
     </div>
   );
 };

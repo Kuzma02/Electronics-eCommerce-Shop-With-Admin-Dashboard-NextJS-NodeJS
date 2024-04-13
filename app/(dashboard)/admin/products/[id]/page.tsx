@@ -72,9 +72,9 @@ const DashboardProductDetails = ({
   }, [id]);
 
   return (
-    <div className="bg-white flex justify-start max-w-screen-2xl mx-auto h-[120vh]">
+    <div className="bg-white flex justify-start max-w-screen-2xl mx-auto xl:h-[120vh] max-xl:flex-col max-xl:gap-y-5">
       <DashboardSidebar />
-      <div className="flex flex-col gap-y-7 ml-5 w-full">
+      <div className="flex flex-col gap-y-7 xl:ml-5 w-full max-xl:px-5">
         <h1 className="text-3xl font-semibold">Product details</h1>
         <div>
           <label className="form-control w-full max-w-xs">
@@ -171,7 +171,7 @@ const DashboardProductDetails = ({
             ></textarea>
           </label>
         </div>
-        <div className="flex gap-x-2">
+        <div className="flex gap-x-2 max-sm:flex-col">
           <button
             type="button"
             onClick={updateProduct}

@@ -1,11 +1,13 @@
+"use client";
 import { DashboardSidebar } from "@/components";
 import React from "react";
 
 const DashboardCreateNewUser = () => {
   return (
-    <div className="bg-white flex justify-start max-w-screen-2xl mx-auto h-[100vh]">
+    <div className="bg-white flex justify-start max-w-screen-2xl mx-auto xl:h-[100vh] max-xl:flex-col max-xl:gap-y-5">
       <DashboardSidebar />
-      <div className="flex flex-col gap-y-7 pl-5 w-full">
+      <div className="flex flex-col gap-y-7 xl:pl-5 max-xl:px-5 w-full">
+      <h1 className="text-3xl font-semibold">Add new user</h1>
         <div>
           <label className="form-control w-full max-w-xs">
             <div className="label">

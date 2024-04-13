@@ -9,7 +9,7 @@ import Link from "next/link";
 
 const DashboardSidebar = () => {
   return (
-    <div className="w-[400px] bg-blue-500 h-full">
+    <div className="xl:w-[400px] bg-blue-500 h-full max-xl:w-full">
       <Link href="/admin">
         <div className="flex gap-x-2 w-full hover:bg-blue-600 cursor-pointer items-center py-6 pl-5 text-xl text-white">
           <MdDashboard className="text-2xl" />{" "}
