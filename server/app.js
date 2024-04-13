@@ -6,6 +6,7 @@ const categoryRouter = require('./routes/category');
 const searchRouter = require('./routes/search');
 const mainImageRouter = require('./routes/mainImages');
 const userRouter = require('./routes/users');
+const orderRouter = require('./routes/orders');
 var cors = require('cors');
 
 // use it before all route definitions
@@ -27,6 +28,8 @@ app.use('/api/images', productImagesRouter);
 app.use("/api/main-image", mainImageRouter);
 app.use("/api/users", userRouter);
 app.use('/api/search', searchRouter);
+app.use('/api/orders', orderRouter);
+
 
 
 const PORT = process.env.PORT || 3001;

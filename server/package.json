@@ -10,11 +10,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^5.10.2",
+    "@prisma/client": "^5.12.1",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "express": "^4.18.3",
     "mysql": "^2.18.1",
-    "nanoid": "^5.0.6"
+    "nanoid": "^5.0.6",
+    "prisma": "^5.12.1"
   }
 }

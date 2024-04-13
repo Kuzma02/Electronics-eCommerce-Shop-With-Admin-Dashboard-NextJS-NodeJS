@@ -6,8 +6,8 @@ const AdminDashboardPage = () => {
   return (
     <div className="bg-white flex justify-start max-w-screen-2xl mx-auto">
       <DashboardSidebar />
-      <div className="flex flex-col items-center ml-5 gap-y-4">
-        <div className="flex gap-x-5 justify-center w-full">
+      <div className="flex flex-col items-center ml-5 gap-y-4 w-full">
+        <div className="flex justify-between w-full">
           <StatsElement />
           <StatsElement />
           <StatsElement />

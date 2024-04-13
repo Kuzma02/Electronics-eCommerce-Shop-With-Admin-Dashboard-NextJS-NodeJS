@@ -151,7 +151,7 @@ const DashboardProductDetails = ({
             <Image
               src={`/` + product?.mainImage}
               alt={product?.title}
-              className="w-auto h-auto"
+              className="w-auto h-auto mt-2"
               width={100}
               height={100}
             />

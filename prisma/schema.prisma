@@ -38,17 +38,16 @@ model User {
   password String?
 }
 
-// const userSchema = new Schema(
-//   {
-//     email: {
-//       type: String,
-//       unique: true,
-//       required: true,
-//     },
-//     password: {
-//       type: String,
-//       required: false,
-//     },
-//   },
-//   { timestamps: true }
-// );
+model Order {
+  id         String  @id @default(uuid())
+  name       String
+  lastname   String
+  phone      String
+  email      String  @unique
+  company    String?
+  adress     String
+  apartment  String?
+  city       String
+  country    String
+  postalCode Int
+}
