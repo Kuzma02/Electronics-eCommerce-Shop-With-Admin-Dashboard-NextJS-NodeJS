@@ -1,4 +1,5 @@
 const express = require("express");
+const bcrypt = require('bcryptjs');
 const fileUpload = require("express-fileupload");
 const productsRouter = require("./routes/products");
 const productImagesRouter = require("./routes/productImages");

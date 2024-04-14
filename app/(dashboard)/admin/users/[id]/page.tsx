@@ -1,6 +1,6 @@
 "use client";
 import { DashboardSidebar } from "@/components";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface DashboardUserDetailsProps {
   params: { id: number };
@@ -9,13 +9,31 @@ interface DashboardUserDetailsProps {
 const DashboardSingleUserPage = ({
   params: { id },
 }: DashboardUserDetailsProps) => {
-  const [] = useState({ email: "" });
+  const [userInput, setUserInput] = useState<any>({
+    email: "",
+    newPassword: "",
+    role: "",
+  });
+
+  useEffect(() => {
+    fetch(`http://localhost:3001/api/users/${id}`)
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        setUserInput({
+          email: data?.email,
+          newPassword: "",
+          role: data?.role,
+        });
+      });
+  }, [id]);
 
   return (
     <div className="bg-white flex justify-start max-w-screen-2xl mx-auto xl:h-[100vh] max-xl:flex-col max-xl:gap-y-5">
       <DashboardSidebar />
       <div className="flex flex-col gap-y-7 xl:pl-5 max-xl:px-5 w-full">
-      <h1 className="text-3xl font-semibold">User details</h1>
+        <h1 className="text-3xl font-semibold">User details</h1>
         <div>
           <label className="form-control w-full max-w-xs">
             <div className="label">
@@ -24,6 +42,10 @@ const DashboardSingleUserPage = ({
             <input
               type="email"
               className="input input-bordered w-full max-w-xs"
+              value={userInput.email}
+              onChange={(e) =>
+                setUserInput({ ...userInput, email: userInput.email })
+              }
             />
           </label>
         </div>
@@ -36,6 +58,10 @@ const DashboardSingleUserPage = ({
             <input
               type="password"
               className="input input-bordered w-full max-w-xs"
+              onChange={(e) =>
+                setUserInput({ ...userInput, role: userInput.newPassword })
+              }
+              value={userInput.newPassword}
             />
           </label>
         </div>
@@ -45,7 +71,13 @@ const DashboardSingleUserPage = ({
             <div className="label">
               <span className="label-text">User role: </span>
             </div>
-            <select className="select select-bordered">
+            <select
+              className="select select-bordered"
+              value={userInput.role}
+              onChange={(e) =>
+                setUserInput({ ...userInput, role: userInput.role })
+              }
+            >
               <option value="admin">Admin</option>
               <option value="user">User</option>
             </select>

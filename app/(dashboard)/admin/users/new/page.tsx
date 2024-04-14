@@ -1,8 +1,33 @@
 "use client";
 import { DashboardSidebar } from "@/components";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const DashboardCreateNewUser = () => {
+  const [userInput, setUserInput] = useState({
+    email: "",
+    password: "",
+    role: "user",
+  });
+
+  const addNewUser = () => {
+    const requestOptions: any = {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userInput),
+    };
+    fetch(`http://localhost:3001/api/users`, requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        toast.success("User added successfully");
+        setUserInput({
+          email: "",
+          password: "",
+          role: "",
+        });
+      });
+  };
+
   return (
     <div className="bg-white flex justify-start max-w-screen-2xl mx-auto xl:h-[100vh] max-xl:flex-col max-xl:gap-y-5">
       <DashboardSidebar />
@@ -16,6 +41,10 @@ const DashboardCreateNewUser = () => {
             <input
               type="email"
               className="input input-bordered w-full max-w-xs"
+              value={userInput.email}
+              onChange={(e) =>
+                setUserInput({ ...userInput, email: e.target.value })
+              }
             />
           </label>
         </div>
@@ -28,6 +57,10 @@ const DashboardCreateNewUser = () => {
             <input
               type="password"
               className="input input-bordered w-full max-w-xs"
+              value={userInput.password}
+              onChange={(e) =>
+                setUserInput({ ...userInput, password: e.target.value })
+              }
             />
           </label>
         </div>
@@ -37,7 +70,13 @@ const DashboardCreateNewUser = () => {
             <div className="label">
               <span className="label-text">User role: </span>
             </div>
-            <select className="select select-bordered">
+            <select
+              className="select select-bordered"
+              defaultValue={userInput.role}
+              onChange={(e) =>
+                setUserInput({ ...userInput, role: e.target.value })
+              }
+            >
               <option value="admin">Admin</option>
               <option value="user">User</option>
             </select>
@@ -48,6 +87,7 @@ const DashboardCreateNewUser = () => {
           <button
             type="button"
             className="uppercase bg-blue-500 px-10 py-5 text-lg border border-black border-gray-300 font-bold text-white shadow-sm hover:bg-blue-600 hover:text-white focus:outline-none focus:ring-2"
+            onClick={addNewUser}
           >
             Create user
           </button>

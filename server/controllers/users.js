@@ -1,5 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+const bcrypt = require('bcryptjs');
 
 async function getAllUsers(request, response) {
   try {
@@ -14,10 +15,12 @@ async function createUser(request, response) {
   try {
     console.log("Creating user:", request.body);
     const { email, password, role } = request.body;
+    const hashedPassword = await bcrypt.hash(password, 5);
+
     const user = await prisma.user.create({
       data: {
         email,
-        password,
+        password: hashedPassword,
         role,
       },
     });
@@ -34,7 +37,7 @@ async function updateUser(request, response) {
     const { id } = request.params;
     console.log("Updating user with id:", id);
     const { email, password, role } = request.body;
-
+    const hashedPassword = await bcrypt.hash(password, 5);
     const existingUser = await prisma.user.findUnique({
       where: {
         id: id,
@@ -51,7 +54,7 @@ async function updateUser(request, response) {
       },
       data: {
         email,
-        password,
+        password: hashedPassword,
         role,
       },
     });
