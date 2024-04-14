@@ -3,17 +3,18 @@ import { CustomButton, DashboardSidebar } from "@/components";
 import { nanoid } from "nanoid";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { formatCategoryName } from "../../../../utils/categoryFormating";
 
-const DashboardUsers = () => {
-  const [users, setUsers] = useState<any>([]);
+const DashboardCategory = () => {
+  const [categories, setCategories] = useState<any>([]);
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/users")
+    fetch("http://localhost:3001/api/categories")
       .then((res) => {
         return res.json();
       })
       .then((data) => {
-        setUsers(data);
+        setCategories(data);
       });
   }, []);
 
@@ -21,16 +22,18 @@ const DashboardUsers = () => {
     <div className="bg-white flex justify-start max-w-screen-2xl mx-auto h-[100vh] max-xl:flex-col max-xl:h-fit max-xl:gap-y-4">
       <DashboardSidebar />
       <div className="w-full">
-        <h1 className="text-3xl font-semibold text-center mb-5">All users</h1>
+        <h1 className="text-3xl font-semibold text-center mb-5">
+          All Categories
+        </h1>
         <div className="flex justify-end mb-5">
-          <Link href="/admin/users/new">
+          <Link href="/admin/categories/new">
             <CustomButton
               buttonType="button"
               customWidth="110px"
               paddingX={10}
               paddingY={5}
               textSize="base"
-              text="Add new user"
+              text="Add new category"
             />
           </Link>
         </div>
@@ -44,15 +47,13 @@ const DashboardUsers = () => {
                     <input type="checkbox" className="checkbox" />
                   </label>
                 </th>
-                <th>Email</th>
-                <th>Role</th>
+                <th>Name</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              {/* row 1 */}
-              {users &&
-                users.map((user) => (
+              {categories &&
+                categories.map((category: any) => (
                   <tr key={nanoid()}>
                     <th>
                       <label>
@@ -61,16 +62,14 @@ const DashboardUsers = () => {
                     </th>
 
                     <td>
-                      <div className="flex items-center gap-3">
-                        <p>{user?.email}</p>
+                      <div>
+                        <p>{formatCategoryName(category?.name)}</p>
                       </div>
                     </td>
-                    <td>
-                      <p>{user?.role}</p>
-                    </td>
+
                     <th>
                       <Link
-                        href={`/admin/users/${user?.id}`}
+                        href={`/admin/categories/${category?.id}`}
                         className="btn btn-ghost btn-xs"
                       >
                         details
@@ -83,8 +82,7 @@ const DashboardUsers = () => {
             <tfoot>
               <tr>
                 <th></th>
-                <th>Email</th>
-                <th>Role</th>
+                <th>Name</th>
                 <th></th>
               </tr>
             </tfoot>
@@ -95,4 +93,4 @@ const DashboardUsers = () => {
   );
 };
 
-export default DashboardUsers;
+export default DashboardCategory;

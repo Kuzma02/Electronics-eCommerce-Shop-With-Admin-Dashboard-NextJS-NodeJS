@@ -4,6 +4,8 @@ import { FaTable } from "react-icons/fa6";
 import { FaRegUser } from "react-icons/fa6";
 import { FaGear } from "react-icons/fa6";
 import { FaBagShopping } from "react-icons/fa6";
+import { MdCategory } from "react-icons/md";
+
 
 import Link from "next/link";
 
@@ -26,6 +28,12 @@ const DashboardSidebar = () => {
         <div className="flex gap-x-2 w-full hover:bg-blue-600 cursor-pointer items-center py-6 pl-5 text-xl text-white">
           <FaTable className="text-2xl" />{" "}
           <span className="font-normal">Products</span>
+        </div>
+      </Link>
+      <Link href="/admin/categories">
+        <div className="flex gap-x-2 w-full hover:bg-blue-600 cursor-pointer items-center py-6 pl-5 text-xl text-white">
+          <MdCategory className="text-2xl" />{" "}
+          <span className="font-normal">Categories</span>
         </div>
       </Link>
       <Link href="/admin/users">

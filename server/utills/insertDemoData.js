@@ -204,9 +204,6 @@ const demoCategories = [
     name: "juicers",
   },
   {
-    name: "speakers",
-  },
-  {
     name: "earbuds",
   },
   {
