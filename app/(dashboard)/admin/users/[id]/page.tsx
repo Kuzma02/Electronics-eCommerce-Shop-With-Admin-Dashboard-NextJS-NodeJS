@@ -1,6 +1,8 @@
 "use client";
 import { DashboardSidebar } from "@/components";
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 interface DashboardUserDetailsProps {
   params: { id: number };
@@ -14,6 +16,48 @@ const DashboardSingleUserPage = ({
     newPassword: "",
     role: "",
   });
+  const router = useRouter();
+
+  const deleteUser = async () => {
+    const requestOptions = {
+      method: "DELETE",
+    };
+    fetch(`http://localhost:3001/api/users/${id}`, requestOptions).then(
+      (response) => {
+        toast.success("Product deleted successfully");
+        router.push("/admin/users");
+      }
+    );
+  };
+
+  const updateUser = async () => {
+    if (
+      userInput.email.length > 3 &&
+      userInput.role.length > 0 &&
+      userInput.newPassword.length > 0
+    ) {
+      if (userInput.newPassword.length > 7) {
+        const requestOptions = {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: userInput.email,
+            password: userInput.newPassword,
+            role: userInput.role,
+          }),
+        };
+        fetch(`http://localhost:3001/api/users/${id}`, requestOptions)
+          .then((response) => response.json())
+          .then((data) => toast.success("User successfully updated"));
+      } else {
+        toast.error("Password must be longer than 7 characters");
+        return;
+      }
+    } else {
+      toast.error("For updating a user you must enter all values");
+      return;
+    }
+  };
 
   useEffect(() => {
     fetch(`http://localhost:3001/api/users/${id}`)
@@ -44,7 +88,7 @@ const DashboardSingleUserPage = ({
               className="input input-bordered w-full max-w-xs"
               value={userInput.email}
               onChange={(e) =>
-                setUserInput({ ...userInput, email: userInput.email })
+                setUserInput({ ...userInput, email: e.target.value })
               }
             />
           </label>
@@ -59,7 +103,7 @@ const DashboardSingleUserPage = ({
               type="password"
               className="input input-bordered w-full max-w-xs"
               onChange={(e) =>
-                setUserInput({ ...userInput, role: userInput.newPassword })
+                setUserInput({ ...userInput, newPassword: e.target.value })
               }
               value={userInput.newPassword}
             />
@@ -75,7 +119,7 @@ const DashboardSingleUserPage = ({
               className="select select-bordered"
               value={userInput.role}
               onChange={(e) =>
-                setUserInput({ ...userInput, role: userInput.role })
+                setUserInput({ ...userInput, role: e.target.value })
               }
             >
               <option value="admin">Admin</option>
@@ -87,12 +131,14 @@ const DashboardSingleUserPage = ({
           <button
             type="button"
             className="uppercase bg-blue-600 px-10 py-5 text-lg border border-black border-gray-300 font-bold text-white shadow-sm hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-2"
+            onClick={updateUser}
           >
             Update user
           </button>
           <button
             type="button"
             className="uppercase bg-red-600 px-10 py-5 text-lg border border-black border-gray-300 font-bold text-white shadow-sm hover:bg-red-700 hover:text-white focus:outline-none focus:ring-2"
+            onClick={deleteUser}
           >
             Delete user
           </button>

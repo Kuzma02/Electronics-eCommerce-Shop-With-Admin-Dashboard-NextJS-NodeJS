@@ -11,21 +11,33 @@ const DashboardCreateNewUser = () => {
   });
 
   const addNewUser = () => {
-    const requestOptions: any = {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(userInput),
-    };
-    fetch(`http://localhost:3001/api/users`, requestOptions)
-      .then((response) => response.json())
-      .then((data) => {
-        toast.success("User added successfully");
-        setUserInput({
-          email: "",
-          password: "",
-          role: "",
-        });
-      });
+    if (
+      userInput.email.length > 3 &&
+      userInput.role.length > 0 &&
+      userInput.password.length > 0
+    ) {
+      if (userInput.password.length > 7) {
+        const requestOptions: any = {
+          method: "post",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(userInput),
+        };
+        fetch(`http://localhost:3001/api/users`, requestOptions)
+          .then((response) => response.json())
+          .then((data) => {
+            toast.success("User added successfully");
+            setUserInput({
+              email: "",
+              password: "",
+              role: "",
+            });
+          });
+      } else {
+        toast.error("Password must be longer than 7 characters");
+      }
+    }else{
+      toast.error("You must enter all input values to add a user");
+    }
   };
 
   return (
