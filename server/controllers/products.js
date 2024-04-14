@@ -180,7 +180,7 @@ async function createProduct(request, response) {
       description,
       manufacturer,
       category,
-      inStock
+      inStock,
     } = request.body;
     const product = await prisma.product.create({
       data: {
@@ -229,13 +229,22 @@ async function updateProduct(request, response) {
       return response.status(404).json({ error: "Product not found" });
     }
 
-    
-    console.log(id, title, mainImage, price, rating, description, manufacturer, category, inStock);
+    console.log(
+      id,
+      title,
+      mainImage,
+      price,
+      rating,
+      description,
+      manufacturer,
+      category,
+      inStock
+    );
 
     // Ažuriramo pronađeni proizvod
     const updatedProduct = await prisma.product.update({
       where: {
-        id // Koristimo ID pronađenog proizvoda
+        id, // Koristimo ID pronađenog proizvoda
       },
       data: {
         title: title,

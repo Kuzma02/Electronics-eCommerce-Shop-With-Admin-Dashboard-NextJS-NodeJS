@@ -184,6 +184,48 @@ const demoProductImages = [
   },
 ];
 
+const demoCategories = [
+  {
+    name: "speakers",
+  },
+  {
+    name: "trimmers",
+  },
+  {
+    name: "laptops",
+  },
+  {
+    name: "watches",
+  },
+  {
+    name: "headphones",
+  },
+  {
+    name: "juicers",
+  },
+  {
+    name: "speakers",
+  },
+  {
+    name: "earbuds",
+  },
+  {
+    name: "tablet-keyboards",
+  },
+  {
+    name: "phone-gimbals",
+  },
+  {
+    name: "mixer-grinders",
+  },
+  {
+    name: "cameras",
+  },
+  {
+    name: "smart-phones",
+  },
+];
+
 async function insertDemoData() {
   for (const product of demoProducts) {
     await prisma.product.create({
@@ -198,6 +240,13 @@ async function insertDemoData() {
     });
   }
   console.log("Demo images inserted successfully!");
+
+  for (const category of demoCategories) {
+    await prisma.category.create({
+      data: category,
+    });
+  }
+  console.log("Demo categories inserted successfully!");
 
 }
 

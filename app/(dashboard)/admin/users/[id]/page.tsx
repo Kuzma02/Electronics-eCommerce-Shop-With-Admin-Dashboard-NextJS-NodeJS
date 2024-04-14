@@ -27,6 +27,30 @@ const DashboardSingleUserPage = ({
             />
           </label>
         </div>
+
+        <div>
+          <label className="form-control w-full max-w-xs">
+            <div className="label">
+              <span className="label-text">New password:</span>
+            </div>
+            <input
+              type="password"
+              className="input input-bordered w-full max-w-xs"
+            />
+          </label>
+        </div>
+
+        <div>
+          <label className="form-control w-full max-w-xs">
+            <div className="label">
+              <span className="label-text">User role: </span>
+            </div>
+            <select className="select select-bordered">
+              <option value="admin">Admin</option>
+              <option value="user">User</option>
+            </select>
+          </label>
+        </div>
         <div className="flex gap-x-2 max-sm:flex-col">
           <button
             type="button"

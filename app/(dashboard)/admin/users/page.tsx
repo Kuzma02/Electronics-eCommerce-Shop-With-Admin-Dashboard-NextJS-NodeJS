@@ -66,7 +66,7 @@ const DashboardUsers = () => {
                       </div>
                     </td>
                     <td>
-                      <p>admin</p>
+                      <p>{ user?.role }</p>
                     </td>
                     <th>
                       <Link

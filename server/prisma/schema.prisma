@@ -36,6 +36,7 @@ model User {
   id       String  @id @default(uuid())
   email    String  @unique
   password String?
+  role     String? @default("user")
 }
 
 model Order {
@@ -50,4 +51,9 @@ model Order {
   city       String
   country    String
   postalCode Int
+}
+
+model Category {
+  id   String @id @default(uuid())
+  name String
 }

@@ -13,7 +13,7 @@ const demoProducts = [
     slug: "smart-phone-demo",
     manufacturer: "Samsung",
     category: "smart-phones",
-    inStock: 0
+    inStock: 0,
   },
   {
     id: "2",
@@ -25,7 +25,7 @@ const demoProducts = [
     slug: "slr-camera-demo",
     manufacturer: "Canon",
     category: "cameras",
-    inStock: 0
+    inStock: 0,
   },
   {
     id: "3",
@@ -37,7 +37,7 @@ const demoProducts = [
     slug: "mixed-grinder-demo",
     manufacturer: "ZunVolt",
     category: "mixer-grinders",
-    inStock: 1
+    inStock: 1,
   },
   {
     id: "4",
@@ -49,7 +49,7 @@ const demoProducts = [
     slug: "phone-gimbal-demo",
     manufacturer: "Samsung",
     category: "phone-gimbals",
-    inStock: 1
+    inStock: 1,
   },
   {
     id: "5",
@@ -61,7 +61,7 @@ const demoProducts = [
     slug: "tablet-keyboard-demo",
     manufacturer: "Samsung",
     category: "tablet-keyboards",
-    inStock: 1
+    inStock: 1,
   },
   {
     id: "6",
@@ -73,7 +73,7 @@ const demoProducts = [
     slug: "wireless-earbuds-demo",
     manufacturer: "Samsung",
     category: "earbuds",
-    inStock: 1
+    inStock: 1,
   },
   {
     id: "7",
@@ -85,7 +85,7 @@ const demoProducts = [
     slug: "party-speakers-demo",
     manufacturer: "SOWO",
     category: "speakers",
-    inStock: 1
+    inStock: 1,
   },
   {
     id: "8",
@@ -97,7 +97,7 @@ const demoProducts = [
     slug: "slow-juicer-demo",
     manufacturer: "Bosch",
     category: "juicers",
-    inStock: 1
+    inStock: 1,
   },
   {
     id: "9",
@@ -109,7 +109,7 @@ const demoProducts = [
     slug: "wireless-headphones-demo",
     manufacturer: "Sony",
     category: "headphones",
-    inStock: 1
+    inStock: 1,
   },
   {
     id: "10",
@@ -121,7 +121,7 @@ const demoProducts = [
     slug: "smart-watch-demo",
     manufacturer: "Samsung",
     category: "watches",
-    inStock: 1
+    inStock: 1,
   },
   {
     id: "11",
@@ -133,7 +133,7 @@ const demoProducts = [
     slug: "notebook-horizon-demo",
     manufacturer: "HP",
     category: "laptops",
-    inStock: 1
+    inStock: 1,
   },
   {
     id: "12",
@@ -145,7 +145,7 @@ const demoProducts = [
     slug: "mens-trimmer-demo",
     manufacturer: "Gillete",
     category: "trimmers",
-    inStock: 0
+    inStock: 0,
   },
   {
     id: "13",
@@ -157,7 +157,7 @@ const demoProducts = [
     slug: "sony-speaker-bluetooth",
     manufacturer: "Sony",
     category: "speakers",
-    inStock: 1
+    inStock: 1,
   },
 ];
 
@@ -184,6 +184,48 @@ const demoProductImages = [
   },
 ];
 
+const demoCategories = [
+  {
+    name: "speakers",
+  },
+  {
+    name: "trimmers",
+  },
+  {
+    name: "laptops",
+  },
+  {
+    name: "watches",
+  },
+  {
+    name: "headphones",
+  },
+  {
+    name: "juicers",
+  },
+  {
+    name: "speakers",
+  },
+  {
+    name: "earbuds",
+  },
+  {
+    name: "tablet-keyboards",
+  },
+  {
+    name: "phone-gimbals",
+  },
+  {
+    name: "mixer-grinders",
+  },
+  {
+    name: "cameras",
+  },
+  {
+    name: "smart-phones",
+  },
+];
+
 async function insertDemoData() {
   for (const product of demoProducts) {
     await prisma.product.create({
@@ -192,16 +234,20 @@ async function insertDemoData() {
   }
   console.log("Demo products inserted successfully!");
 
-  for(const image of demoProductImages){
+  for (const image of demoProductImages) {
     await prisma.image.create({
       data: image,
     });
   }
   console.log("Demo images inserted successfully!");
 
+  for (const category of demoCategories) {
+    await prisma.category.create({
+      data: category,
+    });
+  }
+  console.log("Demo categories inserted successfully!");
 }
-
-
 
 insertDemoData()
   .catch((error) => {
