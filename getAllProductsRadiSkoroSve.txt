@@ -122,13 +122,6 @@ async function getAllProducts(request, response) {
     }
   }
 
-  let whereClause = { ...filterObj }; // Include other filters if any
-
-  // Remove category filter from whereClause and use it separately
-  if (filterObj.category && filterObj.category.equals) {
-    delete whereClause.category; // Remove category filter from whereClause
-  }
-
   if (sortByValue === "defaultSort") {
     sortObj = {};
   } else if (sortByValue === "titleAsc") {
@@ -151,55 +144,45 @@ async function getAllProducts(request, response) {
 
   let products;
 
-  if (Object.keys(filterObj).length === 0) {
-    products = await prisma.product.findMany({
-      include: {
-        category: {
-          select: {
-            name: true,
-          },
+if (Object.keys(filterObj).length === 0) {
+  products = await prisma.product.findMany({
+    include: {
+      category: {
+        select: {
+          name: true,
         },
       },
-      orderBy: sortObj,
-    });
-  } else {
-    // Check if category filter is present
-    if (filterObj.category && filterObj.category.equals) {
-      products = await prisma.product.findMany({
-        include: {
-          category: {
-            select: {
-              name: true,
-            },
-          },
+    },
+    orderBy: sortObj,
+  });
+} else {
+  let whereClause = { ...filterObj }; // Include other filters if any
+
+  if (filterObj.category) {
+    whereClause = {
+      ...whereClause,
+      category: {
+        name: {
+          equals: "smart-phones",
         },
-        where: {
-          ...whereClause,
-          category: {
-            name: {
-              equals: filterObj.category.equals,
-            },
-          },
-        },
-        orderBy: sortObj,
-      });
-    } else {
-      // If no category filter, use whereClause
-      products = await prisma.product.findMany({
-        include: {
-          category: {
-            select: {
-              name: true,
-            },
-          },
-        },
-        where: whereClause,
-        orderBy: sortObj,
-      });
-    }
+      },
+    };
   }
 
-  return response.json(products);
+  products = await prisma.product.findMany({
+    include: {
+      category: {
+        select: {
+          name: true,
+        },
+      },
+    },
+    where: whereClause,
+    orderBy: sortObj,
+  });
+}
+
+return response.json(products);
 }
 
 async function getAllProductsOld(request, response) {

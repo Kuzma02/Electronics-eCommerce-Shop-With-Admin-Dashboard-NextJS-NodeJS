@@ -7,7 +7,7 @@ interface Product {
     description: string;
     mainImage: string;
     manufacturer: string;
-    category: string;
+    category: { id: string, name: string };
     inStock: boolean;
 }
 

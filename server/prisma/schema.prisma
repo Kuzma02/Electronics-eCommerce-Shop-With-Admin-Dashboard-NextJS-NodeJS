@@ -14,16 +14,17 @@ datasource db {
 }
 
 model Product {
-  id           String @id @default(uuid())
-  slug         String @unique
+  id           String   @id @default(uuid())
+  slug         String   @unique
   title        String
   mainImage    String
-  price        Int    @default(0)
-  rating       Int    @default(0)
+  price        Int      @default(0)
+  rating       Int      @default(0)
   description  String
   manufacturer String
-  category     String
-  inStock      Int    @default(1)
+  inStock      Int      @default(1)
+  categoryId   String
+  category     Category @relation(fields: [categoryId], references: [id])
 }
 
 model Image {
@@ -54,6 +55,7 @@ model Order {
 }
 
 model Category {
-  id   String @id @default(uuid())
-  name String
+  id       String    @id @default(uuid())
+  name     String
+  products Product[] // Define a one-to-many relationship
 }

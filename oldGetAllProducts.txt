@@ -1,0 +1,167 @@
+// async function getAllProductsOld(request, response) {
+//   const dividerLocation = request.url.indexOf("?");
+//   let filterObj = {};
+//   let sortObj = {};
+//   let sortByValue = "defaultSort";
+//   if (dividerLocation !== -1) {
+//     // queryArray sada sadrzi ceo query deo sto ukljucuje filter i sort queryije
+//     const queryArray = request.url
+//       .substring(dividerLocation + 1, request.url.length)
+//       .split("&");
+
+//     let filterType;
+//     let filterArray = [];
+
+//     for (let i = 0; i < queryArray.length; i++) {
+//       // proveravam da li je u pitanju filter mod i price filter
+//       if (
+//         queryArray[i].indexOf("filters") !== -1 &&
+//         queryArray[i].indexOf("price") !== -1
+//       ) {
+//         // uzimam "price" deo. Naravno mogao sam samo da napisem filterType="price"
+//         filterType = queryArray[i].substring(
+//           queryArray[i].indexOf("price"),
+//           queryArray[i].indexOf("price") + "price".length
+//         );
+//       }
+//       // proveravam da li je u pitanju filter mod i rating filter
+//       if (
+//         queryArray[i].indexOf("filters") !== -1 &&
+//         queryArray[i].indexOf("rating") !== -1
+//       ) {
+//         // uzimam "rating" deo. Naravno mogao sam samo da napisem filterType="rating"
+//         filterType = queryArray[i].substring(
+//           queryArray[i].indexOf("rating"),
+//           queryArray[i].indexOf("rating") + "rating".length
+//         );
+//       }
+
+//       // proveravam da li je u pitanju filter mod i category filter
+//       if (
+//         queryArray[i].indexOf("filters") !== -1 &&
+//         queryArray[i].indexOf("category") !== -1
+//       ) {
+//         // uzimam "category" deo. Naravno mogao sam samo da napisem filterType="category"
+//         filterType = queryArray[i].substring(
+//           queryArray[i].indexOf("category"),
+//           queryArray[i].indexOf("category") + "category".length
+//         );
+//       }
+
+//       if (
+//         queryArray[i].indexOf("filters") !== -1 &&
+//         queryArray[i].indexOf("inStock") !== -1
+//       ) {
+//         // uzimam "inStock" deo. Naravno mogao sam samo da napisem filterType="inStock"
+//         filterType = queryArray[i].substring(
+//           queryArray[i].indexOf("inStock"),
+//           queryArray[i].indexOf("inStock") + "inStock".length
+//         );
+//       }
+
+//       if (
+//         queryArray[i].indexOf("filters") !== -1 &&
+//         queryArray[i].indexOf("outOfStock") !== -1
+//       ) {
+//         // uzimam "outOfStock" deo. Naravno mogao sam samo da napisem filterType="outOfStock"
+//         filterType = queryArray[i].substring(
+//           queryArray[i].indexOf("outOfStock"),
+//           queryArray[i].indexOf("outOfStock") + "outOfStock".length
+//         );
+//       }
+
+//       if (queryArray[i].indexOf("sort") !== -1) {
+//         // uzimamo vrednost sorta iz querija
+//         sortByValue = queryArray[i].substring(queryArray[i].indexOf("=") + 1);
+//       }
+
+//       // proveravam da li je u datom queriju filters mod
+//       if (queryArray[i].indexOf("filters") !== -1) {
+//         let filterValue;
+//         //  proveravam da nije filter po categoriji. To radim kako bih izbegao pretvaranje Stringa u Int
+//         if (queryArray[i].indexOf("category") === -1) {
+//           // uzimam value deo. To je deo gde se nalazi int vrednost querija i konvertujem je u broj jer je po defaultu string
+//           filterValue = parseInt(
+//             queryArray[i].substring(
+//               queryArray[i].indexOf("=") + 1,
+//               queryArray[i].length
+//             )
+//           );
+//         } else {
+//           // ako je filter po kategorije
+//           filterValue = queryArray[i].substring(
+//             queryArray[i].indexOf("=") + 1,
+//             queryArray[i].length
+//           );
+//         }
+
+//         // uzimam operator npr. lte, gte, gt, lt...
+//         const filterOperator = queryArray[i].substring(
+//           queryArray[i].indexOf("$") + 1,
+//           queryArray[i].indexOf("=") - 1
+//         );
+
+//         // sve to dodajemo u filterArray
+//         // primer izgleda filterArray:
+//         /*
+//                 [
+//                 { filterType: 'price', filterOperator: 'lte', filterValue: 3000 },
+//                 { filterType: 'rating', filterOperator: 'gte', filterValue: 0 }
+//                 ]
+//                 */
+//         filterArray.push({ filterType, filterOperator, filterValue });
+//       }
+//     }
+
+//     for (let item in filterArray) {
+//       filterObj = {
+//         ...filterObj,
+//         [filterArray[item].filterType + ""]: {
+//           [filterArray[item].filterOperator]: filterArray[item].filterValue,
+//         },
+//       };
+//     }
+//   }
+
+//   if (sortByValue === "defaultSort") {
+//     sortObj = [];
+//   } else if (sortByValue === "titleAsc") {
+//     sortObj = [
+//       {
+//         title: "asc",
+//       },
+//     ];
+//   } else if (sortByValue === "titleDesc") {
+//     sortObj = [
+//       {
+//         title: "desc",
+//       },
+//     ];
+//   } else if (sortByValue === "lowPrice") {
+//     sortObj = [
+//       {
+//         price: "asc",
+//       },
+//     ];
+//   } else if (sortByValue === "highPrice") {
+//     sortObj = [
+//       {
+//         price: "desc",
+//       },
+//     ];
+//   }
+
+//   let users;
+//   if (Object.keys(filterObj).length === 0) {
+//     users = await prisma.product.findMany({});
+//   } else {
+//     users =
+//       (await prisma.product.findMany) <
+//       object >
+//       {
+//         where: filterObj,
+//         orderBy: sortObj,
+//       };
+//   }
+//   return response.json(users);
+// }

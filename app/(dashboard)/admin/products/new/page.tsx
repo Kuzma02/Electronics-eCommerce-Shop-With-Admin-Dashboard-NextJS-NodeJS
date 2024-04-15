@@ -1,7 +1,7 @@
 "use client";
 import { DashboardSidebar } from "@/components";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 const AddNewProduct = () => {
@@ -15,6 +15,7 @@ const AddNewProduct = () => {
     slug: "",
     category: "",
   });
+  const [categories, setCategories] = useState([]);
 
   const addProduct = async () => {
     console.log(product);
@@ -62,6 +63,20 @@ const AddNewProduct = () => {
     }
   };
 
+  const fetchCategories = async () => {
+    fetch(`http://localhost:3001/api/categories`)
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        setCategories(data);
+      });
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
   return (
     <div className="bg-white flex justify-start max-w-screen-2xl mx-auto xl:h-[120vh] max-xl:flex-col max-xl:gap-y-5">
       <DashboardSidebar />
@@ -102,14 +117,14 @@ const AddNewProduct = () => {
             <div className="label">
               <span className="label-text">Category:</span>
             </div>
-            <input
-              type="text"
-              className="input input-bordered w-full max-w-xs"
-              value={product?.category}
-              onChange={(e) =>
-                setProduct({ ...product, category: e.target.value })
-              }
-            />
+            <select className="select select-bordered">
+              {categories &&
+                categories.map((category: any) => (
+                  <option key={category?.id} value={category?.id}>
+                    {category?.name}
+                  </option>
+                ))}
+            </select>
           </label>
         </div>
 

@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import RatingPercentElement from "./RatingPercentElement";
 import SingleReview from "./SingleReview";
+import { formatCategoryName } from "@/utils/categoryFormating";
 
 const ProductTabs = ({ product } : { product: Product }) => {
   const [currentProductTab, setCurrentProductTab] = useState<number>(0);
@@ -58,7 +59,7 @@ const ProductTabs = ({ product } : { product: Product }) => {
                 {/* row 2 */}
                 <tr>
                   <th>Category:</th>
-                  <td>{ product?.category || "No category" }</td>
+                  <td>{ formatCategoryName(product?.category?.name) || "No category" }</td>
                 </tr>
                 {/* row 3 */}
                 <tr>

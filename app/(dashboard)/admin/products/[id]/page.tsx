@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { convertCategoryNameToURLFriendly as convertSlugToURLFriendly } from "../../../../../utils/categoryFormating";
 
 interface DashboardProductDetailsProps {
   params: { id: number };
@@ -13,6 +14,7 @@ const DashboardProductDetails = ({
   params: { id },
 }: DashboardProductDetailsProps) => {
   const [product, setProduct] = useState<any>();
+  const [categories, setCategories] = useState<any>();
   const router = useRouter();
 
   const deleteProduct = async () => {
@@ -61,7 +63,7 @@ const DashboardProductDetails = ({
     }
   };
 
-  useEffect(() => {
+  const fetchProductData = async () => {
     fetch(`http://localhost:3001/api/products/${id}`)
       .then((res) => {
         return res.json();
@@ -69,6 +71,21 @@ const DashboardProductDetails = ({
       .then((data) => {
         setProduct(data);
       });
+  };
+
+  const fetchCategories = async () => {
+    fetch(`http://localhost:3001/api/categories`)
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        setCategories(data);
+      });
+  };
+
+  useEffect(() => {
+    fetchProductData();
+    fetchCategories();
   }, [id]);
 
   return (
@@ -121,6 +138,21 @@ const DashboardProductDetails = ({
             />
           </label>
         </div>
+
+        <div>
+          <label className="form-control w-full max-w-xs">
+            <div className="label">
+              <span className="label-text">Slug:</span>
+            </div>
+            <input
+              type="text"
+              className="input input-bordered w-full max-w-xs"
+              value={product?.slug && convertSlugToURLFriendly(product?.slug)}
+              onChange={(e) => setProduct({ ...product, slug: convertSlugToURLFriendly(e.target.value) })}
+            />
+          </label>
+        </div>
+
         <div>
           <label className="form-control w-full max-w-xs">
             <div className="label">
@@ -138,6 +170,23 @@ const DashboardProductDetails = ({
             </select>
           </label>
         </div>
+
+        <div>
+          <label className="form-control w-full max-w-xs">
+            <div className="label">
+              <span className="label-text">Category:</span>
+            </div>
+            <select className="select select-bordered">
+              {categories &&
+                categories.map((category: any) => (
+                  <option key={category?.id} value={category?.id}>
+                    {category?.name}
+                  </option>
+                ))}
+            </select>
+          </label>
+        </div>
+
         <div>
           <input
             type="file"
