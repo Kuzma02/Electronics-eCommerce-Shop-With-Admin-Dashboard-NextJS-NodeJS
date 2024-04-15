@@ -4,7 +4,10 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { convertCategoryNameToURLFriendly as convertSlugToURLFriendly } from "../../../../../utils/categoryFormating";
+import {
+  convertCategoryNameToURLFriendly as convertSlugToURLFriendly,
+  formatCategoryName,
+} from "../../../../../utils/categoryFormating";
 
 interface DashboardProductDetailsProps {
   params: { id: number };
@@ -84,8 +87,8 @@ const DashboardProductDetails = ({
   };
 
   useEffect(() => {
-    fetchProductData();
     fetchCategories();
+    fetchProductData();
   }, [id]);
 
   return (
@@ -148,7 +151,12 @@ const DashboardProductDetails = ({
               type="text"
               className="input input-bordered w-full max-w-xs"
               value={product?.slug && convertSlugToURLFriendly(product?.slug)}
-              onChange={(e) => setProduct({ ...product, slug: convertSlugToURLFriendly(e.target.value) })}
+              onChange={(e) =>
+                setProduct({
+                  ...product,
+                  slug: convertSlugToURLFriendly(e.target.value),
+                })
+              }
             />
           </label>
         </div>
@@ -176,11 +184,20 @@ const DashboardProductDetails = ({
             <div className="label">
               <span className="label-text">Category:</span>
             </div>
-            <select className="select select-bordered">
+            <select
+              className="select select-bordered"
+              value={product?.category?.id}
+              onChange={(e) =>
+                setProduct({
+                  ...product,
+                  category: { ...product.category, id: e.target.value },
+                })
+              }
+            >
               {categories &&
                 categories.map((category: any) => (
                   <option key={category?.id} value={category?.id}>
-                    {category?.name}
+                    {formatCategoryName(category?.name)}
                   </option>
                 ))}
             </select>

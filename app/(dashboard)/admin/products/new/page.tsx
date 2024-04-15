@@ -1,5 +1,6 @@
 "use client";
 import { DashboardSidebar } from "@/components";
+import { convertCategoryNameToURLFriendly as convertSlugToURLFriendly } from "@/utils/categoryFormating";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -13,7 +14,7 @@ const AddNewProduct = () => {
     mainImage: "",
     description: "",
     slug: "",
-    category: "",
+    categoryId: "",
   });
   const [categories, setCategories] = useState([]);
 
@@ -37,7 +38,7 @@ const AddNewProduct = () => {
           mainImage: "",
           description: "",
           slug: "",
-          category: "",
+          categoryId: "",
         });
       });
   };
@@ -106,8 +107,13 @@ const AddNewProduct = () => {
             <input
               type="text"
               className="input input-bordered w-full max-w-xs"
-              value={product?.slug}
-              onChange={(e) => setProduct({ ...product, slug: e.target.value })}
+              value={convertSlugToURLFriendly(product?.slug)}
+              onChange={(e) =>
+                setProduct({
+                  ...product,
+                  slug: convertSlugToURLFriendly(e.target.value),
+                })
+              }
             />
           </label>
         </div>
@@ -117,7 +123,13 @@ const AddNewProduct = () => {
             <div className="label">
               <span className="label-text">Category:</span>
             </div>
-            <select className="select select-bordered">
+            <select
+              className="select select-bordered"
+              value={product?.categoryId}
+              onChange={(e) =>
+                setProduct({ ...product, categoryId: e.target.value })
+              }
+            >
               {categories &&
                 categories.map((category: any) => (
                   <option key={category?.id} value={category?.id}>
