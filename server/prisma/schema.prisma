@@ -40,18 +40,19 @@ model User {
   role     String? @default("user")
 }
 
-model Order {
-  id         String  @id @default(uuid())
+model Customer_order {
+  id         String    @id @default(uuid())
   name       String
   lastname   String
   phone      String
-  email      String  @unique
-  company    String?
+  email      String
+  company    String
   adress     String
-  apartment  String?
-  city       String
-  country    String
-  postalCode Int
+  apartment  String
+  postalCode String
+  dateTime   DateTime? @default(now())
+  status     String
+  total      Int
 }
 
 model Category {
