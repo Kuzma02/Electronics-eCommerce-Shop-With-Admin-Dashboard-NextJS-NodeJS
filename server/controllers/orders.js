@@ -13,7 +13,6 @@ async function createCustomerOrder(request, response) {
       adress,
       apartment,
       postalCode,
-      dateTime,
       status,
       total,
     } = request.body;
@@ -27,7 +26,6 @@ async function createCustomerOrder(request, response) {
         adress,
         apartment,
         postalCode,
-        dateTime,
         status,
         total,
       },

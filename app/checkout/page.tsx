@@ -22,6 +22,44 @@ const CheckoutPage = () => {
     postalCode: "",
   });
   const { products, total } = useProductStore();
+
+  const makePurchase = async () => {
+    if (
+      checkoutForm.name.length > 0 &&
+      checkoutForm.lastname.length > 0 &&
+      checkoutForm.phone.length > 0 &&
+      checkoutForm.email.length > 0 &&
+      checkoutForm.cardName.length > 0 &&
+      checkoutForm.expirationDate.length > 0 &&
+      checkoutForm.cvc.length > 0 &&
+      checkoutForm.company.length > 0 &&
+      checkoutForm.adress.length > 0 &&
+      checkoutForm.apartment.length > 0 &&
+      checkoutForm.city.length > 0 &&
+      checkoutForm.country.length > 0 &&
+      checkoutForm.postalCode.length > 0
+    ) {
+      const response = await fetch("http://localhost:3001/api/orders", {
+        method: "POST", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: checkoutForm.name,
+          lastname: checkoutForm.lastname,
+          phone: checkoutForm.phone,
+          email: checkoutForm.email,
+          company: checkoutForm.company,
+          adress: checkoutForm.adress,
+          apartment: checkoutForm.apartment,
+          postalCode: checkoutForm.postalCode,
+          status: "processing",
+          total: total,
+        }),
+      });
+    }
+  };
+
   return (
     <div className="bg-white">
       <SectionTitle title="Checkout" path="Home | Cart | Checkout" />
@@ -476,7 +514,7 @@ const CheckoutPage = () => {
                       onChange={(e) =>
                         setCheckoutForm({
                           ...checkoutForm,
-                          country: e.target.value,
+                          postalCode: e.target.value,
                         })
                       }
                     />
@@ -487,7 +525,8 @@ const CheckoutPage = () => {
 
             <div className="mt-10 border-t border-gray-200 pt-6 ml-0">
               <button
-                type="submit"
+                type="button"
+                onClick={makePurchase}
                 className="w-full rounded-md border border-transparent bg-blue-500 px-20 py-2 text-lg font-medium text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-gray-50 sm:order-last"
               >
                 Pay Now
