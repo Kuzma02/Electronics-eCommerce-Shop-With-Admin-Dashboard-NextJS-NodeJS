@@ -1,26 +1,37 @@
 interface Product {
-    id: number;
-    slug: string;
-    title: string;
-    price: number;
-    rating: number;
-    description: string;
-    mainImage: string;
-    manufacturer: string;
-    category: { id: string, name: string };
-    inStock: boolean;
+  id: number;
+  slug: string;
+  title: string;
+  price: number;
+  rating: number;
+  description: string;
+  mainImage: string;
+  manufacturer: string;
+  categoryId: string;
+  inStock: number;
 }
 
 interface SingleProductPageProps {
-    params: {
-        productSlug: string;
-    }
+  params: {
+    productSlug: string;
+  };
 }
 
 type ProductInWishlist = {
-    id: number;
-    title: string;
-    price: number;
-    image: string;
-    slug: string;
-  };
+  id: number;
+  title: string;
+  price: number;
+  image: string;
+  slug: string;
+};
+
+interface OtherImages {
+  imageID: number;
+  productID: number;
+  image: string;
+}
+
+interface Category {
+  id: string;
+  name: string;
+}

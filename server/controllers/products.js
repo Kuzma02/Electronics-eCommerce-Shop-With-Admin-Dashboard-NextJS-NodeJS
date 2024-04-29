@@ -265,7 +265,7 @@ async function updateProduct(request, response) {
       rating,
       description,
       manufacturer,
-      category,
+      categoryId,
       inStock,
     } = request.body;
     // Pronalazimo proizvod prema slug-u
@@ -292,7 +292,7 @@ async function updateProduct(request, response) {
         rating: rating,
         description: description,
         manufacturer: manufacturer,
-        categoryId: category.id,
+        categoryId: categoryId,
         inStock: inStock,
       },
     });
