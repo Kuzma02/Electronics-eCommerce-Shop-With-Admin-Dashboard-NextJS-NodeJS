@@ -35,3 +35,10 @@ interface Category {
   id: string;
   name: string;
 }
+
+interface User {
+  id: string;
+  email: string;
+  password: string | null;
+  role: string;
+}

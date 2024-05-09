@@ -1,6 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const bcrypt = require('bcryptjs');
+const bcrypt = require("bcryptjs");
 
 async function getAllUsers(request, response) {
   try {
@@ -87,11 +87,30 @@ async function getUser(request, response) {
       id: id,
     },
   });
-  console.log(user);
   if (!user) {
     return response.status(404).json({ error: "User not found" });
   }
   return response.status(200).json(user);
 }
 
-module.exports = { createUser, updateUser, deleteUser, getUser, getAllUsers };
+async function getUserByEmail(request, response) {
+  const { email } = request.params;
+  const user = await prisma.user.findUnique({
+    where: {
+      email: email,
+    },
+  });
+  if (!user) {
+    return response.status(404).json({ error: "User not found" });
+  }
+  return response.status(200).json(user);
+}
+
+module.exports = {
+  createUser,
+  updateUser,
+  deleteUser,
+  getUser,
+  getAllUsers,
+  getUserByEmail,
+};
