@@ -1,10 +1,7 @@
 "use client";
 import { DashboardSidebar, StatsElement } from "@/components";
-import { useSession } from "next-auth/react";
 import React, { useEffect } from "react";
 import { FaArrowUp } from "react-icons/fa6";
-import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
 
 const AdminDashboardPage = () => {
   return (
