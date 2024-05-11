@@ -7,6 +7,9 @@ async function getAllProducts(request, response) {
   let sortObj = {};
   let sortByValue = "defaultSort";
 
+  // getting current page
+  const page = Number(request.query.page) ? Number(request.query.page) : 1;
+
   if (dividerLocation !== -1) {
     const queryArray = request.url
       .substring(dividerLocation + 1, request.url.length)
@@ -16,7 +19,7 @@ async function getAllProducts(request, response) {
     let filterArray = [];
 
     for (let i = 0; i < queryArray.length; i++) {
-      // proveravam da li je u pitanju filter mod i price filter
+      // checking whether it is filter mode or price filter
       if (
         queryArray[i].indexOf("filters") !== -1 &&
         queryArray[i].indexOf("price") !== -1
@@ -153,6 +156,9 @@ async function getAllProducts(request, response) {
 
   if (Object.keys(filterObj).length === 0) {
     products = await prisma.product.findMany({
+      // this is formula for pagination: (page - 1) * limit(take)
+      skip: (page - 1) * 10,
+      take: 12,
       include: {
         category: {
           select: {
@@ -166,6 +172,9 @@ async function getAllProducts(request, response) {
     // Check if category filter is present
     if (filterObj.category && filterObj.category.equals) {
       products = await prisma.product.findMany({
+        // this is formula for pagination: (page - 1) * limit(take)
+        skip: (page - 1) * 10,
+        take: 12,
         include: {
           category: {
             select: {
@@ -186,6 +195,9 @@ async function getAllProducts(request, response) {
     } else {
       // If no category filter, use whereClause
       products = await prisma.product.findMany({
+        // this is formula for pagination: (page - 1) * limit(take)
+        skip: (page - 1) * 10,
+        take: 12,
         include: {
           category: {
             select: {

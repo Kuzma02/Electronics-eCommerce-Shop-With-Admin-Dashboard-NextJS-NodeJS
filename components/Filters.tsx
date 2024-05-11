@@ -1,12 +1,16 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useSortStore } from "@/app/_zustand/sortStore";
+import { usePaginationStore } from "@/app/_zustand/paginationStore";
 
 const Filters = () => {
   const pathname = usePathname();
   const { replace } = useRouter();
+
+  const { page } = usePaginationStore();
+
   const [inputCategory, setInputCategory] = useState<any>({
     inStock: { text: "instock", isChecked: true },
     outOfStock: { text: "outofstock", isChecked: true },
@@ -23,8 +27,9 @@ const Filters = () => {
     params.set("rating", inputCategory.ratingFilter.value);
     params.set("price", inputCategory.priceFilter.value);
     params.set("sort", sortBy);
+    params.set("page", page.toString());
     replace(`${pathname}?${params}`);
-  }, [inputCategory, sortBy]);
+  }, [inputCategory, sortBy, page]);
 
   return (
     <div>
@@ -68,7 +73,9 @@ const Filters = () => {
               }
               className="checkbox"
             />
-            <span className="label-text text-lg ml-2 text-black">Out of stock</span>
+            <span className="label-text text-lg ml-2 text-black">
+              Out of stock
+            </span>
           </label>
         </div>
       </div>

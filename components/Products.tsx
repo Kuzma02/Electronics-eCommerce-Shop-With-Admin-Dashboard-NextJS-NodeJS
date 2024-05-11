@@ -8,6 +8,8 @@ import { RiH3 } from "react-icons/ri";
 const Products = async ({ slug }: any) => {
   const inStockNum = slug?.searchParams?.inStock === "true" ? 1 : 0;
   const outOfStockNum = slug?.searchParams?.outOfStock === "true" ? 1 : 0;
+  const page = slug?.searchParams?.page ? Number(slug?.searchParams?.page) : 1;
+  
   let stockMode: string = "lte";  
 
   if (inStockNum === 1) {
@@ -32,7 +34,7 @@ const Products = async ({ slug }: any) => {
       slug?.searchParams?.price || 3000
     }&filters[rating][$gte]=${
       slug?.searchParams?.rating || 0
-    }&filters[inStock][$${stockMode}]=1&${slug?.params?.slug?.length > 0 ? `filters[category][$equals]=${slug?.params?.slug}&` : ""}sort=${slug?.searchParams?.sort}`
+    }&filters[inStock][$${stockMode}]=1&${slug?.params?.slug?.length > 0 ? `filters[category][$equals]=${slug?.params?.slug}&` : ""}sort=${slug?.searchParams?.sort}&page=${page}`
   );
   console.log(data);
   
