@@ -184,6 +184,7 @@ const demoProductImages = [
   },
 ];
 
+
 const demoCategories = [
   {
     name: "speakers",

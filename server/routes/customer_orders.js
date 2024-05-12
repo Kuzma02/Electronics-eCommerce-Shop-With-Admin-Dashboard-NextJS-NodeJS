@@ -8,7 +8,7 @@ const {
     updateCustomerOrder,
     deleteCustomerOrder,
     getAllOrders 
-  } = require('../controllers/orders');
+  } = require('../controllers/customer_orders');
 
   router.route('/')
   .get(getAllOrders)

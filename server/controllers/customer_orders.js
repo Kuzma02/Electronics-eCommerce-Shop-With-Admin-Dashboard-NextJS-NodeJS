@@ -125,6 +125,7 @@ async function getAllOrders(request, response) {
     const orders = await prisma.customer_order.findMany({});
     return response.json(orders);
   } catch (error) {
+    console.log(error);
     return response.status(500).json({ error: "Error fetching orders" });
   }
 }
