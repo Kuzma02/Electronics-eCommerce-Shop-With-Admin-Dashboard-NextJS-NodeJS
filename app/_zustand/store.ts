@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
 export type ProductInCart = {
-  id: number;
+  id: string;
   title: string;
   price: number;
   image: string;
@@ -49,7 +49,7 @@ export const useProductStore = create<State & Actions>()(
       removeFromCart: (id) => {
         set((state) => {
           state.products = state.products.filter(
-            (product: ProductInCart) => product.id !== id
+            (product: ProductInCart) => product.id !== id.toString()
           );
           return { products: state.products };
         });
@@ -73,7 +73,7 @@ export const useProductStore = create<State & Actions>()(
       },
       updateCartAmount: (id, amount) => {
         set((state) => {
-          const cartItem = state.products.find((item) => item.id === id)!;
+          const cartItem = state.products.find((item) => item.id === id.toString())!;
 
           if (!cartItem) {
             return { products: [...state.products] };

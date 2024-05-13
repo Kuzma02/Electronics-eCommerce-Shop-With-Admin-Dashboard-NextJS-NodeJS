@@ -3,6 +3,7 @@ import { SectionTitle } from "@/components";
 import { useProductStore } from "../_zustand/store";
 import Image from "next/image";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 const CheckoutPage = () => {
   const [checkoutForm, setCheckoutForm] = useState({
@@ -22,6 +23,8 @@ const CheckoutPage = () => {
     postalCode: "",
   });
   const { products, total } = useProductStore();
+  console.log(products);
+  
 
   const makePurchase = async () => {
     if (
@@ -39,7 +42,7 @@ const CheckoutPage = () => {
       checkoutForm.country.length > 0 &&
       checkoutForm.postalCode.length > 0
     ) {
-      const response = await fetch("http://localhost:3001/api/orders", {
+      const response = fetch("http://localhost:3001/api/orders", {
         method: "POST", // or 'PUT'
         headers: {
           "Content-Type": "application/json",
@@ -56,9 +59,34 @@ const CheckoutPage = () => {
           status: "processing",
           total: total,
         }),
-      });
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          const orderId: string = data.id;
+          for(let i = 0;i < products.length;i++){
+            let productId: string = products[i].id;
+            addOrderProduct(orderId, products[i].id, products[i].amount);
+            
+          }
+        }).then(() => {
+          toast.success("Order created successfuly");
+        });
     }
   };
+
+  const addOrderProduct = async (orderId: string, productId: string, productQuantity: number) => {
+    const response = await fetch("http://localhost:3001/api/order-product", {
+              method: "POST", // or 'PUT'
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                customerOrderId: orderId,
+                productId: productId,
+                quantity: productQuantity
+              }),
+            })
+  }
 
   return (
     <div className="bg-white">
