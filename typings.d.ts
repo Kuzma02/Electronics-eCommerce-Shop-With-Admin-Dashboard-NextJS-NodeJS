@@ -42,3 +42,18 @@ interface User {
   password: string | null;
   role: string;
 }
+
+interface Order {
+  id: string;
+  adress: string;
+  apartment: string;
+  company: string;
+  dateTime: string;
+  email: string;
+  lastname: string;
+  name: string;
+  phone: string;
+  postalCode: string;
+  status: "processing" | "canceled" | "delivered";
+  total: number;
+}

@@ -117,7 +117,7 @@ async function getCustomerOrder(request, response) {
   if (!order) {
     return response.status(404).json({ error: "Order not found" });
   }
-  return response.status(200).json({ order: order });
+  return response.status(200).json(order);
 }
 
 async function getAllOrders(request, response) {
