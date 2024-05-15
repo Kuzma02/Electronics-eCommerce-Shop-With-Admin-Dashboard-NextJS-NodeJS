@@ -55,5 +55,8 @@ interface Order {
   phone: string;
   postalCode: string;
   status: "processing" | "canceled" | "delivered";
+  city: string;
+  country: string;
+  orderNotice: string?;
   total: number;
 }

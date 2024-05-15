@@ -14,6 +14,9 @@ async function createCustomerOrder(request, response) {
       apartment,
       postalCode,
       status,
+      city,
+      country,
+      orderNotice,
       total,
     } = request.body;
     const corder = await prisma.customer_order.create({
@@ -27,6 +30,9 @@ async function createCustomerOrder(request, response) {
         apartment,
         postalCode,
         status,
+        city,
+        country,
+        orderNotice,
         total,
       },
     });
@@ -53,6 +59,9 @@ async function updateCustomerOrder(request, response) {
       postalCode,
       dateTime,
       status,
+      city,
+      country,
+      orderNotice,
       total,
     } = request.body;
 
@@ -81,6 +90,9 @@ async function updateCustomerOrder(request, response) {
         postalCode,
         dateTime,
         status,
+        city,
+        country,
+        orderNotice,
         total,
       },
     });

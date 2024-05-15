@@ -42,19 +42,22 @@ model User {
 }
 
 model Customer_order {
-  id         String                   @id @default(uuid())
-  name       String
-  lastname   String
-  phone      String
-  email      String
-  company    String
-  adress     String
-  apartment  String
-  postalCode String
-  dateTime   DateTime?                @default(now())
-  status     String
-  total      Int
-  products   customer_order_product[]
+  id          String                   @id @default(uuid())
+  name        String
+  lastname    String
+  phone       String
+  email       String
+  company     String
+  adress      String
+  apartment   String
+  postalCode  String
+  dateTime    DateTime?                @default(now())
+  status      String
+  city        String
+  country     String
+  orderNotice String?
+  total       Int
+  products    customer_order_product[]
 }
 
 model customer_order_product {

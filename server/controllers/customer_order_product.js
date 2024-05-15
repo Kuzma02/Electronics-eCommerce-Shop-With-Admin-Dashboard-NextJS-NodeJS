@@ -61,14 +61,14 @@ async function deleteProductOrder(request, response) {
     try {
         const { id } = request.params;
         console.log("Deleting product order with id:", id);
-        await prisma.customer_order_product.delete({
+        await prisma.customer_order_product.deleteMany({
             where: {
-                id: id
+                customerOrderId: id
             }
         });
         return response.status(204).send();
     } catch (error) {
-        return response.status(500).json({ error: "Error deleting product order" });
+        return response.status(500).json({ error: "Error deleting product orders" });
     }
 }
 

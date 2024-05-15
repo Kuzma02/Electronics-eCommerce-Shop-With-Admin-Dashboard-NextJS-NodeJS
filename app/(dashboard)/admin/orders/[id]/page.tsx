@@ -2,8 +2,9 @@
 import { DashboardSidebar } from "@/components";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 interface OrderProduct {
   id: string;
@@ -25,7 +26,7 @@ interface OrderProduct {
 }
 
 const AdminSingleOrder = () => {
-  const [ orderProducts, setOrderProducts ] = useState<OrderProduct[]>();
+  const [orderProducts, setOrderProducts] = useState<OrderProduct[]>();
   const [order, setOrder] = useState<Order>({
     id: "",
     adress: "",
@@ -37,10 +38,15 @@ const AdminSingleOrder = () => {
     name: "",
     phone: "",
     postalCode: "",
+    city: "",
+    country: "",
+    orderNotice: "",
     status: "processing",
     total: 0,
   });
   const params = useParams<{ id: string }>();
+
+  const router = useRouter();
 
   useEffect(() => {
     const fetchOrderData = async () => {
@@ -57,12 +63,59 @@ const AdminSingleOrder = () => {
       );
       const data: OrderProduct[] = await response.json();
       setOrderProducts(data);
-      
     };
 
     fetchOrderData();
     fetchOrderProducts();
   }, [params?.id]);
+
+  const updateOrder = async () => {
+    if (
+      order?.name.length > 0 &&
+      order?.lastname.length > 0 &&
+      order?.phone.length > 0 &&
+      order?.email.length > 0 &&
+      order?.company.length > 0 &&
+      order?.adress.length > 0 &&
+      order?.apartment.length > 0 &&
+      order?.city.length > 0 &&
+      order?.country.length > 0 &&
+      order?.postalCode.length > 0
+    ) {
+      fetch(`http://localhost:3001/api/orders/${order?.id}`, {
+        method: "PUT", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(order),
+      })
+        .then((response) => {
+          toast.success("Order updated successfuly");
+        })
+        .catch((error) => toast.error("Error"));
+    } else {
+      toast.error("Please fill all fields");
+    }
+  };
+
+  const deleteOrder = async () => {
+    const requestOptions = {
+      method: "DELETE",
+    };
+
+    fetch(
+      `http://localhost:3001/api/order-product/${order?.id}`,
+      requestOptions
+    ).then((response) => {
+      fetch(
+        `http://localhost:3001/api/orders/${order?.id}`,
+        requestOptions
+      ).then((response) => {
+        toast.success("Order deleted successfully");
+        router.push("/admin/orders");
+      });
+    });
+  };
 
   return (
     <div className="bg-white flex justify-start max-w-screen-2xl mx-auto xl:h-full max-xl:flex-col max-xl:gap-y-5">
@@ -191,6 +244,8 @@ const AdminSingleOrder = () => {
               <input
                 type="text"
                 className="input input-bordered w-full max-w-xs"
+                value={order?.city}
+                onChange={(e) => setOrder({ ...order, city: e.target.value })}
               />
             </label>
           </div>
@@ -203,6 +258,10 @@ const AdminSingleOrder = () => {
               <input
                 type="text"
                 className="input input-bordered w-full max-w-xs"
+                value={order?.country}
+                onChange={(e) =>
+                  setOrder({ ...order, country: e.target.value })
+                }
               />
             </label>
           </div>
@@ -253,41 +312,59 @@ const AdminSingleOrder = () => {
             <div className="label">
               <span className="label-text">Order notice:</span>
             </div>
-            <textarea className="textarea textarea-bordered h-24"></textarea>
+            <textarea
+              className="textarea textarea-bordered h-24"
+              value={order?.orderNotice || ""}
+              onChange={(e) =>
+                setOrder({ ...order, orderNotice: e.target.value })
+              }
+            ></textarea>
           </label>
         </div>
         <div>
-          { orderProducts?.map(product => (
+          {orderProducts?.map((product) => (
             <div className="flex items-center gap-x-4" key={product?.id}>
-              <Image src={`/${product?.product?.mainImage}`} alt={product?.product?.title} width={50} height={50} className="w-auto h-auto" />
+              <Image
+                src={`/${product?.product?.mainImage}`}
+                alt={product?.product?.title}
+                width={50}
+                height={50}
+                className="w-auto h-auto"
+              />
               <div>
-              <Link href={`/product/${product?.product?.slug}`}>{product?.product?.title}</Link>
-              <p>${ product?.product?.price } * {product?.quantity} items</p>
+                <Link href={`/product/${product?.product?.slug}`}>
+                  {product?.product?.title}
+                </Link>
+                <p>
+                  ${product?.product?.price} * {product?.quantity} items
+                </p>
               </div>
-
             </div>
-          )) }
+          ))}
           <div className="flex flex-col gap-y-2 mt-10">
-          <p className="text-2xl">Subtotal: ${ order?.total }</p>
-          <p className="text-2xl">Tax 20%: ${ order?.total / 5 }</p>
-          <p className="text-2xl">Shipping: $5</p>
-          <p className="text-3xl font-semibold">Total: ${ order?.total + (order?.total / 5) + 5 }</p>
-
+            <p className="text-2xl">Subtotal: ${order?.total}</p>
+            <p className="text-2xl">Tax 20%: ${order?.total / 5}</p>
+            <p className="text-2xl">Shipping: $5</p>
+            <p className="text-3xl font-semibold">
+              Total: ${order?.total + order?.total / 5 + 5}
+            </p>
           </div>
-        </div>
-        <div className="flex gap-x-2 max-sm:flex-col">
-          <button
-            type="button"
-            className="uppercase bg-blue-500 px-10 py-5 text-lg border border-black border-gray-300 font-bold text-white shadow-sm hover:bg-blue-600 hover:text-white focus:outline-none focus:ring-2"
-          >
-            Update order
-          </button>
-          <button
-            type="button"
-            className="uppercase bg-red-600 px-10 py-5 text-lg border border-black border-gray-300 font-bold text-white shadow-sm hover:bg-red-700 hover:text-white focus:outline-none focus:ring-2"
-          >
-            Delete order
-          </button>
+          <div className="flex gap-x-2 max-sm:flex-col mt-5">
+            <button
+              type="button"
+              className="uppercase bg-blue-500 px-10 py-5 text-lg border border-black border-gray-300 font-bold text-white shadow-sm hover:bg-blue-600 hover:text-white focus:outline-none focus:ring-2"
+              onClick={updateOrder}
+            >
+              Update order
+            </button>
+            <button
+              type="button"
+              className="uppercase bg-red-600 px-10 py-5 text-lg border border-black border-gray-300 font-bold text-white shadow-sm hover:bg-red-700 hover:text-white focus:outline-none focus:ring-2"
+              onClick={deleteOrder}
+            >
+              Delete order
+            </button>
+          </div>
         </div>
       </div>
     </div>

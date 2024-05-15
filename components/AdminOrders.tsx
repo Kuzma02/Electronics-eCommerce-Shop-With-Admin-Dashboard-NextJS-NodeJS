@@ -32,7 +32,7 @@ const AdminOrders = () => {
               <th>Order ID</th>
               <th>Name and country</th>
               <th>Status</th>
-              <th>Total</th>
+              <th>Subtotal</th>
               <th>Date</th>
               <th></th>
             </tr>
@@ -58,7 +58,7 @@ const AdminOrders = () => {
                     <div className="flex items-center gap-5">
                       <div>
                         <div className="font-bold">{order?.name}</div>
-                        <div className="text-sm opacity-50">Serbia</div>
+                        <div className="text-sm opacity-50">{order?.country}</div>
                       </div>
                     </div>
                   </td>
@@ -92,7 +92,7 @@ const AdminOrders = () => {
               <th>Order ID</th>
               <th>Name and country</th>
               <th>Status</th>
-              <th>Total</th>
+              <th>Subtotal</th>
               <th>Date</th>
               <th></th>
             </tr>

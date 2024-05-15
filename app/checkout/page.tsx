@@ -21,10 +21,10 @@ const CheckoutPage = () => {
     city: "",
     country: "",
     postalCode: "",
+    orderNotice: "",
   });
   const { products, total } = useProductStore();
   console.log(products);
-  
 
   const makePurchase = async () => {
     if (
@@ -58,35 +58,42 @@ const CheckoutPage = () => {
           postalCode: checkoutForm.postalCode,
           status: "processing",
           total: total,
+          city: checkoutForm.city,
+          country: checkoutForm.country,
+          orderNotice: checkoutForm.orderNotice,
         }),
       })
         .then((res) => res.json())
         .then((data) => {
           const orderId: string = data.id;
-          for(let i = 0;i < products.length;i++){
+          for (let i = 0; i < products.length; i++) {
             let productId: string = products[i].id;
             addOrderProduct(orderId, products[i].id, products[i].amount);
-            
           }
-        }).then(() => {
+        })
+        .then(() => {
           toast.success("Order created successfuly");
         });
     }
   };
 
-  const addOrderProduct = async (orderId: string, productId: string, productQuantity: number) => {
+  const addOrderProduct = async (
+    orderId: string,
+    productId: string,
+    productQuantity: number
+  ) => {
     const response = await fetch("http://localhost:3001/api/order-product", {
-              method: "POST", // or 'PUT'
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                customerOrderId: orderId,
-                productId: productId,
-                quantity: productQuantity
-              }),
-            })
-  }
+      method: "POST", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        customerOrderId: orderId,
+        productId: productId,
+        quantity: productQuantity,
+      }),
+    });
+  };
 
   return (
     <div className="bg-white">
@@ -546,6 +553,30 @@ const CheckoutPage = () => {
                         })
                       }
                     />
+                  </div>
+                </div>
+
+                <div className="sm:col-span-3">
+                  <label
+                    htmlFor="order-notice"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Order notice
+                  </label>
+                  <div className="mt-1">
+                    <textarea
+                      className="textarea textarea-bordered textarea-lg w-full"
+                      id="order-notice"
+                      name="order-notice"
+                      autoComplete="order-notice"
+                      value={checkoutForm.orderNotice}
+                      onChange={(e) =>
+                        setCheckoutForm({
+                          ...checkoutForm,
+                          orderNotice: e.target.value,
+                        })
+                      }
+                    ></textarea>
                   </div>
                 </div>
               </div>
