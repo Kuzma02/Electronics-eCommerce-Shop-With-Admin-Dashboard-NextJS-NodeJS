@@ -4,7 +4,14 @@ import Image from "next/image";
 import React from "react";
 import { FaHeartCrack } from "react-icons/fa6";
 
-const WishItem = ({ id, title, price, image, slug }: ProductInWishlist) => {
+const WishItem = ({
+  id,
+  title,
+  price,
+  image,
+  slug,
+  stockAvailabillity,
+}: ProductInWishlist) => {
   const { removeFromWishlist } = useWishlistStore();
   return (
     <tr className="hover:bg-gray-100 cursor-pointer">
@@ -21,7 +28,13 @@ const WishItem = ({ id, title, price, image, slug }: ProductInWishlist) => {
         </div>
       </th>
       <td className="text-black text-sm text-center">{title}</td>
-      <td className="text-black text-sm text-center">In stock</td>
+      <td className="text-black text-sm text-center">
+        {stockAvailabillity ? (
+          <span className="text-success">In stock</span>
+        ) : (
+          <span className="text-error">Out of stock</span>
+        )}
+      </td>
       <td>
         <button className="btn btn-xs bg-blue-500 text-white hover:text-blue-500 border border-blue-500 hover:bg-white hover:text-blue-500 text-sm">
           <FaHeartCrack />

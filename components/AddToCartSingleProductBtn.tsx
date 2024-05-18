@@ -3,17 +3,14 @@ import React from "react";
 import { useProductStore } from "@/app/_zustand/store";
 import toast from "react-hot-toast";
 
-interface AddToCartSingleProductBtnProps {
-  product: Product;
-  quantityCount: number;
-} 
 
-const AddToCartSingleProductBtn = ({ product, quantityCount } : AddToCartSingleProductBtnProps) => {
+
+const AddToCartSingleProductBtn = ({ product, quantityCount } : SingleProductBtnProps) => {
   const { addToCart, calculateTotals } = useProductStore();
 
   const handleAddToCart = () => {
     addToCart({
-      id: product?.id,
+      id: product?.id.toString(),
       title: product?.title,
       price: product?.price,
       image: product?.mainImage,

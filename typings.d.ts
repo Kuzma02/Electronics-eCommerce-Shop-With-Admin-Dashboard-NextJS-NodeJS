@@ -8,6 +8,7 @@ interface Product {
   mainImage: string;
   manufacturer: string;
   categoryId: string;
+  category: {name: string}?;
   inStock: number;
 }
 
@@ -23,6 +24,7 @@ type ProductInWishlist = {
   price: number;
   image: string;
   slug: string;
+  stockAvailabillity: number;
 };
 
 interface OtherImages {
@@ -60,3 +62,8 @@ interface Order {
   orderNotice: string?;
   total: number;
 }
+
+interface SingleProductBtnProps {
+  product: Product;
+  quantityCount: number;
+} 

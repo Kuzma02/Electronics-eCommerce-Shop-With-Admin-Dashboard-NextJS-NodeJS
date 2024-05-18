@@ -5,10 +5,9 @@ import RatingPercentElement from "./RatingPercentElement";
 import SingleReview from "./SingleReview";
 import { formatCategoryName } from "@/utils/categoryFormating";
 
-const ProductTabs = ({ product } : { product: Product }) => {
+const ProductTabs = ({ product }: { product: Product }) => {
   const [currentProductTab, setCurrentProductTab] = useState<number>(0);
-  console.log(product);
-  
+
   return (
     <div className="px-5 text-black">
       <div role="tablist" className="tabs tabs-bordered">
@@ -43,7 +42,7 @@ const ProductTabs = ({ product } : { product: Product }) => {
       <div className="pt-5">
         {currentProductTab === 0 && (
           <p className="text-lg max-sm:text-base max-sm:text-sm">
-            { product?.description }
+            {product?.description}
           </p>
         )}
 
@@ -54,12 +53,16 @@ const ProductTabs = ({ product } : { product: Product }) => {
                 {/* row 1 */}
                 <tr>
                   <th>Manufacturer:</th>
-                  <td>{ product?.manufacturer }</td>
+                  <td>{product?.manufacturer}</td>
                 </tr>
                 {/* row 2 */}
                 <tr>
                   <th>Category:</th>
-                  <td>{ formatCategoryName(product?.category?.name) || "No category" }</td>
+                  <td>
+                    {product?.category?.name
+                      ? formatCategoryName(product?.category?.name)
+                      : "No category"}
+                  </td>
                 </tr>
                 {/* row 3 */}
                 <tr>
@@ -71,14 +74,14 @@ const ProductTabs = ({ product } : { product: Product }) => {
           </div>
         )}
 
-        { currentProductTab === 2 && (
+        {currentProductTab === 2 && (
           <>
-          <RatingPercentElement />
-          <SingleReview />
-          <SingleReview />
-          <SingleReview />
+            <RatingPercentElement />
+            <SingleReview />
+            <SingleReview />
+            <SingleReview />
           </>
-        ) }
+        )}
       </div>
     </div>
   );

@@ -34,6 +34,7 @@ const WishlistPage = () => {
                     price={item?.price}
                     image={item?.image}
                     slug={item?.slug}
+                    stockAvailabillity={item?.stockAvailabillity}
                     key={nanoid()}
                   />
                 ))}
