@@ -12,8 +12,9 @@ const RegisterPage = () => {
   const { data: session, status: sessionStatus } = useSession();
 
   useEffect(() => {
+    // chechking if user has already registered redirect to home page
     if (sessionStatus === "authenticated") {
-      router.replace("/dashboard");
+      router.replace("/");
     }
   }, [sessionStatus, router]);
 
@@ -46,6 +47,7 @@ const RegisterPage = () => {
     }
 
     try {
+      // sending API request for registering user
       const res = await fetch("/api/register", {
         method: "POST",
         headers: {
@@ -56,7 +58,6 @@ const RegisterPage = () => {
           password,
         }),
       });
-      console.log(res.status);
 
       if (res.status === 400) {
         toast.error("This email is already registered");

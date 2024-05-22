@@ -13,6 +13,7 @@ const LoginPage = () => {
   const { data: session, status: sessionStatus } = useSession();
 
   useEffect(() => {
+    // if user has already logged in redirect to home page
     if (sessionStatus === "authenticated") {
       router.replace("/");
     }

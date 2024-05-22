@@ -66,4 +66,10 @@ interface Order {
 interface SingleProductBtnProps {
   product: Product;
   quantityCount: number;
-} 
+}
+
+
+interface Category {
+  id: string;
+  name: string;
+}

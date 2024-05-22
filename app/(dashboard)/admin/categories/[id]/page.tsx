@@ -13,7 +13,7 @@ interface DashboardSingleCategoryProps {
 const DashboardSingleCategory = ({
   params: { id },
 }: DashboardSingleCategoryProps) => {
-  const [categoryInput, setCategoryInput] = useState<any>({
+  const [categoryInput, setCategoryInput] = useState<{name: string}>({
     name: "",
   });
   const router = useRouter();
@@ -22,6 +22,7 @@ const DashboardSingleCategory = ({
     const requestOptions = {
       method: "DELETE",
     };
+    // sending API request for deleting a category
     fetch(`http://localhost:3001/api/categories/${id}`, requestOptions).then(
       (response) => {
         toast.success("Category deleted successfully");
@@ -39,6 +40,7 @@ const DashboardSingleCategory = ({
           name: convertCategoryNameToURLFriendly(categoryInput.name),
         }),
       };
+      // sending API request for updating a category
       fetch(`http://localhost:3001/api/categories/${id}`, requestOptions)
         .then((response) => response.json())
         .then((data) => toast.success("Category successfully updated"));
@@ -49,6 +51,7 @@ const DashboardSingleCategory = ({
   };
 
   useEffect(() => {
+    // sending API request for getting single categroy
     fetch(`http://localhost:3001/api/categories/${id}`)
       .then((res) => {
         return res.json();

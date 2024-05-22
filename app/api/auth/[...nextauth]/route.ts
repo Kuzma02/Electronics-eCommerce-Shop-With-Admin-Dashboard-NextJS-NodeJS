@@ -47,7 +47,7 @@ export const authOptions: any = {
       clientId: process.env.GOOGLE_ID ?? "",
       clientSecret: process.env.GOOGLE_SECRET ?? "",
     }),
-    // ...add more providers here
+    // ...add more providers here if you want. You can find them on nextauth website.
   ],
   callbacks: {
     async signIn({ user, account }: { user: AuthUser; account: Account }) {

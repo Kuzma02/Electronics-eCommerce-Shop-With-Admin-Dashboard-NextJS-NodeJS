@@ -5,9 +5,10 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 const DashboardUsers = () => {
-  const [users, setUsers] = useState<any>([]);
+  const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
+    // sending API request for all users
     fetch("http://localhost:3001/api/users")
       .then((res) => {
         return res.json();

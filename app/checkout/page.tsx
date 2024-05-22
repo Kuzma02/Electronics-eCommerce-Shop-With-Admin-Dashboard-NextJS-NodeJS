@@ -42,8 +42,10 @@ const CheckoutPage = () => {
       checkoutForm.country.length > 0 &&
       checkoutForm.postalCode.length > 0
     ) {
+
+      // sending API request for creating a order
       const response = fetch("http://localhost:3001/api/orders", {
-        method: "POST", // or 'PUT'
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
@@ -66,6 +68,7 @@ const CheckoutPage = () => {
         .then((res) => res.json())
         .then((data) => {
           const orderId: string = data.id;
+          // for every product in the order we are calling addOrderProduct function that adds fields to the customer_order_product table
           for (let i = 0; i < products.length; i++) {
             let productId: string = products[i].id;
             addOrderProduct(orderId, products[i].id, products[i].amount);
@@ -82,6 +85,7 @@ const CheckoutPage = () => {
     productId: string,
     productQuantity: number
   ) => {
+    // sending API POST request for the table customer_order_product that does many to many relatioship for order and product
     const response = await fetch("http://localhost:3001/api/order-product", {
       method: "POST", // or 'PUT'
       headers: {

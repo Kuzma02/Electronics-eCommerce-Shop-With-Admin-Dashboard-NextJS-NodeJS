@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 const AddNewProduct = () => {
-  const [product, setProduct] = useState({
+  const [product, setProduct] = useState<{title: string; price: number; manufacturer: string; inStock: number; mainImage: string; description: string; slug: string; categoryId: string;}>({
     title: "",
     price: 0,
     manufacturer: "",
@@ -16,7 +16,7 @@ const AddNewProduct = () => {
     slug: "",
     categoryId: "",
   });
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const addProduct = async () => {
     console.log(product);
@@ -55,12 +55,11 @@ const AddNewProduct = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data.message); // Ispisuje poruku sa servera
       } else {
-        console.error("Otpremanje fajla nije uspelo.");
+        console.error("File upload unsuccessfull");
       }
     } catch (error) {
-      console.error("Došlo je do greške prilikom slanja zahteva:", error);
+      console.error("Error happend while sending request:", error);
     }
   };
 

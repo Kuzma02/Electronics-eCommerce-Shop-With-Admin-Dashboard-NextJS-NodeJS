@@ -9,14 +9,21 @@ import { FaBell } from "react-icons/fa6";
 
 import CartElement from "./CartElement";
 import HeartElement from "./HeartElement";
+import { signOut } from "next-auth/react";
+import toast from "react-hot-toast";
 
 const Header = () => {
   const pathname = usePathname();
 
+  const handleLogout = () => {
+    setTimeout(() => signOut(), 1000);
+    toast.success("Logout successful!");
+  };
+
   return (
     <header className="bg-white">
       <HeaderTop />
-      {pathname.startsWith("/admin") === false  && (
+      {pathname.startsWith("/admin") === false && (
         <div className="h-32 bg-white flex items-center justify-between px-16 max-[1320px]:px-10 max-md:px-6 max-lg:flex-col max-lg:gap-y-7 max-lg:justify-center max-lg:h-60 max-w-screen-2xl mx-auto">
           <Link href="/">
             <Image
@@ -49,19 +56,27 @@ const Header = () => {
             <FaBell className="text-xl" />
             <div className="dropdown dropdown-end">
               <div tabIndex={0} role="button" className="w-10">
-                <Image src="/randomuser.jpg" alt="random profile photo" width={30} height={30} className="w-full h-full rounded-full" />
+                <Image
+                  src="/randomuser.jpg"
+                  alt="random profile photo"
+                  width={30}
+                  height={30}
+                  className="w-full h-full rounded-full"
+                />
               </div>
               <ul
                 tabIndex={0}
                 className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
               >
                 <li>
-                  <a>Dashboard</a>
+                  <Link href="/admin">Dashboard</Link>
                 </li>
                 <li>
                   <a>Profile</a>
                 </li>
-                <li><a href="#">Logout</a></li>
+                <li onClick={handleLogout}>
+                  <a href="#">Logout</a>
+                </li>
               </ul>
             </div>
           </div>

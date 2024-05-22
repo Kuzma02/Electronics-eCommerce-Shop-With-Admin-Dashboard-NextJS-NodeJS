@@ -11,7 +11,7 @@ interface DashboardUserDetailsProps {
 const DashboardSingleUserPage = ({
   params: { id },
 }: DashboardUserDetailsProps) => {
-  const [userInput, setUserInput] = useState<any>({
+  const [userInput, setUserInput] = useState<{email: string; newPassword: string; role: string;}>({
     email: "",
     newPassword: "",
     role: "",
@@ -60,6 +60,7 @@ const DashboardSingleUserPage = ({
   };
 
   useEffect(() => {
+    // sending API request for a single user
     fetch(`http://localhost:3001/api/users/${id}`)
       .then((res) => {
         return res.json();

@@ -20,12 +20,14 @@ interface ImageItem {
 }
 
 const SingleProductPage = async ({ params }: SingleProductPageProps) => {
+  // sending API request for a single product with a given product slug
   const data = await fetch(
     `http://localhost:3001/api/slugs/${params.productSlug}`,
     { cache: "no-store" }
   );
   const product = await data.json();
 
+  // sending API request for more than 1 product image if it exists
   const imagesData = await fetch(
     `http://localhost:3001/api/images/${product.id}`,
     { cache: "no-store" }

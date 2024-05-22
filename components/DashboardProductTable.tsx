@@ -84,8 +84,6 @@ const DashboardProductTable = () => {
                   </td>
 
                   <td>
-                    25
-                    <br />
                     <span className="badge badge-success text-white badge-sm">
                       In stock
                     </span>

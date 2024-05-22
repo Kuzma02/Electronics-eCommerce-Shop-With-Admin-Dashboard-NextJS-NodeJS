@@ -6,8 +6,9 @@ import React, { useEffect, useState } from "react";
 import { formatCategoryName } from "../../../../utils/categoryFormating";
 
 const DashboardCategory = () => {
-  const [categories, setCategories] = useState<any>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
+  // getting all categories to be displayed on the all categories page
   useEffect(() => {
     fetch("http://localhost:3001/api/categories")
       .then((res) => {
@@ -53,7 +54,7 @@ const DashboardCategory = () => {
             </thead>
             <tbody>
               {categories &&
-                categories.map((category: any) => (
+                categories.map((category: Category) => (
                   <tr key={nanoid()}>
                     <th>
                       <label>
