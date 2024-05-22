@@ -20,10 +20,11 @@ const ProductItem = ({
               ? `/${product.mainImage}`
               : "/product_placeholder.jpg"
           }
-          width={300}
-          height={300}
-          className="h-[300px] w-[300px]"
-          alt="product 1"
+          width="0"
+          height="0"
+          sizes="100vw"
+          className="w-auto h-[300px]"
+          alt={product?.title}
         />
       </Link>
       <Link
