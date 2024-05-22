@@ -17,8 +17,8 @@ export type State = {
 
 export type Actions = {
   addToCart: (newProduct: ProductInCart) => void;
-  removeFromCart: (id: number) => void;
-  updateCartAmount: (id: number, quantity: number) => void;
+  removeFromCart: (id: string) => void;
+  updateCartAmount: (id: string, quantity: number) => void;
   calculateTotals: () => void;
 };
 
@@ -49,7 +49,7 @@ export const useProductStore = create<State & Actions>()(
       removeFromCart: (id) => {
         set((state) => {
           state.products = state.products.filter(
-            (product: ProductInCart) => product.id !== id.toString()
+            (product: ProductInCart) => product.id !== id
           );
           return { products: state.products };
         });
@@ -73,7 +73,7 @@ export const useProductStore = create<State & Actions>()(
       },
       updateCartAmount: (id, amount) => {
         set((state) => {
-          const cartItem = state.products.find((item) => item.id === id.toString())!;
+          const cartItem = state.products.find((item) => item.id === id);
 
           if (!cartItem) {
             return { products: [...state.products] };

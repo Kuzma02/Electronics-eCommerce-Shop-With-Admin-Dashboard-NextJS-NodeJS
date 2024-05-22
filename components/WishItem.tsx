@@ -12,6 +12,7 @@ const WishItem = ({
   slug,
   stockAvailabillity,
 }: ProductInWishlist) => {
+  // getting from Zustand wishlist store
   const { removeFromWishlist } = useWishlistStore();
   return (
     <tr className="hover:bg-gray-100 cursor-pointer">

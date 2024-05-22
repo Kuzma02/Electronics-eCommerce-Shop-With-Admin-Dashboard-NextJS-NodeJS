@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import React from "react";
 
 const Pagination = () => {
+  // getting from Zustand store current page and methods for incrementing and decrementing current page
   const { page, incrementPage, decrementPage } = usePaginationStore();
   return (
     <div className="join flex justify-center py-16">

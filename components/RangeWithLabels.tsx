@@ -6,6 +6,7 @@ const RangeWithLabels = () => {
   const [currentRangeWLabelsValue, setCurrentRangeWLabelsValue] =
     useState<number>(0);
 
+  // function for handling range change
   const handleRangeWLabelsValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentRangeWLabelsValue(parseInt(e.target.value));
   };

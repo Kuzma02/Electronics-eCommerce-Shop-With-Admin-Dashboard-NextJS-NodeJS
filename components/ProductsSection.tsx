@@ -3,6 +3,7 @@ import ProductItem from "./ProductItem";
 import Heading from "./Heading";
 
 const ProductsSection = async () => {
+  // sending API request for getting all products
   const data = await fetch("http://localhost:3001/api/products", {
     cache: "no-store",
   });

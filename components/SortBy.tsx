@@ -5,8 +5,8 @@ import React, { useEffect, useState } from "react";
 import { useSortStore } from "@/app/_zustand/sortStore";
 
 const SortBy = () => {
-
-const { sortBy, changeSortBy } = useSortStore();
+  // getting values from Zustand sort store
+  const { sortBy, changeSortBy } = useSortStore();
 
   return (
     <div className="flex items-center gap-x-5 max-lg:flex-col max-lg:w-full max-lg:items-start">

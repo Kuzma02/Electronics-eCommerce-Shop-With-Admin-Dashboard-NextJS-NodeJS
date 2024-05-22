@@ -5,13 +5,21 @@ import { useRouter } from "next/navigation";
 import { useSortStore } from "@/app/_zustand/sortStore";
 import { usePaginationStore } from "@/app/_zustand/paginationStore";
 
+interface InputCategory {
+  inStock: { text: string, isChecked: boolean },
+  outOfStock: { text: string, isChecked: boolean },
+  priceFilter: { text: string, value: number },
+  ratingFilter: { text: string, value: number },
+}
+
 const Filters = () => {
   const pathname = usePathname();
   const { replace } = useRouter();
 
+  // getting current page number from Zustand store
   const { page } = usePaginationStore();
 
-  const [inputCategory, setInputCategory] = useState<any>({
+  const [inputCategory, setInputCategory] = useState<InputCategory>({
     inStock: { text: "instock", isChecked: true },
     outOfStock: { text: "outofstock", isChecked: true },
     priceFilter: { text: "price", value: 3000 },
@@ -21,11 +29,11 @@ const Filters = () => {
 
   useEffect(() => {
     const params = new URLSearchParams();
-
-    params.set("outOfStock", inputCategory.outOfStock.isChecked);
-    params.set("inStock", inputCategory.inStock.isChecked);
-    params.set("rating", inputCategory.ratingFilter.value);
-    params.set("price", inputCategory.priceFilter.value);
+    // setting URL params and after that putting them all in URL
+    params.set("outOfStock", inputCategory.outOfStock.isChecked.toString());
+    params.set("inStock", inputCategory.inStock.isChecked.toString());
+    params.set("rating", inputCategory.ratingFilter.value.toString());
+    params.set("price", inputCategory.priceFilter.value.toString());
     params.set("sort", sortBy);
     params.set("page", page.toString());
     replace(`${pathname}?${params}`);
@@ -96,7 +104,7 @@ const Filters = () => {
                 ...inputCategory,
                 priceFilter: {
                   text: "price",
-                  value: e.target.value,
+                  value: Number(e.target.value),
                 },
               })
             }
@@ -117,7 +125,7 @@ const Filters = () => {
           onChange={(e) =>
             setInputCategory({
               ...inputCategory,
-              ratingFilter: { text: "rating", value: e.target.value },
+              ratingFilter: { text: "rating", value: Number(e.target.value) },
             })
           }
           className="range range-info"

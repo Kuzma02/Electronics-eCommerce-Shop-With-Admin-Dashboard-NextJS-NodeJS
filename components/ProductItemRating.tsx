@@ -5,14 +5,16 @@ import { AiFillStar } from "react-icons/ai";
 import { AiOutlineStar } from "react-icons/ai";
 
 const ProductItemRating = ({ productRating }: { productRating: number }) => {
-  const [rating, setRating] = useState([
+  // setting rating with all empty stars by default
+  const rating: Array<string> = [
     "empty star",
     "empty star",
     "empty star",
     "empty star",
     "empty star",
-  ]);
+  ];
 
+  // going through product rating and modifying rating state
   for (let i = 0; i < productRating; i++) {
     rating[i] = "full star";
   }
