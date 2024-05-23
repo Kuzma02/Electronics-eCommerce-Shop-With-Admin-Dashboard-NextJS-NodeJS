@@ -20,6 +20,7 @@ export type Actions = {
   removeFromCart: (id: string) => void;
   updateCartAmount: (id: string, quantity: number) => void;
   calculateTotals: () => void;
+  clearCart: () => void;
 };
 
 export const useProductStore = create<State & Actions>()(
@@ -45,7 +46,16 @@ export const useProductStore = create<State & Actions>()(
           return { products: [...state.products] };
         });
       },
-
+      clearCart: () => {
+        set((state: any) => {
+          
+          return {
+            products: [],
+            allQuantity: 0,
+            total: 0,
+          };
+        });
+      },
       removeFromCart: (id) => {
         set((state) => {
           state.products = state.products.filter(

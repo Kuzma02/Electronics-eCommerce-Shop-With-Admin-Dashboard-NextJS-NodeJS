@@ -2,8 +2,9 @@
 import { SectionTitle } from "@/components";
 import { useProductStore } from "../_zustand/store";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const CheckoutPage = () => {
   const [checkoutForm, setCheckoutForm] = useState({
@@ -23,8 +24,8 @@ const CheckoutPage = () => {
     postalCode: "",
     orderNotice: "",
   });
-  const { products, total } = useProductStore();
-  console.log(products);
+  const { products, total, clearCart } = useProductStore();
+  const router = useRouter();
 
   const makePurchase = async () => {
     if (
@@ -42,7 +43,6 @@ const CheckoutPage = () => {
       checkoutForm.country.length > 0 &&
       checkoutForm.postalCode.length > 0
     ) {
-
       // sending API request for creating a order
       const response = fetch("http://localhost:3001/api/orders", {
         method: "POST",
@@ -75,7 +75,28 @@ const CheckoutPage = () => {
           }
         })
         .then(() => {
+          setCheckoutForm({
+            name: "",
+            lastname: "",
+            phone: "",
+            email: "",
+            cardName: "",
+            cardNumber: "",
+            expirationDate: "",
+            cvc: "",
+            company: "",
+            adress: "",
+            apartment: "",
+            city: "",
+            country: "",
+            postalCode: "",
+            orderNotice: "",
+          });
+          clearCart();
           toast.success("Order created successfuly");
+          setTimeout(() => {
+            router.push("/");
+          }, 1000);
         });
     }
   };
@@ -98,6 +119,13 @@ const CheckoutPage = () => {
       }),
     });
   };
+
+  useEffect(() => {
+    if (products.length === 0) {
+      toast.error("You don't have items in your cart");
+      router.push("/cart");
+    }
+  }, []);
 
   return (
     <div className="bg-white">
