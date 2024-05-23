@@ -83,29 +83,27 @@ export const incentives = [
 ];
 
 export const navigation = {
-  solutions: [
-    { name: "Marketing", href: "#" },
-    { name: "Analytics", href: "#" },
-    { name: "Commerce", href: "#" },
-    { name: "Insights", href: "#" },
+  sale: [
+    { name: "Discounts", href: "#" },
+    { name: "News", href: "#" },
+    { name: "Register Discounts", href: "#" },
   ],
-  support: [
-    { name: "Pricing", href: "#" },
-    { name: "Documentation", href: "#" },
-    { name: "Guides", href: "#" },
-    { name: "API Status", href: "#" },
+  about: [
+    { name: "About Singitronic", href: "#" },
+    { name: "Work With Us", href: "#" },
+    { name: "Company Profile", href: "#" },
   ],
-  company: [
-    { name: "About", href: "#" },
-    { name: "Blog", href: "#" },
-    { name: "Jobs", href: "#" },
-    { name: "Press", href: "#" },
+  buy: [
+    { name: "Singitronic Loyalty Card", href: "#" },
+    { name: "Terms Of Use", href: "#" },
+    { name: "Privacy Policy", href: "#" },
+    { name: "Complaints", href: "#" },
     { name: "Partners", href: "#" },
   ],
-  legal: [
-    { name: "Claim", href: "#" },
-    { name: "Privacy", href: "#" },
-    { name: "Terms", href: "#" },
+  help: [
+    { name: "Contact", href: "#" },
+    { name: "How to Buy at Singitronic", href: "#" },
+    { name: "FAQ", href: "#" },
   ],
 };
 

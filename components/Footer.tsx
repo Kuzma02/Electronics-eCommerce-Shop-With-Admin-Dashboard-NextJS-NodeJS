@@ -22,14 +22,50 @@ const Footer = () => {
               <div className="md:grid md:grid-cols-2 md:gap-8">
                 <div>
                   <h3 className="text-lg font-bold leading-6 text-blue-600">
-                    Solutions
+                    Sale
                   </h3>
                   <ul role="list" className="mt-6 space-y-4">
-                    {navigation.solutions.map((item) => (
+                    {navigation.sale.map((item) => (
                       <li key={item.name}>
                         <a
                           href={item.href}
-                          className="text-sm leading-6 text-black hover:text-gray-100"
+                          className="text-sm leading-6 text-black hover:text-gray-700"
+                        >
+                          {item.name}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="mt-10 md:mt-0">
+                  <h3 className="text-base font-bold leading-6 text-blue-600">
+                    About Us
+                  </h3>
+                  <ul role="list" className="mt-6 space-y-4">
+                    {navigation.about.map((item) => (
+                      <li key={item.name}>
+                        <a
+                          href={item.href}
+                          className="text-sm leading-6 text-black hover:text-gray-700"
+                        >
+                          {item.name}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              <div className="md:grid md:grid-cols-2 md:gap-8">
+                <div>
+                  <h3 className="text-base font-bold leading-6 text-blue-600">
+                    Buying
+                  </h3>
+                  <ul role="list" className="mt-6 space-y-4">
+                    {navigation.buy.map((item) => (
+                      <li key={item.name}>
+                        <a
+                          href={item.href}
+                          className="text-sm leading-6 text-black hover:text-gray-700"
                         >
                           {item.name}
                         </a>
@@ -42,47 +78,11 @@ const Footer = () => {
                     Support
                   </h3>
                   <ul role="list" className="mt-6 space-y-4">
-                    {navigation.support.map((item) => (
+                    {navigation.help.map((item) => (
                       <li key={item.name}>
                         <a
                           href={item.href}
-                          className="text-sm leading-6 text-black hover:text-gray-100"
-                        >
-                          {item.name}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-              <div className="md:grid md:grid-cols-2 md:gap-8">
-                <div>
-                  <h3 className="text-base font-bold leading-6 text-blue-600">
-                    Company
-                  </h3>
-                  <ul role="list" className="mt-6 space-y-4">
-                    {navigation.company.map((item) => (
-                      <li key={item.name}>
-                        <a
-                          href={item.href}
-                          className="text-sm leading-6 text-black hover:text-gray-100"
-                        >
-                          {item.name}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="mt-10 md:mt-0">
-                  <h3 className="text-base font-bold leading-6 text-blue-600">
-                    Legal
-                  </h3>
-                  <ul role="list" className="mt-6 space-y-4">
-                    {navigation.legal.map((item) => (
-                      <li key={item.name}>
-                        <a
-                          href={item.href}
-                          className="text-sm leading-6 text-black hover:text-gray-100"
+                          className="text-sm leading-6 text-black hover:text-gray-700"
                         >
                           {item.name}
                         </a>
