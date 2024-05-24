@@ -2,7 +2,6 @@ import React from "react";
 import CategoryItem from "./CategoryItem";
 import Image from "next/image";
 import { categoryMenuList } from "@/lib/utils";
-import IntroducingSection from "./IntroducingSection";
 import Heading from "./Heading";
 
 const CategoryMenu = () => {
