@@ -1,6 +1,4 @@
 "use client";
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
 import { SectionTitle, WishItem } from "@/components";
 import React from "react";
 import { useWishlistStore } from "../_zustand/wishlistStore";

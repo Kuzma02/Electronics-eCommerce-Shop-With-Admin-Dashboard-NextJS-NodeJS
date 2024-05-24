@@ -233,7 +233,6 @@ async function getAllProductsOld(request, response) {
 
 async function createProduct(request, response) {
   try {
-    console.log("Creating product:", request.body);
     const {
       slug,
       title,
@@ -257,7 +256,6 @@ async function createProduct(request, response) {
         inStock,
       },
     });
-    console.log("Product created:", product); // Dodajemo log za proveru
     return response.status(201).json(product);
   } catch (error) {
     console.error("Error creating product:", error); // Dodajemo log za proveru
@@ -319,7 +317,6 @@ async function updateProduct(request, response) {
 async function deleteProduct(request, response) {
   try {
     const { id } = request.params;
-    console.log("Deleting product with slug:", id); // Dodajemo log za proveru
     await prisma.product.delete({
       where: {
         id,
@@ -374,7 +371,6 @@ async function getProductById(request, response) {
       category: true,
     },
   });
-  console.log(product);
   if (!product) {
     return response.status(404).json({ error: "Product not found" });
   }

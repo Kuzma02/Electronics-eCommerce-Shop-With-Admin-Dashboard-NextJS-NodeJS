@@ -3,7 +3,6 @@ const prisma = new PrismaClient();
 
 async function createOrderProduct(request, response) {
     try {
-        console.log("Creating order:", request.body);
         const { customerOrderId, productId, quantity } = request.body;
         const corder = await prisma.customer_order_product.create({
             data: {
@@ -12,7 +11,6 @@ async function createOrderProduct(request, response) {
                 quantity
             }
         });
-        console.log("Product order created:", corder);
         return response.status(201).json(corder);
     } catch (error) {
         console.error("Error creating prodcut order:", error);
@@ -24,7 +22,6 @@ async function createOrderProduct(request, response) {
 async function updateProductOrder(request, response) {
     try {
         const { id } = request.params;
-        console.log("Updating product order with id:", id);
         const { customerOrderId, productId, quantity } = request.body;
 
 
@@ -60,7 +57,6 @@ async function updateProductOrder(request, response) {
 async function deleteProductOrder(request, response) {
     try {
         const { id } = request.params;
-        console.log("Deleting product order with id:", id);
         await prisma.customer_order_product.deleteMany({
             where: {
                 customerOrderId: id
@@ -82,7 +78,6 @@ async function getProductOrder(request, response) {
             product: true // Ukljucuje informacije o proizvodu u odgovor
         }
     });
-    console.log(order);
     if (!order) {
         return response.status(404).json({ error: "Order not found" });
     }

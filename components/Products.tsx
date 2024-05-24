@@ -40,7 +40,6 @@ const Products = async ({ slug }: any) => {
         : ""
     }sort=${slug?.searchParams?.sort}&page=${page}`
   );
-  console.log(data);
 
   const products = await data.json();
 

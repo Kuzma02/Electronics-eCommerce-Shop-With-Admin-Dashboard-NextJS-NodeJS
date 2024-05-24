@@ -1,6 +1,8 @@
 "use client";
 import { useWishlistStore } from "@/app/_zustand/wishlistStore";
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { FaHeartCrack } from "react-icons/fa6";
 
@@ -14,11 +16,19 @@ const WishItem = ({
 }: ProductInWishlist) => {
   // getting from Zustand wishlist store
   const { removeFromWishlist } = useWishlistStore();
+  const router = useRouter();
+
+  const openProduct = (slug: string): void => {
+    router.push(`/product/${slug}`);
+  };
   return (
-    <tr className="hover:bg-gray-100 cursor-pointer">
-      <th className="text-black text-sm text-center">{id}</th>
+    <tr
+      className="hover:bg-gray-100 cursor-pointer"
+
+    >
+      <th className="text-black text-sm text-center" onClick={() => openProduct(slug)}>{id}</th>
       <th>
-        <div className="w-12 h-12 mx-auto">
+        <div className="w-12 h-12 mx-auto" onClick={() => openProduct(slug)}>
           <Image
             src={`/${image}`}
             width={200}
@@ -28,8 +38,8 @@ const WishItem = ({
           />
         </div>
       </th>
-      <td className="text-black text-sm text-center">{title}</td>
-      <td className="text-black text-sm text-center">
+      <td className="text-black text-sm text-center" onClick={() => openProduct(slug)}>{title}</td>
+      <td className="text-black text-sm text-center" onClick={() => openProduct(slug)}>
         {stockAvailabillity ? (
           <span className="text-success">In stock</span>
         ) : (

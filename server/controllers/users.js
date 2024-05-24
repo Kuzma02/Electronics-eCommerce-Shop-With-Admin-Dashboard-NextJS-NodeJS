@@ -13,7 +13,6 @@ async function getAllUsers(request, response) {
 
 async function createUser(request, response) {
   try {
-    console.log("Creating user:", request.body);
     const { email, password, role } = request.body;
     const hashedPassword = await bcrypt.hash(password, 5);
 
@@ -24,7 +23,6 @@ async function createUser(request, response) {
         role,
       },
     });
-    console.log(" User:", user);
     return response.status(201).json(user);
   } catch (error) {
     console.error("Error creating user:", error);
@@ -35,7 +33,6 @@ async function createUser(request, response) {
 async function updateUser(request, response) {
   try {
     const { id } = request.params;
-    console.log("Updating user with id:", id);
     const { email, password, role } = request.body;
     const hashedPassword = await bcrypt.hash(password, 5);
     const existingUser = await prisma.user.findUnique({
@@ -68,7 +65,6 @@ async function updateUser(request, response) {
 async function deleteUser(request, response) {
   try {
     const { id } = request.params;
-    console.log("Deleting user with id:", id);
     await prisma.user.delete({
       where: {
         id: id,

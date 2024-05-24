@@ -14,7 +14,6 @@ async function getSingleProductImages(request, response) {
 
 async function createImage(request, response) {
   try {
-    console.log("Creating image:", request.body);
     const { productID, image } = request.body;
     const createImage = await prisma.image.create({
       data: {
@@ -22,7 +21,6 @@ async function createImage(request, response) {
         image,
       },
     });
-    console.log("Image created:", createImage); // Dodajemo log za proveru
     return response.status(201).json(createImage);
   } catch (error) {
     console.error("Error creating image:", error); // Dodajemo log za proveru
@@ -33,7 +31,6 @@ async function createImage(request, response) {
 async function updateImage(request, response) {
   try {
     const { id } = request.params; // Dobijamo productID iz params
-    console.log("Updating image with productID:", id); // Dodajemo log za proveru
     const { productID, image } = request.body;
 
     // Proveravamo da li slika postoji za dati productID
@@ -71,7 +68,6 @@ async function updateImage(request, response) {
 async function deleteImage(request, response) {
   try {
     const { id } = request.params;
-    console.log("Deleting image with productID:", id); // Dodajemo log za proveru
     await prisma.image.deleteMany({
       where: {
         productID: String(id), // Konvertujemo id u string

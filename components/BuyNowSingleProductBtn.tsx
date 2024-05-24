@@ -2,13 +2,13 @@
 import { useProductStore } from "@/app/_zustand/store";
 import React from "react";
 import toast from "react-hot-toast";
-import { useRouter } from 'next/navigation'
+import { useRouter } from "next/navigation";
 
 const BuyNowSingleProductBtn = ({
   product,
   quantityCount,
 }: SingleProductBtnProps) => {
-  const router = useRouter()
+  const router = useRouter();
   const { addToCart, calculateTotals } = useProductStore();
 
   const handleAddToCart = () => {
@@ -21,9 +21,7 @@ const BuyNowSingleProductBtn = ({
     });
     calculateTotals();
     toast.success("Product added to the cart");
-    setTimeout(() => {
-      router.push("/checkout");
-    }, 1000);
+    router.push("/checkout");
   };
   return (
     <button

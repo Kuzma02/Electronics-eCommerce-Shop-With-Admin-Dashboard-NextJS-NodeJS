@@ -3,14 +3,12 @@ const prisma = new PrismaClient();
 
 async function createCategory(request, response) {
   try {
-    console.log("Creating category:", request.body);
     const { name } = request.body;
     const category = await prisma.category.create({
       data: {
         name,
       },
     });
-    console.log("Category created:", category);
     return response.status(201).json(category);
   } catch (error) {
     console.error("Error creating category:", error);
@@ -21,7 +19,6 @@ async function createCategory(request, response) {
 async function updateCategory(request, response) {
   try {
     const { id } = request.params;
-    console.log("Updating category with id:", id);
     const { name } = request.body;
 
     const existingCategory = await prisma.category.findUnique({
@@ -52,7 +49,6 @@ async function updateCategory(request, response) {
 async function deleteCategory(request, response) {
   try {
     const { id } = request.params;
-    console.log("Deleting category with id:", id);
     await prisma.category.delete({
       where: {
         id: id,
@@ -71,7 +67,6 @@ async function getCategory(request, response) {
       id: id,
     },
   });
-  console.log(category);
   if (!category) {
     return response.status(404).json({ error: "Category not found" });
   }

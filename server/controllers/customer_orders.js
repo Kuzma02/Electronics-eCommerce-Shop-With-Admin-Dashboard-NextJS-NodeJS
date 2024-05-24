@@ -3,7 +3,6 @@ const prisma = new PrismaClient();
 
 async function createCustomerOrder(request, response) {
   try {
-    console.log("Creating order:", request.body);
     const {
       name,
       lastname,
@@ -36,7 +35,6 @@ async function createCustomerOrder(request, response) {
         total,
       },
     });
-    console.log("Order created:", corder);
     return response.status(201).json(corder);
   } catch (error) {
     console.error("Error creating order:", error);
@@ -47,7 +45,6 @@ async function createCustomerOrder(request, response) {
 async function updateCustomerOrder(request, response) {
   try {
     const { id } = request.params;
-    console.log("Updating order with id:", id);
     const {
       name,
       lastname,
@@ -106,7 +103,6 @@ async function updateCustomerOrder(request, response) {
 async function deleteCustomerOrder(request, response) {
   try {
     const { id } = request.params;
-    console.log("Deleting order with id:", id);
     await prisma.customer_order.delete({
       where: {
         id: id,
@@ -125,7 +121,6 @@ async function getCustomerOrder(request, response) {
       id: id,
     },
   });
-  console.log(order);
   if (!order) {
     return response.status(404).json({ error: "Order not found" });
   }
