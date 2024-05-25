@@ -23,34 +23,34 @@ async function createImage(request, response) {
     });
     return response.status(201).json(createImage);
   } catch (error) {
-    console.error("Error creating image:", error); // Dodajemo log za proveru
+    console.error("Error creating image:", error);
     return response.status(500).json({ error: "Error creating image" });
   }
 }
 
 async function updateImage(request, response) {
   try {
-    const { id } = request.params; // Dobijamo productID iz params
+    const { id } = request.params; // Getting product id from params
     const { productID, image } = request.body;
 
-    // Proveravamo da li slika postoji za dati productID
+    // Checking whether photo exists for the given product id
     const existingImage = await prisma.image.findFirst({
       where: {
-        productID: id, // Tražimo sliku na osnovu productID
+        productID: id, // Finding photo with a product id
       },
     });
 
-    // Ako slika ne postoji, vraćamo odgovarajući status koda
+    // if photo doesn't exist, return coresponding status code
     if (!existingImage) {
       return response
         .status(404)
         .json({ error: "Image not found for the provided productID" });
     }
 
-    // Ažuriramo sliku koristeći pronađeni imageID
+    // Updating photo using coresponding imageID
     const updatedImage = await prisma.image.update({
       where: {
-        imageID: existingImage.imageID, // Koristimo imageID pronađene slike
+        imageID: existingImage.imageID, // Using imageID of the found existing image
       },
       data: {
         productID: productID,
@@ -60,7 +60,7 @@ async function updateImage(request, response) {
 
     return response.json(updatedImage);
   } catch (error) {
-    console.error("Error updating image:", error); // Dodajemo log za proveru
+    console.error("Error updating image:", error);
     return response.status(500).json({ error: "Error updating image" });
   }
 }
@@ -70,12 +70,12 @@ async function deleteImage(request, response) {
     const { id } = request.params;
     await prisma.image.deleteMany({
       where: {
-        productID: String(id), // Konvertujemo id u string
+        productID: String(id), // Converting id to string
       },
     });
     return response.status(204).send();
   } catch (error) {
-    console.error("Error deleting image:", error); // Dodajemo log za proveru
+    console.error("Error deleting image:", error);
     return response.status(500).json({ error: "Error deleting image" });
   }
 }

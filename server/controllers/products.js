@@ -24,30 +24,33 @@ async function getAllProducts(request, response) {
         queryArray[i].indexOf("filters") !== -1 &&
         queryArray[i].indexOf("price") !== -1
       ) {
-        // uzimam "price" deo. Naravno mogao sam samo da napisem filterType="price"
+
+        // taking price par. Of course I could write it much simpler: filterType="price"
         filterType = queryArray[i].substring(
           queryArray[i].indexOf("price"),
           queryArray[i].indexOf("price") + "price".length
         );
       }
-      // proveravam da li je u pitanju filter mod i rating filter
+
+      // checking whether it is filter mode and rating filter
       if (
         queryArray[i].indexOf("filters") !== -1 &&
         queryArray[i].indexOf("rating") !== -1
       ) {
-        // uzimam "rating" deo. Naravno mogao sam samo da napisem filterType="rating"
+
+        // taking "rating" part. Of course I could write it much simpler: filterType="rating"
         filterType = queryArray[i].substring(
           queryArray[i].indexOf("rating"),
           queryArray[i].indexOf("rating") + "rating".length
         );
       }
 
-      // proveravam da li je u pitanju filter mod i category filter
+      // checking whether it is filter mode and category filter
       if (
         queryArray[i].indexOf("filters") !== -1 &&
         queryArray[i].indexOf("category") !== -1
       ) {
-        // uzimam "category" deo. Naravno mogao sam samo da napisem filterType="category"
+        // getting "category" part
         filterType = "category";
       }
 
@@ -55,7 +58,7 @@ async function getAllProducts(request, response) {
         queryArray[i].indexOf("filters") !== -1 &&
         queryArray[i].indexOf("inStock") !== -1
       ) {
-        // uzimam "inStock" deo. Naravno mogao sam samo da napisem filterType="inStock"
+        // getting "inStock" part.  Of course I could write it much simpler: filterType="inStock"
         filterType = queryArray[i].substring(
           queryArray[i].indexOf("inStock"),
           queryArray[i].indexOf("inStock") + "inStock".length
@@ -66,7 +69,7 @@ async function getAllProducts(request, response) {
         queryArray[i].indexOf("filters") !== -1 &&
         queryArray[i].indexOf("outOfStock") !== -1
       ) {
-        // uzimam "outOfStock" deo. Naravno mogao sam samo da napisem filterType="outOfStock"
+        // getting "outOfStock" part.  Of course I could write it much simpler: filterType="outOfStock"
         filterType = queryArray[i].substring(
           queryArray[i].indexOf("outOfStock"),
           queryArray[i].indexOf("outOfStock") + "outOfStock".length
@@ -74,16 +77,16 @@ async function getAllProducts(request, response) {
       }
 
       if (queryArray[i].indexOf("sort") !== -1) {
-        // uzimamo vrednost sorta iz querija
+        // getting sort value from the query
         sortByValue = queryArray[i].substring(queryArray[i].indexOf("=") + 1);
       }
 
-      // proveravam da li je u datom queriju filters mod
+      // checking whether in the given query filters mode is on
       if (queryArray[i].indexOf("filters") !== -1) {
         let filterValue;
-        //  proveravam da nije filter po categoriji. To radim kako bih izbegao pretvaranje Stringa u Int
+        // checking that it is not filter by category. I am doing it so I can avoid converting string to number
         if (queryArray[i].indexOf("category") === -1) {
-          // uzimam value deo. To je deo gde se nalazi int vrednost querija i konvertujem je u broj jer je po defaultu string
+          // taking value part. It is the part where number value of the query is located and I am converting it to the number type because it is string by default
           filterValue = parseInt(
             queryArray[i].substring(
               queryArray[i].indexOf("=") + 1,
@@ -91,21 +94,21 @@ async function getAllProducts(request, response) {
             )
           );
         } else {
-          // ako je filter po kategorije
+          // if it is filter by category
           filterValue = queryArray[i].substring(
             queryArray[i].indexOf("=") + 1,
             queryArray[i].length
           );
         }
 
-        // uzimam operator npr. lte, gte, gt, lt...
+        // getting operator for example: lte, gte, gt, lt....
         const filterOperator = queryArray[i].substring(
           queryArray[i].indexOf("$") + 1,
           queryArray[i].indexOf("=") - 1
         );
 
-        // sve to dodajemo u filterArray
-        // primer izgleda filterArray:
+        // All of it I add to the filterArray
+        // example for current state of filterArray:
         /*
                 [
                 { filterType: 'price', filterOperator: 'lte', filterValue: 3000 },
@@ -263,10 +266,10 @@ async function createProduct(request, response) {
   }
 }
 
-// Metoda za ažuriranje postojećeg proizvoda
+// Method for updating existing product
 async function updateProduct(request, response) {
   try {
-    const { id } = request.params; // Dobijamo slug iz params
+    const { id } = request.params; // Getting a slug from params
     const {
       slug,
       title,
@@ -278,7 +281,7 @@ async function updateProduct(request, response) {
       categoryId,
       inStock,
     } = request.body;
-    // Pronalazimo proizvod prema slug-u
+    // Finding a product by slug
     const existingProduct = await prisma.product.findUnique({
       where: {
         id,
@@ -289,10 +292,10 @@ async function updateProduct(request, response) {
       return response.status(404).json({ error: "Product not found" });
     }
 
-    // Ažuriramo pronađeni proizvod
+    // Updating found product
     const updatedProduct = await prisma.product.update({
       where: {
-        id, // Koristimo ID pronađenog proizvoda
+        id, // Using id of the found product
       },
       data: {
         title: title,
@@ -313,7 +316,7 @@ async function updateProduct(request, response) {
   }
 }
 
-// Metoda za brisanje proizvoda
+// Method for deleting a product
 async function deleteProduct(request, response) {
   try {
     const { id } = request.params;

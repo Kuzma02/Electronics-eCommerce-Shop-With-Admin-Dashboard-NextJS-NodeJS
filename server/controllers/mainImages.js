@@ -6,10 +6,10 @@ async function uploadMainImage(req, res) {
       return res.status(400).json({ message: "Nema otpremljenih fajlova" });
     }
   
-    // Uzmi fajl iz zahteva
+    // Get file from a request
     const uploadedFile = req.files.uploadedFile;
   
-    // Koristi mv() metodu za pomeranje fajla u odgovarajući direktorijum na serveru
+    // Using mv method for moving file to the directory on the server
     uploadedFile.mv('../public/' + uploadedFile.name, (err) => {
       if (err) {
         return res.status(500).send(err);

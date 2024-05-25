@@ -72,10 +72,10 @@ async function getProductOrder(request, response) {
     const { id } = request.params;
     const order = await prisma.customer_order_product.findMany({
         where: {
-            customerOrderId: id // Koristi customerOrderId kao uslov pretrage
+            customerOrderId: id // Use customerOrderId for searching
         },
         include: {
-            product: true // Ukljucuje informacije o proizvodu u odgovor
+            product: true // Including information about a product for response
         }
     });
     if (!order) {
@@ -87,15 +87,15 @@ async function getProductOrder(request, response) {
 
 async function getAllProductOrders(request, response) {
     try {
-        // Pronalaženje svih porudžbina iz customer_order_product tabele
+        // Getting all orders from customer_order_product table
         const productOrders = await prisma.customer_order_product.findMany({
             select: {
-                productId: true, // Izdvajanje samo productId-ova
-                quantity: true, // Izdvajanje samo quantity-ja
-                customerOrder: { // Spajanje na customerOrder objekat iz tabele customer_order_product
+                productId: true,
+                quantity: true,
+                customerOrder: {
                     select: {
-                        id: true, // Izdvajanje samo id-jeva iz tabele customer_orders
-                        name: true, // Dodajte ostale potrebne informacije o porudžbini
+                        id: true,
+                        name: true,
                         lastname: true,
                         phone: true,
                         email: true,
@@ -111,22 +111,21 @@ async function getAllProductOrders(request, response) {
             }
         });
 
-        // Kreiranje mape za čuvanje podataka o porudžbinama grupisanim po customerOrderId-u
+        // Creating map for storing data about orders grouped by customerOrderId
         const ordersMap = new Map();
 
-        // Iteracija kroz sve porudžbine
+        // Iterating through all orders
         for (const order of productOrders) {
             const { customerOrder, productId, quantity } = order;
             const { id, ...orderDetails } = customerOrder;
 
-            // Pronalaženje proizvoda iz tabele Product na osnovu productId-ja
+            // Finding a product from the table Product with productId
             const product = await prisma.product.findUnique({
                 where: {
                     id: productId
                 },
                 select: {
                     id: true,
-                    // Dodajte ostale željene informacije o proizvodu
                     title: true,
                     mainImage: true,
                     price: true,
@@ -135,10 +134,10 @@ async function getAllProductOrders(request, response) {
             });
 
             if (ordersMap.has(id)) {
-                // Ako postoji unos za customerOrderId, dodajte novi proizvod u postojeći niz
+                // If there is input for customerOrderId, add a new product in existing map array
                 ordersMap.get(id).products.push({ ...product, quantity });
             } else {
-                // Inače, kreirajte novi unos za customerOrderId i dodajte prvi proizvod
+                // Otherwise create new input for customerOrderId and add the product
                 ordersMap.set(id, {
                     customerOrderId: id,
                     customerOrder: orderDetails,
@@ -147,7 +146,7 @@ async function getAllProductOrders(request, response) {
             }
         }
 
-        // Konvertovanje mape u niz objekata
+        // Converting map to object array
         const groupedOrders = Array.from(ordersMap.values());
 
         return response.json(groupedOrders);

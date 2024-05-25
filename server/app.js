@@ -12,8 +12,6 @@ const slugRouter = require("./routes/slugs");
 const OrderProductRouter = require('./routes/customer_order_product');
 var cors = require("cors");
 
-// use it before all route definitions
-
 const app = express();
 
 app.use(express.json());
