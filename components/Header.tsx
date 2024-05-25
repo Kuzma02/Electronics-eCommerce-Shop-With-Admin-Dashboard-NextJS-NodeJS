@@ -1,3 +1,13 @@
+// *********************
+// Role of the component: Header component
+// Name of the component: Header.tsx
+// Developer: Aleksandar Kuzmanovic
+// Version: 1.0
+// Component call: <Header />
+// Input parameters: no input parameters
+// Output: Header component
+// *********************
+
 "use client";
 import { usePathname } from "next/navigation";
 import React, { useEffect } from "react";

@@ -1,3 +1,13 @@
+// *********************
+// Role of the component: Product table component on admin dashboard page
+// Name of the component: DashboardProductTable.tsx
+// Developer: Aleksandar Kuzmanovic
+// Version: 1.0
+// Component call: <DashboardProductTable />
+// Input parameters: no input parameters
+// Output: products table
+// *********************
+
 "use client";
 import { nanoid } from "nanoid";
 import Image from "next/image";

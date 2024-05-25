@@ -1,4 +1,13 @@
-import { nanoid } from "nanoid";
+// *********************
+// Role of the component: Rating stars component that will display stars on the single product page 
+// Name of the component: SingleProductRating.tsx
+// Developer: Aleksandar Kuzmanovic
+// Version: 1.0
+// Component call: <SingleProductRating rating={rating} />
+// Input parameters: { rating: number }
+// Output: full colored star icons and outlined star icons depending on the ratingArray element("empty star" or "full star")
+// *********************
+
 import React from "react";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 

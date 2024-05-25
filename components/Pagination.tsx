@@ -1,6 +1,15 @@
+// *********************
+// Role of the component: Pagination for navigating the shop page
+// Name of the component: Pagination.tsx
+// Developer: Aleksandar Kuzmanovic
+// Version: 1.0
+// Component call: <Pagination />
+// Input parameters: no input parameters
+// Output: Component with the current page and buttons for incrementing and decrementing page
+// *********************
+
 "use client";
 import { usePaginationStore } from "@/app/_zustand/paginationStore";
-import { useSearchParams } from "next/navigation";
 import React from "react";
 
 const Pagination = () => {

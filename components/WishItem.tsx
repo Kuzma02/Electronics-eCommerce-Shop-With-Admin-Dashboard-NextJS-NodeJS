@@ -1,7 +1,16 @@
+// *********************
+// Role of the component: Wishlist item component for wishlist page
+// Name of the component: WishItem.tsx
+// Developer: Aleksandar Kuzmanovic
+// Version: 1.0
+// Component call: <WishItem id={id} title={title} price={price} image={image} slug={slug} stockAvailabillity={stockAvailabillity} />
+// Input parameters: ProductInWishlist interface
+// Output: single wishlist item on the wishlist page
+// *********************
+
 "use client";
 import { useWishlistStore } from "@/app/_zustand/wishlistStore";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { FaHeartCrack } from "react-icons/fa6";
@@ -22,11 +31,13 @@ const WishItem = ({
     router.push(`/product/${slug}`);
   };
   return (
-    <tr
-      className="hover:bg-gray-100 cursor-pointer"
-
-    >
-      <th className="text-black text-sm text-center" onClick={() => openProduct(slug)}>{id}</th>
+    <tr className="hover:bg-gray-100 cursor-pointer">
+      <th
+        className="text-black text-sm text-center"
+        onClick={() => openProduct(slug)}
+      >
+        {id}
+      </th>
       <th>
         <div className="w-12 h-12 mx-auto" onClick={() => openProduct(slug)}>
           <Image
@@ -38,8 +49,16 @@ const WishItem = ({
           />
         </div>
       </th>
-      <td className="text-black text-sm text-center" onClick={() => openProduct(slug)}>{title}</td>
-      <td className="text-black text-sm text-center" onClick={() => openProduct(slug)}>
+      <td
+        className="text-black text-sm text-center"
+        onClick={() => openProduct(slug)}
+      >
+        {title}
+      </td>
+      <td
+        className="text-black text-sm text-center"
+        onClick={() => openProduct(slug)}
+      >
         {stockAvailabillity ? (
           <span className="text-success">In stock</span>
         ) : (

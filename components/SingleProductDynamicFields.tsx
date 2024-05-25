@@ -1,3 +1,13 @@
+// *********************
+// Role of the component: Helper component for seperating dynamic client component from server component on the single product page with the intention to preserve SEO benefits of Next.js
+// Name of the component: SingleProductDynamicFields.tsx
+// Developer: Aleksandar Kuzmanovic
+// Version: 1.0
+// Component call: <SingleProductDynamicFields product={product} />
+// Input parameters: { product: Product }
+// Output: Quantity, add to cart and buy now component on the single product page
+// *********************
+
 "use client";
 import React, { useState } from "react";
 import QuantityInput from "./QuantityInput";

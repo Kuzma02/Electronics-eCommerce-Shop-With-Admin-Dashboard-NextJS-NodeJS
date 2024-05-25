@@ -1,3 +1,13 @@
+// *********************
+// Role of the component: Topbar of the header
+// Name of the component: HeaderTop.tsx
+// Developer: Aleksandar Kuzmanovic
+// Version: 1.0
+// Component call: <HeaderTop />
+// Input parameters: no input parameters
+// Output: topbar with phone, email and login and register links
+// *********************
+
 "use client";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";

@@ -1,3 +1,13 @@
+// *********************
+// Role of the component: Section title that can be used on any page
+// Name of the component: SectionTitle.tsx
+// Developer: Aleksandar Kuzmanovic
+// Version: 1.0
+// Component call: <SectionTitle />
+// Input parameters: {title: string; path: string}
+// Output: div containing h1 for page title and p for page location path 
+// *********************
+
 import React from 'react'
 
 const SectionTitle = ({title, path} : {title: string; path: string}) => {

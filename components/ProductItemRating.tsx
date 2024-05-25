@@ -1,3 +1,13 @@
+// *********************
+// Role of the component: Showing stars for the given rating number
+// Name of the component: ProductItemRating.tsx
+// Developer: Aleksandar Kuzmanovic
+// Version: 1.0
+// Component call: <ProductItemRating productRating={productRating} />
+// Input parameters: { productRating: number }
+// Output: full colored or outlined star icon depending on the element of the rating array("empty star" or "full star") 
+// *********************
+
 "use client";
 import { nanoid } from "nanoid";
 import React, { useState } from "react";

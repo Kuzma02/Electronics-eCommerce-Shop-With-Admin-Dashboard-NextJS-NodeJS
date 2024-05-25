@@ -1,7 +1,15 @@
-"use client";
+// *********************
+// Role of the component: SortBy
+// Name of the component: SortBy.tsx
+// Developer: Aleksandar Kuzmanovic
+// Version: 1.0
+// Component call: <SortBy />
+// Input parameters: no input parameters
+// Output: select input with options for sorting by a-z, z-a, price low, price high
+// *********************
 
-import { usePathname, useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+"use client";
+import React from "react";
 import { useSortStore } from "@/app/_zustand/sortStore";
 
 const SortBy = () => {

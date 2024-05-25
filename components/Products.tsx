@@ -1,9 +1,15 @@
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+// *********************
+// Role of the component: Showing products on the shop page with applied filter and sort
+// Name of the component: Products.tsx
+// Developer: Aleksandar Kuzmanovic
+// Version: 1.0
+// Component call: <Products slug={slug} />
+// Input parameters: { slug }: any
+// Output: products grid
+// *********************
 
 import React from "react";
 import ProductItem from "./ProductItem";
-import { RiH3 } from "react-icons/ri";
 
 const Products = async ({ slug }: any) => {
   // getting all data from URL slug and after that sending API request with filtering, sorting and pagination for getting all products

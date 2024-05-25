@@ -1,3 +1,13 @@
+// *********************
+// Role of the component: Classical hero component on home page
+// Name of the component: Hero.tsx
+// Developer: Aleksandar Kuzmanovic
+// Version: 1.0
+// Component call: <Hero />
+// Input parameters: no input parameters
+// Output: Classical hero component with two columns on desktop and one column on smaller devices
+// *********************
+
 import Image from "next/image";
 import React from "react";
 
