@@ -40,8 +40,8 @@ const ProductItem = ({
         href={`/product/${product.slug}`}
         className={
           color === "black"
-            ? `text-2xl text-black font-normal mt-2`
-            : `text-2xl text-white font-normal mt-2`
+            ? `text-xl text-black font-normal mt-2 uppercase`
+            : `text-xl text-white font-normal mt-2 uppercase`
         }
       >
         {product.title}
@@ -49,8 +49,8 @@ const ProductItem = ({
       <p
         className={
           color === "black"
-            ? "text-xl text-black font-semibold"
-            : "text-xl text-white font-semibold"
+            ? "text-lg text-black font-semibold"
+            : "text-lg text-white font-semibold"
         }
       >
         ${product.price}
