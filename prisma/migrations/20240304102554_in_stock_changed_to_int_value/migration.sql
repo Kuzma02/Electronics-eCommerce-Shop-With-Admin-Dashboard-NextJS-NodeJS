@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE `product` MODIFY `inStock` INTEGER NOT NULL DEFAULT 1;

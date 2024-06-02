@@ -9,7 +9,8 @@ const mainImageRouter = require("./routes/mainImages");
 const userRouter = require("./routes/users");
 const orderRouter = require("./routes/customer_orders");
 const slugRouter = require("./routes/slugs");
-const OrderProductRouter = require('./routes/customer_order_product');
+const orderProductRouter = require('./routes/customer_order_product');
+const wishlistRouter = require('./routes/wishlist');
 var cors = require("cors");
 
 const app = express();
@@ -31,8 +32,9 @@ app.use("/api/main-image", mainImageRouter);
 app.use("/api/users", userRouter);
 app.use("/api/search", searchRouter);
 app.use("/api/orders", orderRouter);
-app.use('/api/order-product', OrderProductRouter);
+app.use('/api/order-product', orderProductRouter);
 app.use("/api/slugs", slugRouter);
+app.use("/api/wishlist", wishlistRouter);
 
 
 const PORT = process.env.PORT || 3001;

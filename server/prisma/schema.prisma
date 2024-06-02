@@ -26,6 +26,7 @@ model Product {
   categoryId     String
   category       Category                 @relation(fields: [categoryId], references: [id])
   customerOrders customer_order_product[]
+  Wishlist       Wishlist[]
 }
 
 model Image {
@@ -35,10 +36,11 @@ model Image {
 }
 
 model User {
-  id       String  @id @default(uuid())
-  email    String  @unique
+  id       String     @id @default(uuid())
+  email    String     @unique
   password String?
-  role     String? @default("user")
+  role     String?    @default("user")
+  Wishlist Wishlist[]
 }
 
 model Customer_order {
@@ -73,4 +75,12 @@ model Category {
   id       String    @id @default(uuid())
   name     String
   products Product[] // Define a one-to-many relationship
+}
+
+model Wishlist {
+  id        String  @id @default(uuid())
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+  user      User    @relation(fields: [userId], references: [id])
+  userId    String
 }
