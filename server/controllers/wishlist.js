@@ -52,12 +52,14 @@ async function createWishItem(request, response) {
 async function deleteWishItem(request, response) {
   try {
     const { id } = request.params;
+    console.log("Deleting wish item "+id);
     await prisma.wishlist.delete({
       where: {
         id: id,
       },
     });
     return response.status(204).send();
+
   } catch (error) {
     console.log(error);
     return response.status(500).json({ error: "Error deleting wish item" });

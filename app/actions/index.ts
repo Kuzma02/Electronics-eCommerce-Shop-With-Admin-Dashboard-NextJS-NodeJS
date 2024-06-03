@@ -1,6 +1,16 @@
-// 'use server'
+'use server'
+
+import { revalidateTag } from "next/cache";
+
+export async function deleteWishItem(id: string){
+  await fetch(`http://localhost:3001/api/wishlist/${id}`, {
+    method: "DELETE",
+  });
+}
+
+
 // import { redirect } from 'next/navigation'
- 
+
 // export async function sortCars(formData: string) {
 //   switch (formData) {
 //     case "defaultSort":
@@ -31,6 +41,7 @@
 // export async function filterCars(formData: FormData){
 //   redirect(`/cars?condition=${formData.get("conditions") || "all"}&transmission=${formData.get("transmissions") || 'all'}&fuel=${formData.get("fuels") || 'all'}`);
 // }
+
 
 // export async function filterAndSortCars(formData: FormData){
 //   const sort = formData.get("sort");

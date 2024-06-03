@@ -19,7 +19,7 @@ interface SingleProductPageProps {
 }
 
 type ProductInWishlist = {
-  id: number;
+  id: string;
   title: string;
   price: number;
   image: string;

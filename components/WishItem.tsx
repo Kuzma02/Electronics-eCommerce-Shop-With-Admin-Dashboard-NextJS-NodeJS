@@ -10,10 +10,18 @@
 
 "use client";
 import { useWishlistStore } from "@/app/_zustand/wishlistStore";
+import { revalidatePath } from "next/cache";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
+import toast from "react-hot-toast";
 import { FaHeartCrack } from "react-icons/fa6";
+import { deleteWishItem } from "@/app/actions";
+
+interface wishItemStateTrackers {
+  isWishItemDeleted: boolean;
+  setIsWishItemDeleted: any; 
+}
 
 const WishItem = ({
   id,
@@ -22,7 +30,9 @@ const WishItem = ({
   image,
   slug,
   stockAvailabillity,
-}: ProductInWishlist) => {
+  isWishItemDeleted,
+  setIsWishItemDeleted
+}: ProductInWishlist & wishItemStateTrackers) => {
   // getting from Zustand wishlist store
   const { removeFromWishlist } = useWishlistStore();
   const router = useRouter();
@@ -30,6 +40,13 @@ const WishItem = ({
   const openProduct = (slug: string): void => {
     router.push(`/product/${slug}`);
   };
+
+  const removeItemFromWishlist = async (id: string) => {
+    deleteWishItem(id);
+    setIsWishItemDeleted(() => !isWishItemDeleted);
+    toast.success("Item removed from your wishlist");
+  };
+
   return (
     <tr className="hover:bg-gray-100 cursor-pointer">
       <th
@@ -70,7 +87,7 @@ const WishItem = ({
           <FaHeartCrack />
           <span
             className="max-sm:hidden"
-            onClick={() => removeFromWishlist(id)}
+            onClick={() => removeItemFromWishlist(id)}
           >
             remove from the wishlist
           </span>
