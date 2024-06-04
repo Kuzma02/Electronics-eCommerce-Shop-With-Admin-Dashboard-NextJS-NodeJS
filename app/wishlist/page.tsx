@@ -5,16 +5,11 @@ import { useWishlistStore } from "../_zustand/wishlistStore";
 import { nanoid } from "nanoid";
 import { useSession } from "next-auth/react";
 
-interface WishListItem {
-  id: string;
-  userId: string;
-  productId: string;
-  product: Product;
-}
+
 
 const WishlistPage = () => {
   const { data: session, status } = useSession();
-  const [wishlist, setWishlist] = useState<WishListItem[]>([]);
+  const {wishlist, setWishlist}= useWishlistStore();
   const [isWishItemDeleted, setIsWishItemDeleted] = useState<boolean>(false);
 
   const getWishlistByUserId = async (id: string) => {
@@ -22,7 +17,19 @@ const WishlistPage = () => {
       cache: "no-store",
     });
     const wishlist = await response.json();
-    setWishlist(wishlist);
+
+    const productArray: {
+      id: string;
+      title: string;
+      price: number;
+      image: string;
+      slug:string
+      stockAvailabillity: number;
+    }[] = [];
+    
+    wishlist.map((item:any) => productArray.push({id: item?.product?.id, title: item?.product?.title, price: item?.product?.price, image: item?.product?.mainImage, slug: item?.product?.slug, stockAvailabillity: item?.product?.inStock}));
+    
+    setWishlist(productArray);
   };
 
   const getUserByEmail = async () => {
@@ -39,7 +46,7 @@ const WishlistPage = () => {
 
   useEffect(() => {
     getUserByEmail();
-  }, [session?.user?.email, isWishItemDeleted]);
+  }, [session?.user?.email, wishlist.length]);
   return (
     <div className="bg-white">
       <SectionTitle title="Wishlist" path="Home | Wishlist" />
@@ -64,15 +71,14 @@ const WishlistPage = () => {
                 {wishlist &&
                   wishlist?.map((item) => (
                     <WishItem
+                      
                       id={item?.id}
-                      title={item?.product?.title}
-                      price={item?.product?.price}
-                      image={item?.product?.mainImage}
-                      slug={item?.product?.slug}
-                      stockAvailabillity={item?.product?.inStock}
+                      title={item?.title}
+                      price={item?.price}
+                      image={item?.image}
+                      slug={item?.slug}
+                      stockAvailabillity={item?.stockAvailabillity}
                       key={nanoid()}
-                      isWishItemDeleted={isWishItemDeleted}
-                      setIsWishItemDeleted={setIsWishItemDeleted}
                     />
                   ))}
               </tbody>

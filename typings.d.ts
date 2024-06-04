@@ -1,5 +1,5 @@
 interface Product {
-  id: number;
+  id: string;
   slug: string;
   title: string;
   price: number;
@@ -72,4 +72,11 @@ interface SingleProductBtnProps {
 interface Category {
   id: string;
   name: string;
+}
+
+interface WishListItem {
+  id: string;
+  userId: string;
+  productId: string;
+  product: Product;
 }

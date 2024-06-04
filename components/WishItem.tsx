@@ -29,10 +29,8 @@ const WishItem = ({
   price,
   image,
   slug,
-  stockAvailabillity,
-  isWishItemDeleted,
-  setIsWishItemDeleted
-}: ProductInWishlist & wishItemStateTrackers) => {
+  stockAvailabillity
+}: ProductInWishlist) => {
   // getting from Zustand wishlist store
   const { removeFromWishlist } = useWishlistStore();
   const router = useRouter();
@@ -43,7 +41,6 @@ const WishItem = ({
 
   const removeItemFromWishlist = async (id: string) => {
     deleteWishItem(id);
-    setIsWishItemDeleted(() => !isWishItemDeleted);
     toast.success("Item removed from your wishlist");
   };
 
