@@ -79,7 +79,7 @@ async function getSingleProductFromWishlist(request, response){
       },
     });
     
-    return response.status(201).json(wishItem);
+    return response.status(200).json(wishItem);
 
   } catch (error) {
     console.log(error);
