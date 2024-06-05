@@ -25,10 +25,12 @@ interface AddToWishlistBtnProps {
 const AddToWishlistBtn = ({ product, slug }: AddToWishlistBtnProps) => {
   const { data: session, status } = useSession();
   const { addToWishlist } = useWishlistStore();
+  const [isProductInWishlist, setIsProductInWishlist] = useState<boolean>();
 
   const addToWishlistFun = async () => {
     // getting user by email so I can get his user id
     if (session?.user?.email) {
+      // sending fetch request to get user id because we will need it for saving wish item
       fetch(`http://localhost:3001/api/users/email/${session?.user?.email}`, {
         cache: "no-store",
       })
@@ -55,23 +57,79 @@ const AddToWishlistBtn = ({ product, slug }: AddToWishlistBtnProps) => {
               toast.success("Product added to the wishlist");
             })
         );
+    } else {
+      toast.error("You need to be logged in to add a product to the wishlist");
     }
   };
 
+  const removeFromWishlistFun = async () => {
+    if (session?.user?.email) {
+      // sending fetch request to get user id because we will need to delete wish item
+      fetch(`http://localhost:3001/api/users/email/${session?.user?.email}`, {
+        cache: "no-store",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          return fetch(
+            `http://localhost:3001/api/wishlist/${data?.id}/${product?.id}`,
+            {
+              method: "DELETE",
+            }
+          );
+        })
+        .then((response) => {
+          toast.success("Product removed from the wishlist");
+        });
+    }
+  };
+
+  const isInWishlist = async () => {
+    // sending fetch request to get user id because we will need it for cheching whether the product is in wishlist
+    if (session?.user?.email) {
+      fetch(`http://localhost:3001/api/users/email/${session?.user?.email}`, {
+        cache: "no-store",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // checking is product in wishlist
+          return fetch(
+            `http://localhost:3001/api/wishlist/${data?.id}/${product?.id}`
+          );
+        })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+
+          if (data[0]?.id) {
+            setIsProductInWishlist(() => true);
+          } else {
+            setIsProductInWishlist(() => false);
+          }
+        });
+    }
+  };
+
+  useEffect(() => {
+    isInWishlist();
+  }, [session?.user?.email]);
+
   return (
     <>
-      {true ? (
+      {isProductInWishlist ? (
+        <p
+          className="flex items-center gap-x-2 cursor-pointer"
+          onClick={removeFromWishlistFun}
+        >
+          <FaHeartCrack className="text-xl text-custom-black" />
+          <span className="text-lg">REMOVE FROM WISHLIST</span>
+        </p>
+      ) : (
         <p
           className="flex items-center gap-x-2 cursor-pointer"
           onClick={addToWishlistFun}
         >
           <FaHeart className="text-xl text-custom-black" />
           <span className="text-lg">ADD TO WISHLIST</span>
-        </p>
-      ) : (
-        <p className="flex items-center gap-x-2 cursor-pointer">
-          <FaHeartCrack className="text-xl text-custom-black" />
-          <span className="text-lg">REMOVE FROM WISHLIST</span>
         </p>
       )}
     </>

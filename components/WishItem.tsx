@@ -13,14 +13,15 @@ import { useWishlistStore } from "@/app/_zustand/wishlistStore";
 import { revalidatePath } from "next/cache";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FaHeartCrack } from "react-icons/fa6";
 import { deleteWishItem } from "@/app/actions";
+import { useSession } from "next-auth/react";
 
 interface wishItemStateTrackers {
   isWishItemDeleted: boolean;
-  setIsWishItemDeleted: any; 
+  setIsWishItemDeleted: any;
 }
 
 const WishItem = ({
@@ -29,20 +30,46 @@ const WishItem = ({
   price,
   image,
   slug,
-  stockAvailabillity
+  stockAvailabillity,
 }: ProductInWishlist) => {
-  // getting from Zustand wishlist store
-  const { removeFromWishlist } = useWishlistStore();
+  const { data: session, status } = useSession();
   const router = useRouter();
+  const [userId, setUserId] = useState<string>();
 
   const openProduct = (slug: string): void => {
     router.push(`/product/${slug}`);
   };
 
-  const removeItemFromWishlist = async (id: string) => {
-    deleteWishItem(id);
-    toast.success("Item removed from your wishlist");
+  const getUserByEmail = async () => {
+    if (session?.user?.email) {
+      fetch(`http://localhost:3001/api/users/email/${session?.user?.email}`, {
+        cache: "no-store",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setUserId(data?.id);
+        });
+    }
   };
+
+  const deleteItemFromWishlist = async (productId: string) => {
+    console.log("in delete item fun");
+    
+    if (userId) {
+      console.log("in delete item user id condition");
+      fetch(`http://localhost:3001/api/wishlist/${userId}/${productId}`, {method: "DELETE"}).then(
+        (response) => {
+          toast.success("Item removed from your wishlist");
+        }
+      );
+    }else{
+      toast.error("You need to be logged in to perform this action");
+    }
+  };
+
+  useEffect(() => {
+    getUserByEmail();
+  }, [session?.user?.email]);
 
   return (
     <tr className="hover:bg-gray-100 cursor-pointer">
@@ -84,7 +111,7 @@ const WishItem = ({
           <FaHeartCrack />
           <span
             className="max-sm:hidden"
-            onClick={() => removeItemFromWishlist(id)}
+            onClick={() => deleteItemFromWishlist(id)}
           >
             remove from the wishlist
           </span>

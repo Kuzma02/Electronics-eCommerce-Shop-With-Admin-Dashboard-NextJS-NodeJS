@@ -70,7 +70,7 @@ const Header = () => {
 
   useEffect(() => {
     getUserByEmail();
-  }, [session?.user?.email, wishQuantity]);
+  }, [session?.user?.email, wishlist.length]);
 
   return (
     <header className="bg-white">

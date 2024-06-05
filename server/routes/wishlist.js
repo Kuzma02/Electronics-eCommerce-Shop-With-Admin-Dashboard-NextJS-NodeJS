@@ -6,12 +6,13 @@ const {
   getAllWishlistByUserId,
   getAllWishlist,
   createWishItem,
-  deleteWishItem
+  deleteWishItem,
+  getSingleProductFromWishlist
 } = require("../controllers/wishlist");
 
 router.route("/").get(getAllWishlist).post(createWishItem);
 
 router.route("/:userId").get(getAllWishlistByUserId);
-router.route("/:id").delete(deleteWishItem);
+router.route("/:userId/:productId").get(getSingleProductFromWishlist).delete(deleteWishItem);
 
 module.exports = router;

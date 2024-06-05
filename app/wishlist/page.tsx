@@ -10,7 +10,6 @@ import { useSession } from "next-auth/react";
 const WishlistPage = () => {
   const { data: session, status } = useSession();
   const {wishlist, setWishlist}= useWishlistStore();
-  const [isWishItemDeleted, setIsWishItemDeleted] = useState<boolean>(false);
 
   const getWishlistByUserId = async (id: string) => {
     const response = await fetch(`http://localhost:3001/api/wishlist/${id}`, {
@@ -71,7 +70,6 @@ const WishlistPage = () => {
                 {wishlist &&
                   wishlist?.map((item) => (
                     <WishItem
-                      
                       id={item?.id}
                       title={item?.title}
                       price={item?.price}

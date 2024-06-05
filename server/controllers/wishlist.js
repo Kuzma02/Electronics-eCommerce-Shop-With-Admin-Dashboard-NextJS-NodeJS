@@ -51,13 +51,15 @@ async function createWishItem(request, response) {
 
 async function deleteWishItem(request, response) {
   try {
-    const { id } = request.params;
-    console.log("Deleting wish item "+id);
-    await prisma.wishlist.delete({
+    const { userId, productId } = request.params;
+    
+    await prisma.wishlist.deleteMany({
       where: {
-        id: id,
+        userId: userId,
+        productId: productId,
       },
     });
+    
     return response.status(204).send();
 
   } catch (error) {
@@ -66,10 +68,30 @@ async function deleteWishItem(request, response) {
   }
 }
 
+async function getSingleProductFromWishlist(request, response){
+  try {
+    const { userId, productId } = request.params;
+    
+    const wishItem = await prisma.wishlist.findMany({
+      where: {
+        userId: userId,
+        productId: productId,
+      },
+    });
+    
+    return response.status(201).json(wishItem);
+
+  } catch (error) {
+    console.log(error);
+    return response.status(500).json({ error: "Error getting wish item" });
+  }
+}
+
 
 module.exports = {
   getAllWishlistByUserId,
   getAllWishlist,
   createWishItem,
-  deleteWishItem
+  deleteWishItem,
+  getSingleProductFromWishlist
 };
