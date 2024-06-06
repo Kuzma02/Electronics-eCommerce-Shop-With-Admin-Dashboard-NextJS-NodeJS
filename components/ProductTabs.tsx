@@ -39,15 +39,6 @@ const ProductTabs = ({ product }: { product: Product }) => {
         >
           Additional info
         </a>
-        <a
-          role="tab"
-          className={`tab text-black text-lg pb-8 max-[500px]:text-base max-[400px]:text-sm max-[370px]:text-xs ${
-            currentProductTab === 2 && "tab-active"
-          }`}
-          onClick={() => setCurrentProductTab(2)}
-        >
-          Reviews
-        </a>
       </div>
       <div className="pt-5">
         {currentProductTab === 0 && (
@@ -82,15 +73,6 @@ const ProductTabs = ({ product }: { product: Product }) => {
               </tbody>
             </table>
           </div>
-        )}
-
-        {currentProductTab === 2 && (
-          <>
-            <RatingPercentElement />
-            <SingleReview />
-            <SingleReview />
-            <SingleReview />
-          </>
         )}
       </div>
     </div>
