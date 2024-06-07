@@ -332,6 +332,17 @@ async function updateProduct(request, response) {
 async function deleteProduct(request, response) {
   try {
     const { id } = request.params;
+
+        // Check for related records in wishlist table
+        const relatedOrderProductItems = await prisma.customer_order_product.findMany({
+          where: {
+            productId: id,
+          },
+        });
+        if(relatedOrderProductItems.length > 0){
+          return response.status(400).json({ error: 'Cannot delete product because of foreign key constraint. ' });
+        }
+
     await prisma.product.delete({
       where: {
         id,
@@ -339,6 +350,7 @@ async function deleteProduct(request, response) {
     });
     return response.status(204).send();
   } catch (error) {
+    console.log(error);
     return response.status(500).json({ error: "Error deleting product" });
   }
 }

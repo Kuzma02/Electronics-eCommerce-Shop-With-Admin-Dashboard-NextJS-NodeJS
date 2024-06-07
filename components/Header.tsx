@@ -95,7 +95,7 @@ const Header = () => {
               width={130}
               height={130}
               alt="singitronic logo"
-              className="w-48 h-auto"
+              className="w-56 h-auto"
             />
           </Link>
           <div className="flex gap-x-5 items-center">

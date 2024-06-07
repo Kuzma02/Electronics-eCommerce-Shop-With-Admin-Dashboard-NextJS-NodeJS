@@ -79,7 +79,7 @@ model Category {
 
 model Wishlist {
   id        String  @id @default(uuid())
-  product   Product @relation(fields: [productId], references: [id])
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId String
   user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String

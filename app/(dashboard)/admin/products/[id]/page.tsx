@@ -29,7 +29,15 @@ const DashboardProductDetails = ({
     };
     fetch(`http://localhost:3001/api/products/${id}`, requestOptions).then(
       (response) => {
-        toast.success("Product deleted successfully");
+        console.log(response.status);
+        if (response.status === 400) {
+          toast.error(
+            "Cannot delete the product because of foreign key constraint"
+          );
+        } else {
+          toast.success("Product deleted successfully");
+        }
+
         router.push("/admin/products");
       }
     );
@@ -307,6 +315,9 @@ const DashboardProductDetails = ({
           </button>
         </div>
         {/* Action buttons div - end */}
+        <p className="text-xl max-sm:text-lg text-error">
+          To delete the product you first need to delete all its records in orders (customer_order_product table).
+        </p>
       </div>
     </div>
   );
