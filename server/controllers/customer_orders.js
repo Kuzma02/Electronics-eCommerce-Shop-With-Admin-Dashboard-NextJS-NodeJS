@@ -94,7 +94,7 @@ async function updateCustomerOrder(request, response) {
       },
     });
 
-    return response.json(updatedOrder);
+    return response.status(200).json(updatedOrder);
   } catch (error) {
     return response.status(500).json({ error: "Error updating order" });
   }

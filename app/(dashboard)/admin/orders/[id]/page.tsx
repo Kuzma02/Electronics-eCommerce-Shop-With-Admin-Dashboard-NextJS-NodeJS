@@ -1,5 +1,6 @@
 "use client";
 import { DashboardSidebar } from "@/components";
+import { isValidEmailAddressFormat, isValidNameOrLastname } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -82,6 +83,21 @@ const AdminSingleOrder = () => {
       order?.country.length > 0 &&
       order?.postalCode.length > 0
     ) {
+      if (!isValidNameOrLastname(order?.name)) {
+        toast.error("You entered invalid name format");
+        return;
+      }
+
+      if (!isValidNameOrLastname(order?.lastname)) {
+        toast.error("You entered invalid lastname format");
+        return;
+      }
+
+      if (!isValidEmailAddressFormat(order?.email)) {
+        toast.error("You entered invalid email format");
+        return;
+      }
+
       fetch(`http://localhost:3001/api/orders/${order?.id}`, {
         method: "PUT", // or 'PUT'
         headers: {
@@ -90,9 +106,15 @@ const AdminSingleOrder = () => {
         body: JSON.stringify(order),
       })
         .then((response) => {
-          toast.success("Order updated successfuly");
+          if (response.status === 200) {
+            toast.success("Order updated successfuly");
+          } else {
+            throw Error("There was an error while updating a order");
+          }
         })
-        .catch((error) => toast.error("Error"));
+        .catch((error) =>
+          toast.error("There was an error while updating a order")
+        );
     } else {
       toast.error("Please fill all fields");
     }
@@ -325,7 +347,7 @@ const AdminSingleOrder = () => {
           {orderProducts?.map((product) => (
             <div className="flex items-center gap-x-4" key={product?.id}>
               <Image
-                src={`/${product?.product?.mainImage}`}
+                src={product?.product?.mainImage ? `/${product?.product?.mainImage}` : "/product_placeholder.jpg"}
                 alt={product?.product?.title}
                 width={50}
                 height={50}

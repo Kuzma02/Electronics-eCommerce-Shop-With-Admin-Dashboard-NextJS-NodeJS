@@ -207,7 +207,7 @@ const CheckoutPage = () => {
                   className="flex items-start space-x-4 py-6"
                 >
                   <Image
-                    src={`/${product?.image}`}
+                    src={product?.image ? `/${product?.image}` : "/product_placeholder.jpg"}
                     alt={product?.title}
                     width={80}
                     height={80}
