@@ -78,7 +78,7 @@ const DashboardProductTable = () => {
                           <Image
                             width={48}
                             height={48}
-                            src={`/${product?.mainImage}`}
+                            src={product?.mainImage ? `/${product?.mainImage}` : "/product_placeholder.jpg"}
                             alt="Avatar Tailwind CSS Component"
                             className="w-auto h-auto"
                           />
@@ -94,9 +94,12 @@ const DashboardProductTable = () => {
                   </td>
 
                   <td>
-                    <span className="badge badge-success text-white badge-sm">
+                    { product?.inStock ? (<span className="badge badge-success text-white badge-sm">
                       In stock
-                    </span>
+                    </span>) : (<span className="badge badge-error text-white badge-sm">
+                      Out of stock
+                    </span>) }
+                    
                   </td>
                   <td>${product?.price}</td>
                   <th>
