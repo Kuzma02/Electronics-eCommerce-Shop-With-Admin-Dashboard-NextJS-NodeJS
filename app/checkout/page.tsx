@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { isValidCardNumber, isValidCreditCardCVVOrCVC, isValidCreditCardExpirationDate, isValidEmailAddressFormat, isValidNameOrLastname } from "@/lib/utils";
 
 const CheckoutPage = () => {
   const [checkoutForm, setCheckoutForm] = useState({
@@ -43,6 +44,43 @@ const CheckoutPage = () => {
       checkoutForm.country.length > 0 &&
       checkoutForm.postalCode.length > 0
     ) {
+      if (!isValidNameOrLastname(checkoutForm.name)) {
+        toast.error("You entered invalid format for name");
+        return;
+      }
+
+      if (!isValidNameOrLastname(checkoutForm.lastname)) {
+        toast.error("You entered invalid format for lastname");
+        return;
+      }
+
+      if (!isValidEmailAddressFormat(checkoutForm.email)) {
+        toast.error("You entered invalid format for email address");
+        return;
+      }
+
+      if (!isValidNameOrLastname(checkoutForm.cardName)) {
+        toast.error("You entered invalid format for card name");
+        return;
+      }
+
+      if (!isValidCardNumber(checkoutForm.cardNumber)) {
+        toast.error("You entered invalid format for credit card number");
+        return;
+      }
+
+      if (!isValidCreditCardExpirationDate(checkoutForm.expirationDate)) {
+        toast.error(
+          "You entered invalid format for credit card expiration date"
+        );
+        return;
+      }
+
+      if (!isValidCreditCardCVVOrCVC(checkoutForm.cvc)) {
+        toast.error("You entered invalid format for credit card CVC or CVV");
+        return;
+      }
+
       // sending API request for creating a order
       const response = fetch("http://localhost:3001/api/orders", {
         method: "POST",
@@ -98,6 +136,8 @@ const CheckoutPage = () => {
             router.push("/");
           }, 1000);
         });
+    } else {
+      toast.error("You need to enter values in the input fields");
     }
   };
 
@@ -119,6 +159,8 @@ const CheckoutPage = () => {
       }),
     });
   };
+
+  
 
   useEffect(() => {
     if (products.length === 0) {
@@ -409,7 +451,7 @@ const CheckoutPage = () => {
                     htmlFor="cvc"
                     className="block text-sm font-medium text-gray-700"
                   >
-                    CVC
+                    CVC or CVV
                   </label>
                   <div className="mt-1">
                     <input

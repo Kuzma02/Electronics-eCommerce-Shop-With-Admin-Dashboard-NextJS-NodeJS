@@ -1,5 +1,6 @@
 "use client";
 import { CustomButton, SectionTitle } from "@/components";
+import { isValidEmailAddressFormat } from "@/lib/utils";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -19,17 +20,12 @@ const LoginPage = () => {
     }
   }, [sessionStatus, router]);
 
-  const isValidEmail = (email: string) => {
-    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-    return emailRegex.test(email);
-  };
-
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     const email = e.target[0].value;
     const password = e.target[1].value;
 
-    if (!isValidEmail(email)) {
+    if (!isValidEmailAddressFormat(email)) {
       setError("Email is invalid");
       toast.error("Email is invalid");
       return;

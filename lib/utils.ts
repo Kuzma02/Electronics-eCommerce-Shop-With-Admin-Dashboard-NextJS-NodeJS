@@ -107,3 +107,34 @@ export const navigation = {
   ],
 };
 
+export const isValidNameOrLastname = (input: string) => {
+  // Simple name or lastname regex format check
+  const regex = /^[a-zA-Z\s]+$/;
+  return regex.test(input);
+};
+
+export const isValidEmailAddressFormat = (input: string) => {
+  // simple email address format check
+  const regex = /^\S+@\S+\.\S+$/;
+  return regex.test(input);
+};
+
+export const isValidCardNumber = (input: string) => {
+  // Remove all non-digit characters
+  const cleanedInput = input.replace(/[^0-9]/g, "");
+  // test for credit card number between 13 and 19 characters
+  const regex = /^\d{13,19}$/;
+  return regex.test(cleanedInput);
+}
+
+export const isValidCreditCardExpirationDate = (input: string) => {
+  // simple expiration date format check
+  const regex = /^(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})$/;
+  return regex.test(input);
+};
+
+export const isValidCreditCardCVVOrCVC = (input: string) => {
+  // simple CVV or CVC format check
+  const regex = /^[0-9]{3,4}$/;
+  return regex.test(input);
+};
