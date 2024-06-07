@@ -72,6 +72,7 @@ async function deleteUser(request, response) {
     });
     return response.status(204).send();
   } catch (error) {
+    console.log(error);
     return response.status(500).json({ error: "Error deleting user" });
   }
 }

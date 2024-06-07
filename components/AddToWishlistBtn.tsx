@@ -24,7 +24,7 @@ interface AddToWishlistBtnProps {
 
 const AddToWishlistBtn = ({ product, slug }: AddToWishlistBtnProps) => {
   const { data: session, status } = useSession();
-  const { addToWishlist } = useWishlistStore();
+  const { addToWishlist, removeFromWishlist, wishlist } = useWishlistStore();
   const [isProductInWishlist, setIsProductInWishlist] = useState<boolean>();
 
   const addToWishlistFun = async () => {
@@ -78,6 +78,7 @@ const AddToWishlistBtn = ({ product, slug }: AddToWishlistBtnProps) => {
           );
         })
         .then((response) => {
+          removeFromWishlist(product?.id);
           toast.success("Product removed from the wishlist");
         });
     }
@@ -111,7 +112,7 @@ const AddToWishlistBtn = ({ product, slug }: AddToWishlistBtnProps) => {
 
   useEffect(() => {
     isInWishlist();
-  }, [session?.user?.email]);
+  }, [session?.user?.email, wishlist]);
 
   return (
     <>

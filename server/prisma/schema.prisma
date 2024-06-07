@@ -81,6 +81,6 @@ model Wishlist {
   id        String  @id @default(uuid())
   product   Product @relation(fields: [productId], references: [id])
   productId String
-  user      User    @relation(fields: [userId], references: [id])
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
 }

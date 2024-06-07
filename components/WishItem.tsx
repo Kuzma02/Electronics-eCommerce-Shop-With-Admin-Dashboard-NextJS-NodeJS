@@ -33,6 +33,7 @@ const WishItem = ({
   stockAvailabillity,
 }: ProductInWishlist) => {
   const { data: session, status } = useSession();
+  const { removeFromWishlist } = useWishlistStore();
   const router = useRouter();
   const [userId, setUserId] = useState<string>();
 
@@ -53,12 +54,12 @@ const WishItem = ({
   };
 
   const deleteItemFromWishlist = async (productId: string) => {
-    console.log("in delete item fun");
     
     if (userId) {
-      console.log("in delete item user id condition");
+
       fetch(`http://localhost:3001/api/wishlist/${userId}/${productId}`, {method: "DELETE"}).then(
         (response) => {
+          removeFromWishlist(productId);
           toast.success("Item removed from your wishlist");
         }
       );
