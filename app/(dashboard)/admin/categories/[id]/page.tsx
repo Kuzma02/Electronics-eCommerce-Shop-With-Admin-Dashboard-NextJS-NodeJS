@@ -13,7 +13,7 @@ interface DashboardSingleCategoryProps {
 const DashboardSingleCategory = ({
   params: { id },
 }: DashboardSingleCategoryProps) => {
-  const [categoryInput, setCategoryInput] = useState<{name: string}>({
+  const [categoryInput, setCategoryInput] = useState<{ name: string }>({
     name: "",
   });
   const router = useRouter();
@@ -23,12 +23,18 @@ const DashboardSingleCategory = ({
       method: "DELETE",
     };
     // sending API request for deleting a category
-    fetch(`http://localhost:3001/api/categories/${id}`, requestOptions).then(
-      (response) => {
-        toast.success("Category deleted successfully");
-        router.push("/admin/categories");
-      }
-    );
+    fetch(`http://localhost:3001/api/categories/${id}`, requestOptions)
+      .then((response) => {
+        if (response.status === 204) {
+          toast.success("Category deleted successfully");
+          router.push("/admin/categories");
+        } else {
+          throw Error("There was an error deleting a category");
+        }
+      })
+      .catch((error) => {
+        toast.error("There was an error deleting category");
+      });
   };
 
   const updateCategory = async () => {
@@ -42,8 +48,17 @@ const DashboardSingleCategory = ({
       };
       // sending API request for updating a category
       fetch(`http://localhost:3001/api/categories/${id}`, requestOptions)
-        .then((response) => response.json())
-        .then((data) => toast.success("Category successfully updated"));
+        .then((response) => {
+          if (response.status === 200) {
+            return response.json();
+          } else {
+            throw Error("Error updating a category");
+          }
+        })
+        .then((data) => toast.success("Category successfully updated"))
+        .catch((error) => {
+          toast.error("There was an error while updating a category");
+        });
     } else {
       toast.error("For updating a category you must enter all values");
       return;
@@ -100,7 +115,10 @@ const DashboardSingleCategory = ({
             Delete category
           </button>
         </div>
-        <p className="text-xl text-error max-sm:text-lg">Note: if you delete this category, you will delete all products associated with the category.</p>
+        <p className="text-xl text-error max-sm:text-lg">
+          Note: if you delete this category, you will delete all products
+          associated with the category.
+        </p>
       </div>
     </div>
   );

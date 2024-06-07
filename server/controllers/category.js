@@ -40,7 +40,7 @@ async function updateCategory(request, response) {
       },
     });
 
-    return response.json(updatedCategory);
+    return response.status(200).json(updatedCategory);
   } catch (error) {
     return response.status(500).json({ error: "Error updating category" });
   }

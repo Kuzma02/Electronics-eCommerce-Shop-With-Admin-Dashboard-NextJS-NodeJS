@@ -3,6 +3,7 @@ import { DashboardSidebar } from "@/components";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { isValidEmailAddressFormat } from "@/lib/utils";
 
 interface DashboardUserDetailsProps {
   params: { id: number };
@@ -36,6 +37,12 @@ const DashboardSingleUserPage = ({
       userInput.role.length > 0 &&
       userInput.newPassword.length > 0
     ) {
+
+      if(!isValidEmailAddressFormat(userInput.email)){
+        toast.error("You entered invalid email address format");
+        return;
+      }
+
       if (userInput.newPassword.length > 7) {
         const requestOptions = {
           method: "PUT",
@@ -47,8 +54,16 @@ const DashboardSingleUserPage = ({
           }),
         };
         fetch(`http://localhost:3001/api/users/${id}`, requestOptions)
-          .then((response) => response.json())
-          .then((data) => toast.success("User successfully updated"));
+          .then((response) => {
+            if(response.status === 200){
+              return response.json();
+            }else{
+              throw Error("Error while updating user");
+            }
+          })
+          .then((data) => toast.success("User successfully updated")).catch(error => {
+            toast.error("There was an error while updating user");
+          });
       } else {
         toast.error("Password must be longer than 7 characters");
         return;

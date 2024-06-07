@@ -1,5 +1,6 @@
 "use client";
 import { DashboardSidebar } from "@/components";
+import { isValidEmailAddressFormat } from "@/lib/utils";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -16,6 +17,11 @@ const DashboardCreateNewUser = () => {
       userInput.role.length > 0 &&
       userInput.password.length > 0
     ) {
+      if (!isValidEmailAddressFormat(userInput.email)) {
+        toast.error("You entered invalid email address format");
+        return;
+      }
+
       if (userInput.password.length > 7) {
         const requestOptions: any = {
           method: "post",
@@ -23,7 +29,15 @@ const DashboardCreateNewUser = () => {
           body: JSON.stringify(userInput),
         };
         fetch(`http://localhost:3001/api/users`, requestOptions)
-          .then((response) => response.json())
+          .then((response) => {
+            if(response.status === 201){
+              return response.json();
+
+            }else{
+              
+              throw Error("Error while creating user");
+            }
+          })
           .then((data) => {
             toast.success("User added successfully");
             setUserInput({
@@ -31,11 +45,13 @@ const DashboardCreateNewUser = () => {
               password: "",
               role: "user",
             });
+          }).catch(error => {
+            toast.error("Error while creating user");
           });
       } else {
         toast.error("Password must be longer than 7 characters");
       }
-    }else{
+    } else {
       toast.error("You must enter all input values to add a user");
     }
   };
