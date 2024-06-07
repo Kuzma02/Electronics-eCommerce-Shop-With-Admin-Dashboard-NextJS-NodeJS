@@ -322,7 +322,7 @@ async function updateProduct(request, response) {
       },
     });
 
-    return response.json(updatedProduct);
+    return response.status(200).json(updatedProduct);
   } catch (error) {
     return response.status(500).json({ error: "Error updating product" });
   }

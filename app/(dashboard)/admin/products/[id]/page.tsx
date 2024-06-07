@@ -27,20 +27,24 @@ const DashboardProductDetails = ({
     const requestOptions = {
       method: "DELETE",
     };
-    fetch(`http://localhost:3001/api/products/${id}`, requestOptions).then(
-      (response) => {
-        console.log(response.status);
-        if (response.status === 400) {
-          toast.error(
-            "Cannot delete the product because of foreign key constraint"
-          );
+    fetch(`http://localhost:3001/api/products/${id}`, requestOptions)
+      .then((response) => {
+        if (response.status !== 204) {
+          if (response.status === 400) {
+            toast.error(
+              "Cannot delete the product because of foreign key constraint"
+            );
+          } else {
+            throw Error("There was an error while deleting product");
+          }
         } else {
           toast.success("Product deleted successfully");
+          router.push("/admin/products");
         }
-
-        router.push("/admin/products");
-      }
-    );
+      })
+      .catch((error) => {
+        toast.error("There was an error while deleting product");
+      });
   };
 
   // functionality for updating product
@@ -53,8 +57,17 @@ const DashboardProductDetails = ({
       body: JSON.stringify(product),
     };
     fetch(`http://localhost:3001/api/products/${id}`, requestOptions)
-      .then((response) => response.json())
-      .then((data) => toast.success("Product successfully updated"));
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        } else {
+          throw Error("There was an error while updating product");
+        }
+      })
+      .then((data) => toast.success("Product successfully updated"))
+      .catch((error) => {
+        toast.error("There was an error while updating product");
+      });
   };
 
   // functionality for uploading main image file
@@ -72,10 +85,11 @@ const DashboardProductDetails = ({
         const data = await response.json();
         console.log(data.message);
       } else {
-        console.error("File upload unsuccessful.");
+        toast.error("File upload unsuccessful.");
       }
     } catch (error) {
       console.error("There was an error while during request sending:", error);
+      toast.error("There was an error during request sending");
     }
   };
 
@@ -86,8 +100,6 @@ const DashboardProductDetails = ({
         return res.json();
       })
       .then((data) => {
-        console.log(data);
-
         setProduct(data);
       });
 
@@ -98,7 +110,7 @@ const DashboardProductDetails = ({
     setOtherImages((currentImages) => images);
   };
 
-  // fetching all product categories. It will be used for displaying in select category input
+  // fetching all product categories. It will be used for displaying categories in select category input
   const fetchCategories = async () => {
     fetch(`http://localhost:3001/api/categories`)
       .then((res) => {
@@ -316,7 +328,8 @@ const DashboardProductDetails = ({
         </div>
         {/* Action buttons div - end */}
         <p className="text-xl max-sm:text-lg text-error">
-          To delete the product you first need to delete all its records in orders (customer_order_product table).
+          To delete the product you first need to delete all its records in
+          orders (customer_order_product table).
         </p>
       </div>
     </div>
