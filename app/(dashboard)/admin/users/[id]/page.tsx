@@ -12,7 +12,11 @@ interface DashboardUserDetailsProps {
 const DashboardSingleUserPage = ({
   params: { id },
 }: DashboardUserDetailsProps) => {
-  const [userInput, setUserInput] = useState<{email: string; newPassword: string; role: string;}>({
+  const [userInput, setUserInput] = useState<{
+    email: string;
+    newPassword: string;
+    role: string;
+  }>({
     email: "",
     newPassword: "",
     role: "",
@@ -23,12 +27,18 @@ const DashboardSingleUserPage = ({
     const requestOptions = {
       method: "DELETE",
     };
-    fetch(`http://localhost:3001/api/users/${id}`, requestOptions).then(
-      (response) => {
-        toast.success("Product deleted successfully");
-        router.push("/admin/users");
-      }
-    );
+    fetch(`http://localhost:3001/api/users/${id}`, requestOptions)
+      .then((response) => {
+        if (response.status === 204) {
+          toast.success("User deleted successfully");
+          router.push("/admin/users");
+        } else {
+          throw Error("There was an error while deleting user");
+        }
+      })
+      .catch((error) => {
+        toast.error("There was an error while deleting user");
+      });
   };
 
   const updateUser = async () => {
@@ -37,8 +47,7 @@ const DashboardSingleUserPage = ({
       userInput.role.length > 0 &&
       userInput.newPassword.length > 0
     ) {
-
-      if(!isValidEmailAddressFormat(userInput.email)){
+      if (!isValidEmailAddressFormat(userInput.email)) {
         toast.error("You entered invalid email address format");
         return;
       }
@@ -55,13 +64,14 @@ const DashboardSingleUserPage = ({
         };
         fetch(`http://localhost:3001/api/users/${id}`, requestOptions)
           .then((response) => {
-            if(response.status === 200){
+            if (response.status === 200) {
               return response.json();
-            }else{
+            } else {
               throw Error("Error while updating user");
             }
           })
-          .then((data) => toast.success("User successfully updated")).catch(error => {
+          .then((data) => toast.success("User successfully updated"))
+          .catch((error) => {
             toast.error("There was an error while updating user");
           });
       } else {

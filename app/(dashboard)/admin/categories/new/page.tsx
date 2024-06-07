@@ -20,12 +20,21 @@ const DashboardNewCategoryPage = () => {
       };
       // sending API request for creating new cateogry
       fetch(`http://localhost:3001/api/categories`, requestOptions)
-        .then((response) => response.json())
+        .then((response) => {
+          if (response.status === 201) {
+            return response.json();
+          } else {
+            throw Error("There was an error while creating category");
+          }
+        })
         .then((data) => {
           toast.success("Category added successfully");
           setCategoryInput({
             name: "",
           });
+        })
+        .catch((error) => {
+          toast.error("There was an error while creating category");
         });
     } else {
       toast.error("You need to enter values to add a category");
