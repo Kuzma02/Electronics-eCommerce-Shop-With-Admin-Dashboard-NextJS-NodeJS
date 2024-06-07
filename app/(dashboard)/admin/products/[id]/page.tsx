@@ -49,7 +49,16 @@ const DashboardProductDetails = ({
 
   // functionality for updating product
   const updateProduct = async () => {
-    console.log(product);
+    if (
+      product?.title === "" ||
+      product?.slug === "" ||
+      product?.price.toString() === "" ||
+      product?.manufacturer === "" ||
+      product?.description === ""
+    ) {
+      toast.error("You need to enter values in input fields");
+      return;
+    }
 
     const requestOptions = {
       method: "PUT",
