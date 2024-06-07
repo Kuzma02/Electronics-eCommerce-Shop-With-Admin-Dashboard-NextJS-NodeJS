@@ -100,6 +100,7 @@ const DashboardSingleCategory = ({
             Delete category
           </button>
         </div>
+        <p className="text-xl text-error max-sm:text-lg">Note: if you delete this category, you will delete all products associated with the category.</p>
       </div>
     </div>
   );

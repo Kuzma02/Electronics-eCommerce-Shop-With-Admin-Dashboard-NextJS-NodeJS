@@ -24,7 +24,7 @@ model Product {
   manufacturer   String
   inStock        Int                      @default(1)
   categoryId     String
-  category       Category                 @relation(fields: [categoryId], references: [id])
+  category       Category                 @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   customerOrders customer_order_product[]
   Wishlist       Wishlist[]
 }
