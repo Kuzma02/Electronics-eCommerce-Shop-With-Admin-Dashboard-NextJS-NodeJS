@@ -6,7 +6,16 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 const AddNewProduct = () => {
-  const [product, setProduct] = useState<{title: string; price: number; manufacturer: string; inStock: number; mainImage: string; description: string; slug: string; categoryId: string;}>({
+  const [product, setProduct] = useState<{
+    title: string;
+    price: number;
+    manufacturer: string;
+    inStock: number;
+    mainImage: string;
+    description: string;
+    slug: string;
+    categoryId: string;
+  }>({
     title: "",
     price: 0,
     manufacturer: "",
@@ -19,7 +28,15 @@ const AddNewProduct = () => {
   const [categories, setCategories] = useState<Category[]>([]);
 
   const addProduct = async () => {
-    console.log(product);
+    if (
+      product.title === "" ||
+      product.manufacturer === "" ||
+      product.description == "" ||
+      product.slug === ""
+    ) {
+      toast.error("Please enter values in input fields");
+      return;
+    }
 
     const requestOptions: any = {
       method: "post",
@@ -28,9 +45,9 @@ const AddNewProduct = () => {
     };
     fetch(`http://localhost:3001/api/products`, requestOptions)
       .then((response) => {
-        if(response.status === 201){
+        if (response.status === 201) {
           return response.json();
-        }else{
+        } else {
           throw Error("There was an error while creating product");
         }
       })
@@ -46,7 +63,8 @@ const AddNewProduct = () => {
           slug: "",
           categoryId: "",
         });
-      }).catch(error => {
+      })
+      .catch((error) => {
         toast.error("There was an error while creating product");
       });
   };
@@ -78,6 +96,16 @@ const AddNewProduct = () => {
       })
       .then((data) => {
         setCategories(data);
+        setProduct({
+          title: "",
+          price: 0,
+          manufacturer: "",
+          inStock: 1,
+          mainImage: "",
+          description: "",
+          slug: "",
+          categoryId: data[0]?.id,
+        });
       });
   };
 
