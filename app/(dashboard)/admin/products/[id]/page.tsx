@@ -92,7 +92,6 @@ const DashboardProductDetails = ({
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data.message);
       } else {
         toast.error("File upload unsuccessful.");
       }
@@ -224,8 +223,6 @@ const DashboardProductDetails = ({
               className="select select-bordered"
               value={product?.inStock}
               onChange={(e) => {
-                console.log(e.target.value);
-
                 setProduct({ ...product!, inStock: Number(e.target.value) });
               }}
             >
