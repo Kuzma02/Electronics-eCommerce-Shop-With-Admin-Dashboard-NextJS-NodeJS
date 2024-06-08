@@ -1,0 +1,86 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id             String                   @id @default(uuid())
+  slug           String                   @unique
+  title          String
+  mainImage      String
+  price          Int                      @default(0)
+  rating         Int                      @default(0)
+  description    String
+  manufacturer   String
+  inStock        Int                      @default(1)
+  categoryId     String
+  category       Category                 @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  customerOrders customer_order_product[]
+  Wishlist       Wishlist[]
+}
+
+model Image {
+  imageID   String @id @default(uuid())
+  productID String
+  image     String
+}
+
+model User {
+  id       String     @id @default(uuid())
+  email    String     @unique
+  password String?
+  role     String?    @default("user")
+  Wishlist Wishlist[]
+}
+
+model Customer_order {
+  id          String                   @id @default(uuid())
+  name        String
+  lastname    String
+  phone       String
+  email       String
+  company     String
+  adress      String
+  apartment   String
+  postalCode  String
+  dateTime    DateTime?                @default(now())
+  status      String
+  city        String
+  country     String
+  orderNotice String?
+  total       Int
+  products    customer_order_product[]
+}
+
+model customer_order_product {
+  id              String         @id @default(uuid())
+  customerOrder   Customer_order @relation(fields: [customerOrderId], references: [id])
+  customerOrderId String
+  product         Product        @relation(fields: [productId], references: [id])
+  productId       String
+  quantity        Int
+}
+
+model Category {
+  id       String    @id @default(uuid())
+  name     String    @unique
+  products Product[] // Define a one-to-many relationship
+}
+
+model Wishlist {
+  id        String  @id @default(uuid())
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+}
