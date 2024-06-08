@@ -38,15 +38,15 @@ export const authOptions: any = {
           throw new Error(err);
         }
       },
-    }),
-    GithubProvider({
-      clientId: process.env.GITHUB_ID ?? "",
-      clientSecret: process.env.GITHUB_SECRET ?? "",
-    }),
-    GoogleProvider({
-      clientId: process.env.GOOGLE_ID ?? "",
-      clientSecret: process.env.GOOGLE_SECRET ?? "",
-    }),
+    })
+    // GithubProvider({
+    //   clientId: process.env.GITHUB_ID ?? "",
+    //   clientSecret: process.env.GITHUB_SECRET ?? "",
+    // }),
+    // GoogleProvider({
+    //   clientId: process.env.GOOGLE_ID ?? "",
+    //   clientSecret: process.env.GOOGLE_SECRET ?? "",
+    // }),
     // ...add more providers here if you want. You can find them on nextauth website.
   ],
   callbacks: {
@@ -54,47 +54,47 @@ export const authOptions: any = {
       if (account?.provider == "credentials") {
         return true;
       }
-      if (account?.provider == "github") {
+      // if (account?.provider == "github") {
 
-        try {
-          const existingUser = await prisma.user.findFirst({ where: {email: user.email!} });
-          if (!existingUser) {
+      //   try {
+      //     const existingUser = await prisma.user.findFirst({ where: {email: user.email!} });
+      //     if (!existingUser) {
 
-            await prisma.user.create({
-                data: {
-                  id: nanoid() + "",
-                  email: user.email!
-                },
-              });
-            return true;
-          }
-          return true;
-        } catch (err) {
-          console.log("Error saving user", err);
-          return false;
-        }
-      }
+      //       await prisma.user.create({
+      //           data: {
+      //             id: nanoid() + "",
+      //             email: user.email!
+      //           },
+      //         });
+      //       return true;
+      //     }
+      //     return true;
+      //   } catch (err) {
+      //     console.log("Error saving user", err);
+      //     return false;
+      //   }
+      // }
 
-      if (account?.provider == "google") {
+      // if (account?.provider == "google") {
 
-        try {
-          const existingUser = await prisma.user.findFirst({where: { email: user.email! }});
-          if (!existingUser) {
-            await prisma.user.create({
-                data: {
-                  id: nanoid() + "",
-                  email: user.email!
-                },
-              });
+      //   try {
+      //     const existingUser = await prisma.user.findFirst({where: { email: user.email! }});
+      //     if (!existingUser) {
+      //       await prisma.user.create({
+      //           data: {
+      //             id: nanoid() + "",
+      //             email: user.email!
+      //           },
+      //         });
 
-            return true;
-          }
-          return true;
-        } catch (err) {
-          console.log("Error saving user", err);
-          return false;
-        }
-      }
+      //       return true;
+      //     }
+      //     return true;
+      //   } catch (err) {
+      //     console.log("Error saving user", err);
+      //     return false;
+      //   }
+      // }
     },
   },
 };
