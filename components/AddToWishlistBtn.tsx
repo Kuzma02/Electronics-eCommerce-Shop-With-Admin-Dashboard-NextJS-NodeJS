@@ -99,8 +99,6 @@ const AddToWishlistBtn = ({ product, slug }: AddToWishlistBtnProps) => {
         })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
-
           if (data[0]?.id) {
             setIsProductInWishlist(() => true);
           } else {

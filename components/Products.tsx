@@ -12,24 +12,27 @@ import React from "react";
 import ProductItem from "./ProductItem";
 
 const Products = async ({ slug }: any) => {
-  // getting all data from URL slug and after that sending API request with filtering, sorting and pagination for getting all products
+  // getting all data from URL slug and preparing everything for sending GET request
   const inStockNum = slug?.searchParams?.inStock === "true" ? 1 : 0;
   const outOfStockNum = slug?.searchParams?.outOfStock === "true" ? 1 : 0;
   const page = slug?.searchParams?.page ? Number(slug?.searchParams?.page) : 1;
 
   let stockMode: string = "lte";
-
+  
+  // preparing inStock and out of stock filter for GET request
+  // If in stock checkbox is checked, stockMode is "equals"
   if (inStockNum === 1) {
     stockMode = "equals";
   }
-
+ // If out of stock checkbox is checked, stockMode is "lt"
   if (outOfStockNum === 1) {
     stockMode = "lt";
   }
+   // If in stock and out of stock checkboxes are checked, stockMode is "lte"
   if (inStockNum === 1 && outOfStockNum === 1) {
     stockMode = "lte";
   }
-
+   // If in stock and out of stock checkboxes aren't checked, stockMode is "gt"
   if (inStockNum === 0 && outOfStockNum === 0) {
     stockMode = "gt";
   }

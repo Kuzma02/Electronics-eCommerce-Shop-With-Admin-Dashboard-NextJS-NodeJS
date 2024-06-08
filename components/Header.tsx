@@ -56,7 +56,6 @@ const Header = () => {
   // getting user by email so I can get his user id
   const getUserByEmail = async () => {
     if (session?.user?.email) {
-      console.log("called");
       
       fetch(`http://localhost:3001/api/users/email/${session?.user?.email}`, {
         cache: "no-store",

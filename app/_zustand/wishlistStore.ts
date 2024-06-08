@@ -40,11 +40,7 @@ export const useWishlistStore = create<State & Actions>((set) => ({
     });
   },
   setWishlist: (wishlist: ProductInWishlist[]) => {
-    set((state) => {
-      console.log("WStore");
-      console.log(wishlist);
-      
-      
+    set((state) => {      
       return { wishlist: [...wishlist], wishQuantity: wishlist.length };
     });
   },
