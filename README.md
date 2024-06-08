@@ -16,29 +16,31 @@ NEXTAUTH_URL=http://localhost:3000
 ```
 DATABASE_URL="mysql://username:password@localhost:3306/singitronic_nextjs"
 ```
-8. Now you need to open your terminal of choice in the server folder of the project and write:
+8. Now you need to open your terminal of choice in the root folder of the project and write:
 ```
 npm install
 ```
-9. You will need to run the Prisma migration. Make sure you are in the server folder and write:
+9. Now you need to navigate with the terminal in the server folder and install everything:
+```
+cd server
+npm install
+```
+10. You will need to run the Prisma migration now. Make sure you are in the server folder and write:
 ```
 npx prisma migrate dev
 ```
-10. Next is to insert demo data. To do it you need to go to the server/utills folder and call insertDemoData.js:
+11. Next is to insert demo data. To do it you need to go to the server/utills folder and call insertDemoData.js:
 ```
 cd utills
 node insertDemoData.js
 ```
-11. Now you can go back to the server folder and run the backend:
+12. Now you can go back to the server folder and run the backend:
 ```
 cd ..
 node app.js
 ```
-12. While your backend is running you need to open another terminal(don't stop the backend). In the second terminal, you need to make sure you are in your root project folder and write the following:
-```
-npm install
-```
-13. After everything is installed, you need to run the Next.js application:
+13. While your backend is running you need to open another terminal(don't stop the backend). In the second terminal, you need to make sure you are in your root project folder and write the following:
 ```
 npm run dev
 ```
+14. Open [http://localhost:3000](http://localhost:3000) and see it live!
