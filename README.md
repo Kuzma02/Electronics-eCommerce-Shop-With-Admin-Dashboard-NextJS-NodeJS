@@ -2,7 +2,7 @@
 
 # Step-by-step video instructions for running the app
 
-[https://youtu.be/Ry0aOMws0gE](https://youtu.be/Ry0aOMws0gE)
+[https://www.youtube.com/watch?v=Ry0aOMws0gE](https://www.youtube.com/watch?v=Ry0aOMws0gE)
 
 # Instructions
 1. To run the app you first need to download and install Node.js and npm on your computer. Here is a link to the tutorial that explains how to install them: [https://www.youtube.com/watch?v=4FAtFwKVhn0](https://www.youtube.com/watch?v=4FAtFwKVhn0). Also here is the link where you can download them: [https://nodejs.org/en](https://nodejs.org/en)
