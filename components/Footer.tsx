@@ -32,7 +32,7 @@ const Footer = () => {
               <div className="md:grid md:grid-cols-2 md:gap-8">
                 <div>
                   <h3 className="text-lg font-bold leading-6 text-blue-600">
-                    Sale
+                    Negócios
                   </h3>
                   <ul role="list" className="mt-6 space-y-4">
                     {navigation.sale.map((item) => (
@@ -49,7 +49,7 @@ const Footer = () => {
                 </div>
                 <div className="mt-10 md:mt-0">
                   <h3 className="text-base font-bold leading-6 text-blue-600">
-                    About Us
+                    Sobre nós
                   </h3>
                   <ul role="list" className="mt-6 space-y-4">
                     {navigation.about.map((item) => (
@@ -68,7 +68,7 @@ const Footer = () => {
               <div className="md:grid md:grid-cols-2 md:gap-8">
                 <div>
                   <h3 className="text-base font-bold leading-6 text-blue-600">
-                    Buying
+                    Termos e condições
                   </h3>
                   <ul role="list" className="mt-6 space-y-4">
                     {navigation.buy.map((item) => (
@@ -85,7 +85,7 @@ const Footer = () => {
                 </div>
                 <div className="mt-10 md:mt-0">
                   <h3 className="text-base font-bold leading-6 text-blue-600">
-                    Support
+                    Suporte
                   </h3>
                   <ul role="list" className="mt-6 space-y-4">
                     {navigation.help.map((item) => (

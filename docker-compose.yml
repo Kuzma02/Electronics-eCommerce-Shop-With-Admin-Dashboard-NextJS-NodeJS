@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  # Front-end (Next.js, React, etc.)
+  frontend:
+    build:
+      context: ./ # Diretório do front-end
+    ports:
+      - "3000:3000" # Expondo a porta 3000 para acessar o front-end
+    depends_on:
+      - api
+    environment:
+      - NEXTAUTH_URL=http://localhost:3000
+      - DATABASE_URL="mysql://root:´passwordRoot´@localhost:3306/suplementos" # Usando o banco de dados db
+
+  # API (Node.js, Prisma, etc.)
+  api:
+    build:
+      context: ./server # Caminho para o diretório da API
+    ports:
+      - "3001:3001" # Expondo a porta 5000 para acessar a API
+    environment:
+      # - DATABASE_URL="mysql://username:password@db:3306/singitronic_nextjs" # Usando o banco de dados db
+      - DATABASE_URL="mysql://root:´passwordRoot´@localhost:3306/suplementos"
+#   # Banco de dados (MySQL)
+#   db:
+#     image: mysql:8
+#     environment:
+#       MYSQL_ROOT_PASSWORD: ´passwordRoot´
+#       MYSQL_DATABASE: suplementos
+#       MYSQL_USER: root
+#       MYSQL_PASSWORD: ´passwordRoot´
+#     volumes:
+#       - db_data:/var/lib/mysql
+#     ports:
+#       - "3306:3306" # Porta do banco de dados MySQL
+
+# volumes:
+#   db_data:
+#     driver: local
