@@ -17,7 +17,7 @@ const AdminDashboardPage = () => {
           <h4 className="text-3xl text-gray-100 max-[400px]:text-2xl">
             Number of visitors today
           </h4>
-          <p className="text-3xl font-bold">1200</p>
+          <p className="text-3xl font-bold">120</p>
           <p className="text-green-300 flex gap-x-1 items-center">
             <FaArrowUp />
             12.5% Since last month
