@@ -41,6 +41,7 @@ model User {
   password String?
   role     String?    @default("user")
   Wishlist Wishlist[]
+  Project  Project[]
 }
 
 model Customer_order {
@@ -83,4 +84,24 @@ model Wishlist {
   productId String
   user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
+}
+
+model Project {
+  id          String     @id @default(uuid())
+  name        String
+  createdAt   DateTime   @default(now())
+  itemCount   Int        @default(0)
+  contractor  User       @relation(fields: [contractorId], references: [id])
+  contractorId String
+  materials   Material[]
+}
+
+model Material {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  quantity    Int
+  unit        String
+  project     Project  @relation(fields: [projectId], references: [id])
+  projectId   String
 }
