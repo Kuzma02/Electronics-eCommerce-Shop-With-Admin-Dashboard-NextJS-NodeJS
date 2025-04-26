@@ -36,7 +36,7 @@ type ProjectProductWithProduct = {
     price: number;
     mainImage: string;
   };
-};
+}
 
 // GET handler: Fetch all materials for a project
 export async function GET(
@@ -62,12 +62,19 @@ export async function GET(
             title: true,
             price: true,
             mainImage: true,
+            description: true,
           },
         },
       },
     });
 
-    return NextResponse.json(materials);
+    // Transform the data to include name property
+    const transformedMaterials = materials.map((material: ProjectProductWithProduct) => ({
+      ...material,
+      name: material.product.title,
+    }));
+
+    return NextResponse.json(transformedMaterials);
   } catch (error) {
     console.error("Error fetching materials:", error);
     return new NextResponse("Internal Server Error", { status: 500 });
@@ -118,12 +125,19 @@ export async function POST(
             title: true,
             price: true,
             mainImage: true,
+            description: true,
           },
         },
       },
     });
 
-    return NextResponse.json(material);
+    // Add name property to response
+    const transformedMaterial = {
+      ...material,
+      name: material.product.title,
+    };
+
+    return NextResponse.json(transformedMaterial);
   } catch (error) {
     console.error("Error creating material:", error);
     return new NextResponse("Internal Server Error", { status: 500 });

@@ -1,8 +1,19 @@
--- Drop the old tables
-DROP TABLE IF EXISTS `Material`;
-DROP TABLE IF EXISTS `MaterialTemplate`;
+-- CreateTable
+CREATE TABLE `Project` (
+    `id` VARCHAR(191) NOT NULL,
+    `name` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `itemCount` INTEGER NOT NULL DEFAULT 0,
+    `contractorId` VARCHAR(191) NOT NULL,
 
--- Create the new ProjectProduct table
+    INDEX `Project_contractorId_fkey`(`contractorId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `Project` ADD CONSTRAINT `Project_contractorId_fkey` FOREIGN KEY (`contractorId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- CreateTable
 CREATE TABLE `ProjectProduct` (
     `id` VARCHAR(191) NOT NULL,
     `quantity` INTEGER NOT NULL,
@@ -14,7 +25,7 @@ CREATE TABLE `ProjectProduct` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- Add foreign key constraints
+-- AddForeignKey
 ALTER TABLE `ProjectProduct` ADD CONSTRAINT `ProjectProduct_projectId_fkey` 
     FOREIGN KEY (`projectId`) REFERENCES `Project`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 

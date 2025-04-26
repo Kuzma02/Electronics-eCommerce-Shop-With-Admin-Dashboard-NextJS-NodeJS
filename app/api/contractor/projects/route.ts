@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
-import prisma from "@/utils/db";
+import prisma from "@/server/utills/db";
 
 export async function GET() {
   try {
@@ -18,7 +18,7 @@ export async function GET() {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const projects = await prisma.project.findMany({
+    const projects = await prisma.Project.findMany({
       where: { contractorId: user.id },
       orderBy: { createdAt: "desc" },
     });
@@ -57,7 +57,7 @@ export async function POST(req: Request) {
     }
 
     console.log("[PROJECTS_POST] Creating project with:", { name, contractorId: user.id });
-    const project = await prisma.project.create({
+    const project = await prisma.Project.create({
       data: {
         name,
         contractorId: user.id,

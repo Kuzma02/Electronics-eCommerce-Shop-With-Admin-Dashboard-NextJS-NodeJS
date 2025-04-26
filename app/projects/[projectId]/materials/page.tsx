@@ -24,6 +24,13 @@ interface Material {
   quantity: number;
   unit: string;
   productId: string;
+  product?: {
+    id: string;
+    title: string;
+    description?: string;
+    price: number;
+    mainImage: string;
+  };
 }
 
 interface Product {
@@ -58,7 +65,14 @@ export default function MaterialsPage() {
           throw new Error("Failed to fetch materials");
         }
         const materialsData = await materialsResponse.json();
-        setMaterials(materialsData);
+        
+        // Ensure each material has a name property, using product.title as fallback
+        const processedMaterials = materialsData.map((material: any) => ({
+          ...material,
+          name: material.name || (material.product?.title || "Unknown Material")
+        }));
+        
+        setMaterials(processedMaterials);
 
         // Fetch available products catalog
         const productsResponse = await fetch('/api/products');
@@ -99,7 +113,14 @@ export default function MaterialsPage() {
 
       // Update local state with new material
       const newMaterial = await response.json();
-      setMaterials([...materials, newMaterial]);
+      
+      // Make sure the material has a name property derived from the product if needed
+      const materialWithName = {
+        ...newMaterial,
+        name: newMaterial.name || (newMaterial.product?.title || "Unknown Material")
+      };
+      
+      setMaterials([...materials, materialWithName]);
       
       // Update project item count
       await fetch(`/api/contractor/projects/${params.projectId}/recalculate`, {

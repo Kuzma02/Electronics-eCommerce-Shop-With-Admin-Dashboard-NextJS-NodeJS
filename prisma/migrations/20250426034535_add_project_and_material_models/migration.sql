@@ -6,10 +6,10 @@
 
 */
 -- DropTable
-DROP TABLE `customer_order`;
+-- DROP TABLE `customer_order`;
 
 -- DropTable
-DROP TABLE `user`;
+-- DROP TABLE `user`;
 
 -- CreateTable
 CREATE TABLE `User` (
@@ -56,28 +56,14 @@ CREATE TABLE `Project` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Material` (
+CREATE TABLE `ProjectProduct` (
     `id` VARCHAR(191) NOT NULL,
-    `name` VARCHAR(191) NOT NULL,
-    `description` VARCHAR(191) NULL,
     `quantity` INTEGER NOT NULL,
-    `unit` VARCHAR(191) NOT NULL,
     `projectId` VARCHAR(191) NOT NULL,
-    `templateId` VARCHAR(191) NOT NULL,
+    `productId` VARCHAR(191) NOT NULL,
 
-    INDEX `Material_projectId_fkey`(`projectId`),
-    INDEX `Material_templateId_fkey`(`templateId`),
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `MaterialTemplate` (
-    `id` VARCHAR(191) NOT NULL,
-    `name` VARCHAR(191) NOT NULL,
-    `description` VARCHAR(191) NULL,
-    `unit` VARCHAR(191) NOT NULL,
-
-    UNIQUE INDEX `MaterialTemplate_name_key`(`name`),
+    INDEX `ProjectProduct_projectId_fkey`(`projectId`),
+    INDEX `ProjectProduct_productId_fkey`(`productId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -91,7 +77,14 @@ ALTER TABLE `Wishlist` ADD CONSTRAINT `Wishlist_userId_fkey` FOREIGN KEY (`userI
 ALTER TABLE `Project` ADD CONSTRAINT `Project_contractorId_fkey` FOREIGN KEY (`contractorId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Material` ADD CONSTRAINT `Material_projectId_fkey` FOREIGN KEY (`projectId`) REFERENCES `Project`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `ProjectProduct` ADD CONSTRAINT `ProjectProduct_projectId_fkey` 
+    FOREIGN KEY (`projectId`) REFERENCES `Project`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
-ALTER TABLE `Material` ADD CONSTRAINT `Material_templateId_fkey` FOREIGN KEY (`templateId`) REFERENCES `MaterialTemplate`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `ProjectProduct` ADD CONSTRAINT `ProjectProduct_productId_fkey` 
+    FOREIGN KEY (`productId`) REFERENCES `Product`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- Alter the customer_order table instead of recreating it
+-- Add any necessary ALTER TABLE statements here to modify the customer_order table as needed
+
+-- Alter the user table instead of recreating it
+-- Add any necessary ALTER TABLE statements here to modify the user table as needed
