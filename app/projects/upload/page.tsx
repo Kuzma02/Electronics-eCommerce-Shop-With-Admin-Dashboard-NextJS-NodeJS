@@ -3,30 +3,76 @@
 // Purpose: Creates new projects and handles initial file upload
 // Features:
 // - Project name input
-// - File upload interface (for future implementation)
+// - File upload interface with progress and validation
 // - Form validation
 // - Automatic navigation to materials page after creation
 // *********************
 
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 
 export default function UploadProjectPage() {
-  // Routing and state management
   const router = useRouter();
   const [projectName, setProjectName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadMessage, setUploadMessage] = useState("");
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  // Handle form submission and project creation
+  const handleFileUpload = async (file: File) => {
+    if (file.type !== "application/pdf") {
+      toast.error("Only PDF files are allowed.");
+      return false;
+    }
+    if (file.size > 20 * 1024 * 1024) {
+      toast.error("File size exceeds 20MB limit.");
+      return false;
+    }
+
+    const formData = new FormData();
+    formData.append("uploadedFile", file);
+
+    try {
+      const uploadResponse = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!uploadResponse.ok) {
+        throw new Error("Failed to upload file");
+      }
+
+      const uploadData = await uploadResponse.json();
+      setUploadMessage("File uploaded successfully.");
+      setUploadProgress(100);
+      return uploadData.filePath;
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      setUploadMessage("Failed to upload file.");
+      setUploadProgress(0);
+      return false;
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
+    const file = fileInputRef.current?.files?.[0];
+    let filePath = null;
+
+    if (file) {
+      filePath = await handleFileUpload(file);
+      if (!filePath) {
+        setLoading(false);
+        return;
+      }
+    }
+
     try {
-      // Create new project in database
       const response = await fetch("/api/contractor/projects", {
         method: "POST",
         headers: {
@@ -34,6 +80,7 @@ export default function UploadProjectPage() {
         },
         body: JSON.stringify({
           name: projectName,
+          filePath: filePath,
         }),
       });
 
@@ -41,7 +88,6 @@ export default function UploadProjectPage() {
         throw new Error("Failed to create project");
       }
 
-      // Navigate to materials page on success
       const data = await response.json();
       toast.success("Project created successfully!");
       router.push(`/projects/${data.id}/materials`);
@@ -55,11 +101,15 @@ export default function UploadProjectPage() {
 
   return (
     <div className="max-w-2xl mx-auto bg-white shadow rounded-lg p-8">
-      <h1 className="text-2xl font-semibold text-gray-900 mb-6">Upload</h1>
+      <h1 className="text-2xl font-semibold text-gray-900 mb-6">
+        Upload Project
+      </h1>
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Project name input field */}
         <div>
-          <label htmlFor="projectName" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="projectName"
+            className="block text-sm font-medium text-gray-700"
+          >
             Project Name
           </label>
           <div className="mt-1">
@@ -76,17 +126,21 @@ export default function UploadProjectPage() {
           </div>
         </div>
 
-        {/* File upload input (prepared for future implementation) */}
         <div>
-          <label htmlFor="projectFile" className="block text-sm font-medium text-gray-700">
-            Project File
+          <label
+            htmlFor="projectFile"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Upload PDF (Max 20MB)
           </label>
           <div className="mt-1">
             <input
               type="file"
               id="projectFile"
               name="projectFile"
-              accept=".txt"
+              accept="application/pdf"
+              ref={fileInputRef}
+              onChange={() => setUploadProgress(0)}
               className="block w-full text-sm text-gray-500
                 file:mr-4 file:py-2 file:px-4
                 file:rounded-md file:border-0
@@ -95,9 +149,24 @@ export default function UploadProjectPage() {
                 hover:file:bg-indigo-100"
             />
           </div>
+          {uploadProgress > 0 && (
+            <div className="mt-2">
+              <div className="bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                <div
+                  className="bg-blue-600 h-2.5 rounded-full"
+                  style={{ width: `${uploadProgress}%` }}
+                ></div>
+              </div>
+              <p className="text-sm text-gray-500 mt-1">
+                Upload Progress: {uploadProgress}%
+              </p>
+            </div>
+          )}
+          {uploadMessage && (
+            <p className="text-sm text-gray-700 mt-2">{uploadMessage}</p>
+          )}
         </div>
 
-        {/* Submit button with loading state */}
         <div>
           <button
             type="submit"
@@ -112,4 +181,4 @@ export default function UploadProjectPage() {
       </form>
     </div>
   );
-} 
+}
