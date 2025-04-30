@@ -13,9 +13,14 @@ export async function POST(req: Request) {
 
   const formData = await req.formData();
   const file = formData.get("uploadedFile") as File;
+  const projectId = formData.get("projectId") as string;
 
   if (!file) {
     return new NextResponse("No file uploaded", { status: 400 });
+  }
+
+  if (!projectId) {
+    return new NextResponse("Project ID is required", { status: 400 });
   }
 
   if (file.type !== "application/pdf") {
@@ -24,23 +29,22 @@ export async function POST(req: Request) {
 
   const uniqueFileName = `${uuidv4()}-${file.name}`;
   
-  // Create temp uploads directory
-  const uploadPath = path.join(
+  // Create project-specific directory
+  const projectUploadPath = path.join(
     process.cwd(),
     "server",
     "uploads",
-    "temp",
-    uniqueFileName
+    projectId
   );
 
-  // Ensure temp directory exists
-  await fs.mkdir(path.dirname(uploadPath), { recursive: true });
+  await fs.mkdir(projectUploadPath, { recursive: true });
 
+  const uploadPath = path.join(projectUploadPath, uniqueFileName);
   const buffer = Buffer.from(await file.arrayBuffer());
   await fs.writeFile(uploadPath, Uint8Array.from(buffer));
 
   return NextResponse.json({ 
-    filePath: `uploads/temp/${uniqueFileName}`,
+    filePath: `uploads/${projectId}/${uniqueFileName}`,
     fileName: uniqueFileName,
     originalName: file.name,
     size: buffer.length,

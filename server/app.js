@@ -15,6 +15,7 @@ const orderProductRouter = require('./routes/customer_order_product');
 const wishlistRouter = require('./routes/wishlist');
 const projectsRouter = require('./routes/projects');
 const uploadsRouter = require('./routes/uploads');
+var cors = require("cors");
 
 const app = express();
 
@@ -25,6 +26,13 @@ fs.promises.mkdir(uploadsDir, { recursive: true })
   .catch(err => console.error('Error creating uploads directory:', err));
 
 app.use(express.json());
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 app.use(fileUpload({
   createParentPath: true,
   limits: { 

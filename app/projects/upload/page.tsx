@@ -65,18 +65,19 @@ export default function UploadProjectPage() {
     }
   };
 
-  const handleFilesUpload = async (files: File[]) => {
-    const uploadedFilePaths = [];
+  const handleFilesUpload = async (files: File[], projectId: string) => {
+    const uploadedFiles = [];
     let progress = 0;
     
     for (const file of files) {
       const formData = new FormData();
-      formData.append("uploadedFile", file);
+      formData.append("files", file);  // This matches the backend's expected field name
 
       try {
-        const uploadResponse = await fetch("/api/upload", {
+        const uploadResponse = await fetch(`/api/contractor/projects/${projectId}/files`, {
           method: "POST",
           body: formData,
+          credentials: 'include',  // Include cookies for authentication
         });
 
         if (!uploadResponse.ok) {
@@ -84,10 +85,10 @@ export default function UploadProjectPage() {
         }
 
         const uploadData = await uploadResponse.json();
-        uploadedFilePaths.push(uploadData.filePath);
+        uploadedFiles.push(uploadData);
         
         // Update progress
-        progress = Math.round(((uploadedFilePaths.length) / files.length) * 100);
+        progress = Math.round(((uploadedFiles.length) / files.length) * 100);
         setUploadProgress(progress);
         
       } catch (error) {
@@ -96,9 +97,9 @@ export default function UploadProjectPage() {
       }
     }
     
-    if (uploadedFilePaths.length > 0) {
-      setUploadMessage(`${uploadedFilePaths.length} of ${files.length} files uploaded successfully.`);
-      return uploadedFilePaths;
+    if (uploadedFiles.length > 0) {
+      setUploadMessage(`${uploadedFiles.length} of ${files.length} files uploaded successfully.`);
+      return uploadedFiles;
     }
     
     return null;
@@ -108,18 +109,9 @@ export default function UploadProjectPage() {
     e.preventDefault();
     setLoading(true);
 
-    let filePaths = null;
-
-    if (selectedFiles.length > 0) {
-      filePaths = await handleFilesUpload(selectedFiles);
-      if (!filePaths || filePaths.length === 0) {
-        setLoading(false);
-        return;
-      }
-    }
-
     try {
-      const response = await fetch("http://localhost:3001/api/projects", {
+      // First create the project
+      const createResponse = await fetch("/api/contractor/projects", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -127,17 +119,25 @@ export default function UploadProjectPage() {
         credentials: 'include',  // Include cookies for authentication
         body: JSON.stringify({
           name: projectName,
-          filePaths: filePaths,
         }),
       });
 
-      if (!response.ok) {
+      if (!createResponse.ok) {
         throw new Error("Failed to create project");
       }
 
-      const data = await response.json();
+      const projectData = await createResponse.json();
+      
+      // Then upload files if any
+      if (selectedFiles.length > 0) {
+        const uploadedFiles = await handleFilesUpload(selectedFiles, projectData.id);
+        if (!uploadedFiles || uploadedFiles.length === 0) {
+          toast.error("Failed to upload files");
+        }
+      }
+
       toast.success("Project created successfully!");
-      router.push(`/projects/${data.id}/materials`);
+      router.push(`/projects/${projectData.id}/materials`);
     } catch (error) {
       console.error("Error creating project:", error);
       toast.error("Failed to create project. Please try again.");

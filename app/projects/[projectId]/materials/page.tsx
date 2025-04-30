@@ -93,7 +93,7 @@ export default function MaterialsPage() {
 
         // Fetch uploaded files
         const filesResponse = await fetch(
-          `/api/projects/uploaded-files`
+          `/api/contractor/projects/${params.projectId}/files`
         );
         if (!filesResponse.ok) {
           throw new Error("Failed to fetch uploaded files");
@@ -102,7 +102,7 @@ export default function MaterialsPage() {
         setUploadedFiles(filesData);
       } catch (error) {
         console.error("Error fetching data:", error);
-        toast.error("Failed to load materials");
+        toast.error("Failed to load data");
       } finally {
         setLoading(false);
       }
@@ -219,38 +219,47 @@ export default function MaterialsPage() {
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
 
-    const file = e.target.files[0];
-    if (file.type !== 'application/pdf') {
-      toast.error('Only PDF files are allowed');
-      return;
+    const files = e.target.files;
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      if (file.size > 20 * 1024 * 1024) {
+        toast.error('File size exceeds 20MB');
+        return;
+      }
+      if (file.type !== 'application/pdf') {
+        toast.error('Only PDF files are allowed');
+        return;
+      }
     }
 
     const formData = new FormData();
-    formData.append('files', file);
+    for (let i = 0; i < files.length; i++) {
+      formData.append('files', files[i]);
+    }
 
     try {
-      const response = await fetch(`http://localhost:3001/api/projects/${params.projectId}/files`, {
+      const response = await fetch(`/api/contractor/projects/${params.projectId}/files`, {
         method: 'POST',
         body: formData,
       });
 
       if (!response.ok) {
-        throw new Error('Failed to upload file');
+        throw new Error('Failed to upload files');
       }
 
       const result = await response.json();
       
-      // Refresh the file list from backend
-      const filesResponse = await fetch(`http://localhost:3001/api/projects/${params.projectId}/files`);
+      // Refresh the file list
+      const filesResponse = await fetch(`/api/contractor/projects/${params.projectId}/files`);
       if (!filesResponse.ok) {
         throw new Error('Failed to fetch uploaded files');
       }
       const filesData = await filesResponse.json();
       setUploadedFiles(filesData);
-      toast.success('File uploaded successfully');
+      toast.success('Files uploaded successfully');
     } catch (error) {
-      console.error('Error uploading file:', error);
-      toast.error('Failed to upload file');
+      console.error('Error uploading files:', error);
+      toast.error('Failed to upload files');
     }
   };
 
@@ -358,27 +367,24 @@ export default function MaterialsPage() {
                 {uploadedFiles.map((file) => (
                   <div 
                     key={file.id}
-                    className="flex items-center p-2 rounded-md border border-gray-200"
+                    className="flex items-center p-2 rounded-md hover:bg-gray-50 border border-gray-200"
                   >
                     <input
                       type="checkbox"
                       id={`file-${file.id}`}
                       checked={selectedFilesForImport.includes(file.path)}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setSelectedFilesForImport([...selectedFilesForImport, file.path]);
-                        } else {
-                          setSelectedFilesForImport(selectedFilesForImport.filter(path => path !== file.path));
-                        }
-                      }}
+                      onChange={() => toggleFileSelection(file.path)}
                       className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
                     />
                     <label 
                       htmlFor={`file-${file.id}`}
-                      className="ml-3 block text-sm font-medium text-gray-700 truncate"
+                      className="ml-3 block text-sm font-medium text-gray-700 truncate cursor-pointer flex-1"
                     >
                       {file.originalname}
                     </label>
+                    <span className="text-xs text-gray-500 ml-2">
+                      {new Date(file.uploadedAt).toLocaleDateString()}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -423,20 +429,29 @@ export default function MaterialsPage() {
 
           <div className="bg-white shadow rounded-lg p-6">
             <h2 className="text-xl font-semibold mb-4">Upload Material from PDF</h2>
-            <div className="flex items-center">
+            <div className="flex flex-col items-start space-y-4">
               <input
                 type="file"
                 accept=".pdf"
                 onChange={handleFileChange}
                 className="hidden"
                 id="fileInput"
+                multiple
               />
-              <label
-                htmlFor="fileInput"
-                className="inline-block px-4 py-2 bg-indigo-600 text-white rounded-md cursor-pointer hover:bg-indigo-700"
-              >
-                Upload PDF
-              </label>
+              <div className="flex items-center space-x-4">
+                <label
+                  htmlFor="fileInput"
+                  className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md cursor-pointer hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                  </svg>
+                  Upload PDF Files
+                </label>
+                <span className="text-sm text-gray-500">
+                  Only PDF files up to 20MB are allowed
+                </span>
+              </div>
             </div>
           </div>
 
