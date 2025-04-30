@@ -69,9 +69,10 @@ export async function GET(
     });
 
     // Transform the data to include name property
-    const transformedMaterials = materials.map((material: ProjectProductWithProduct) => ({
+    const transformedMaterials = materials.map((material: any) => ({
       ...material,
-      name: material.product.title,
+      name: material.product?.title || "Unknown Material",
+      unit: "piece", // Default unit
     }));
 
     return NextResponse.json(transformedMaterials);
@@ -135,6 +136,7 @@ export async function POST(
     const transformedMaterial = {
       ...material,
       name: material.product.title,
+      unit: "piece",
     };
 
     return NextResponse.json(transformedMaterial);

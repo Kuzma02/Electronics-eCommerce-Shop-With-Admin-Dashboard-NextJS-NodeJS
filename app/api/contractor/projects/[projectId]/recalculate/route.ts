@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import prisma from "@/utils/db";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
-// POST /api/contractor/projects/[projectId]/recalculate
+// POST handler: Recalculate project item count
 export async function POST(
   request: Request,
   { params }: { params: { projectId: string } }

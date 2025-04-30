@@ -58,6 +58,7 @@ export default function ProjectsPage() {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
+        setLoading(true);
         const response = await fetch("/api/contractor/projects");
         const data = await response.json();
         setProjects(data);

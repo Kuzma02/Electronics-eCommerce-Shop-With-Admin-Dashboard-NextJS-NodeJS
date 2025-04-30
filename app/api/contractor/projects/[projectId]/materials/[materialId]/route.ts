@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import prisma from "@/utils/db";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import prisma from "@/utils/db";
 
-// PUT /api/contractor/projects/[projectId]/materials/[materialId]
+// PUT handler: Update a material
 export async function PUT(
   request: Request,
   { params }: { params: { projectId: string; materialId: string } }
@@ -25,6 +25,7 @@ export async function PUT(
       return new NextResponse("Project not found", { status: 404 });
     }
 
+    // Parse the request body
     const body = await request.json();
     const { quantity } = body;
 
@@ -58,7 +59,7 @@ export async function PUT(
   }
 }
 
-// DELETE /api/contractor/projects/[projectId]/materials/[materialId]
+// DELETE handler: Delete a material
 export async function DELETE(
   request: Request,
   { params }: { params: { projectId: string; materialId: string } }

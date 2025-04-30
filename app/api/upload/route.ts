@@ -23,17 +23,27 @@ export async function POST(req: Request) {
   }
 
   const uniqueFileName = `${uuidv4()}-${file.name}`;
+  
+  // Create temp uploads directory
   const uploadPath = path.join(
     process.cwd(),
     "server",
     "uploads",
+    "temp",
     uniqueFileName
   );
 
+  // Ensure temp directory exists
   await fs.mkdir(path.dirname(uploadPath), { recursive: true });
 
   const buffer = Buffer.from(await file.arrayBuffer());
   await fs.writeFile(uploadPath, Uint8Array.from(buffer));
 
-  return NextResponse.json({ filePath: `uploads/${uniqueFileName}` });
+  return NextResponse.json({ 
+    filePath: `uploads/temp/${uniqueFileName}`,
+    fileName: uniqueFileName,
+    originalName: file.name,
+    size: buffer.length,
+    mimeType: file.type
+  });
 }

@@ -20,67 +20,114 @@ export default function UploadProjectPage() {
   const [loading, setLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadMessage, setUploadMessage] = useState("");
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleFileUpload = async (file: File) => {
-    if (file.type !== "application/pdf") {
-      toast.error("Only PDF files are allowed.");
-      return false;
-    }
-    if (file.size > 20 * 1024 * 1024) {
-      toast.error("File size exceeds 20MB limit.");
-      return false;
-    }
-
-    const formData = new FormData();
-    formData.append("uploadedFile", file);
-
-    try {
-      const uploadResponse = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!uploadResponse.ok) {
-        throw new Error("Failed to upload file");
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUploadProgress(0);
+    setUploadMessage("");
+    
+    if (e.target.files && e.target.files.length > 0) {
+      const newFiles = Array.from(e.target.files);
+      
+      // Validate all files
+      const invalidFiles = newFiles.filter(file => 
+        file.type !== "application/pdf" || file.size > 20 * 1024 * 1024
+      );
+      
+      if (invalidFiles.length > 0) {
+        toast.error("Some files are invalid. Only PDF files up to 20MB are allowed.");
+        return;
       }
-
-      const uploadData = await uploadResponse.json();
-      setUploadMessage("File uploaded successfully.");
-      setUploadProgress(100);
-      return uploadData.filePath;
-    } catch (error) {
-      console.error("Error uploading file:", error);
-      setUploadMessage("Failed to upload file.");
-      setUploadProgress(0);
-      return false;
+      
+      setSelectedFiles(newFiles);
+      setUploadMessage(`${newFiles.length} file(s) selected`);
     }
+  };
+
+  const removeFile = (index: number) => {
+    setSelectedFiles(prevFiles => {
+      const newFiles = [...prevFiles];
+      newFiles.splice(index, 1);
+      
+      // Update the upload message with the new count
+      if (newFiles.length === 0) {
+        setUploadMessage("");
+      } else {
+        setUploadMessage(`${newFiles.length} file(s) selected`);
+      }
+      
+      return newFiles;
+    });
+    
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const handleFilesUpload = async (files: File[]) => {
+    const uploadedFilePaths = [];
+    let progress = 0;
+    
+    for (const file of files) {
+      const formData = new FormData();
+      formData.append("uploadedFile", file);
+
+      try {
+        const uploadResponse = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!uploadResponse.ok) {
+          throw new Error(`Failed to upload file: ${file.name}`);
+        }
+
+        const uploadData = await uploadResponse.json();
+        uploadedFilePaths.push(uploadData.filePath);
+        
+        // Update progress
+        progress = Math.round(((uploadedFilePaths.length) / files.length) * 100);
+        setUploadProgress(progress);
+        
+      } catch (error) {
+        console.error("Error uploading file:", error);
+        toast.error(`Failed to upload ${file.name}`);
+      }
+    }
+    
+    if (uploadedFilePaths.length > 0) {
+      setUploadMessage(`${uploadedFilePaths.length} of ${files.length} files uploaded successfully.`);
+      return uploadedFilePaths;
+    }
+    
+    return null;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    const file = fileInputRef.current?.files?.[0];
-    let filePath = null;
+    let filePaths = null;
 
-    if (file) {
-      filePath = await handleFileUpload(file);
-      if (!filePath) {
+    if (selectedFiles.length > 0) {
+      filePaths = await handleFilesUpload(selectedFiles);
+      if (!filePaths || filePaths.length === 0) {
         setLoading(false);
         return;
       }
     }
 
     try {
-      const response = await fetch("/api/contractor/projects", {
+      const response = await fetch("http://localhost:3001/api/projects", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: 'include',  // Include cookies for authentication
         body: JSON.stringify({
           name: projectName,
-          filePath: filePath,
+          filePaths: filePaths,
         }),
       });
 
@@ -128,27 +175,60 @@ export default function UploadProjectPage() {
 
         <div>
           <label
-            htmlFor="projectFile"
+            htmlFor="projectFiles"
             className="block text-sm font-medium text-gray-700"
           >
-            Upload PDF (Max 20MB)
+            Upload PDF Files (Max 20MB each)
           </label>
-          <div className="mt-1">
-            <input
-              type="file"
-              id="projectFile"
-              name="projectFile"
-              accept="application/pdf"
-              ref={fileInputRef}
-              onChange={() => setUploadProgress(0)}
-              className="block w-full text-sm text-gray-500
-                file:mr-4 file:py-2 file:px-4
-                file:rounded-md file:border-0
-                file:text-sm file:font-semibold
-                file:bg-indigo-50 file:text-indigo-700
-                hover:file:bg-indigo-100"
-            />
+          <div className="mt-1 flex items-center">
+            <label
+              htmlFor="projectFiles"
+              className="cursor-pointer px-4 py-2 bg-indigo-50 text-indigo-700 rounded-md font-semibold text-sm hover:bg-indigo-100"
+            >
+              Choose files
+              <input
+                type="file"
+                id="projectFiles"
+                name="projectFiles"
+                accept="application/pdf"
+                multiple
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                className="hidden"
+              />
+            </label>
+            <span className="ml-3 text-sm text-gray-500">
+              {selectedFiles.length > 0 
+                ? `${selectedFiles.length} file(s)` 
+                : "No file chosen"}
+            </span>
           </div>
+          
+          {selectedFiles.length > 0 && (
+            <div className="mt-4 mb-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 mt-2">
+                {selectedFiles.map((file, index) => (
+                  <div 
+                    key={index} 
+                    className="relative flex items-center justify-between bg-gray-100 border border-gray-200 rounded-md py-2 px-3"
+                  >
+                    <div className="text-sm text-gray-700 truncate max-w-[80%] font-medium">
+                      {file.name}
+                    </div>
+                    <button 
+                      type="button"
+                      onClick={() => removeFile(index)}
+                      className="text-gray-400 hover:text-gray-600"
+                      aria-label="Remove file"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          
           {uploadProgress > 0 && (
             <div className="mt-2">
               <div className="bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
@@ -162,7 +242,7 @@ export default function UploadProjectPage() {
               </p>
             </div>
           )}
-          {uploadMessage && (
+          {uploadMessage && !selectedFiles.length && (
             <p className="text-sm text-gray-700 mt-2">{uploadMessage}</p>
           )}
         </div>

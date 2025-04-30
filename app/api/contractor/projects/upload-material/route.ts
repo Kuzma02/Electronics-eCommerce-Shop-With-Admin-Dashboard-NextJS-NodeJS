@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import fs from "fs";
+import path from "path";
 import prisma from "@/server/utills/db";
 
 interface Material {
@@ -23,19 +25,41 @@ export async function POST(req: Request) {
   }
 
   try {
-    const materials: Material[] = [];
+    // Verify the project exists and belongs to the user
+    const project = await prisma.project.findUnique({
+      where: { id: projectId },
+    });
 
-    for (const material of materials) {
-      await prisma.projectProduct.create({
-        data: {
-          projectId: projectId,
-          productId: material.productId,
-          quantity: material.quantity,
-        },
-      });
+    if (!project) {
+      return new NextResponse("Project not found", { status: 404 });
     }
 
-    return NextResponse.json({ message: "Materials uploaded successfully" });
+    // Check if file exists
+    const fullFilePath = path.join(process.cwd(), filePath);
+    const fileExists = await fs.promises.access(fullFilePath)
+      .then(() => true)
+      .catch(() => false);
+    
+    if (!fileExists) {
+      return new NextResponse("File not found", { status: 404 });
+    }
+
+    // In a real implementation, you would parse the PDF here
+    // and extract materials list
+
+    // Create a placeholder material for demo purposes
+    const newMaterial = await prisma.projectProduct.create({
+      data: {
+        projectId,
+        productId: "placeholder-product-id", // You would determine this from the file
+        quantity: 1,
+      },
+    });
+
+    return NextResponse.json({ 
+      message: "Materials uploaded successfully",
+      material: newMaterial
+    });
   } catch (error) {
     console.error("Error uploading materials:", error);
     return new NextResponse("Internal Server Error", { status: 500 });

@@ -41,6 +41,16 @@ interface Product {
   inStock: number;
 }
 
+interface ProjectFile {
+  id: string;
+  filename: string;
+  originalname: string;
+  path: string;
+  mimetype: string;
+  size: number;
+  uploadedAt: string;
+}
+
 export default function MaterialsPage() {
   const [materials, setMaterials] = useState<Material[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
@@ -48,10 +58,9 @@ export default function MaterialsPage() {
   const [selectedProduct, setSelectedProduct] = useState<string>("");
   const [newQuantity, setNewQuantity] = useState<number>(1);
   const [editingMaterial, setEditingMaterial] = useState<Material | null>(null);
-  const [uploadedFiles, setUploadedFiles] = useState<
-    { name: string; path: string }[]
-  >([]);
+  const [uploadedFiles, setUploadedFiles] = useState<ProjectFile[]>([]);
   const [selectedFile, setSelectedFile] = useState<string>("");
+  const [selectedFilesForImport, setSelectedFilesForImport] = useState<string[]>([]);
 
   const params = useParams();
   const router = useRouter();
@@ -75,15 +84,16 @@ export default function MaterialsPage() {
 
         setMaterials(processedMaterials);
 
-        const productsResponse = await fetch("/api/products");
+        const productsResponse = await fetch(`/api/products`);
         if (!productsResponse.ok) {
           throw new Error("Failed to fetch products");
         }
         const productsData = await productsResponse.json();
         setProducts(productsData);
 
+        // Fetch uploaded files
         const filesResponse = await fetch(
-          "/api/contractor/projects/uploaded-files"
+          `/api/projects/uploaded-files`
         );
         if (!filesResponse.ok) {
           throw new Error("Failed to fetch uploaded files");
@@ -206,33 +216,111 @@ export default function MaterialsPage() {
     }
   };
 
-  const handleUploadMaterial = async () => {
-    if (!selectedFile) {
-      toast.error("Please select a file to upload");
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+
+    const file = e.target.files[0];
+    if (file.type !== 'application/pdf') {
+      toast.error('Only PDF files are allowed');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('files', file);
+
+    try {
+      const response = await fetch(`http://localhost:3001/api/projects/${params.projectId}/files`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to upload file');
+      }
+
+      const result = await response.json();
+      
+      // Refresh the file list from backend
+      const filesResponse = await fetch(`http://localhost:3001/api/projects/${params.projectId}/files`);
+      if (!filesResponse.ok) {
+        throw new Error('Failed to fetch uploaded files');
+      }
+      const filesData = await filesResponse.json();
+      setUploadedFiles(filesData);
+      toast.success('File uploaded successfully');
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      toast.error('Failed to upload file');
+    }
+  };
+
+  const toggleFileSelection = (filePath: string) => {
+    console.log("Current selection:", selectedFilesForImport);
+    console.log("Toggling file:", filePath);
+    
+    setSelectedFilesForImport(prev => {
+      const newSelection = prev.includes(filePath) 
+        ? prev.filter(path => path !== filePath) 
+        : [...prev, filePath];
+      
+      console.log("New selection:", newSelection);
+      return newSelection;
+    });
+  };
+
+  const handleImportList = async () => {
+    if (selectedFilesForImport.length === 0) {
+      toast.error("Please select at least one file to import");
       return;
     }
 
     try {
-      const response = await fetch(`/api/contractor/projects/upload-material`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          projectId: params.projectId,
-          filePath: selectedFile,
-        }),
-      });
+      setLoading(true);
+      
+      // Process each selected file
+      for (const filePath of selectedFilesForImport) {
+        const response = await fetch(`/api/projects/upload-material`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            projectId: params.projectId,
+            filePath: filePath,
+          }),
+        });
 
-      if (!response.ok) {
-        throw new Error("Failed to upload material");
+        if (!response.ok) {
+          throw new Error(`Failed to import from file: ${filePath}`);
+        }
       }
 
-      const result = await response.json();
-      toast.success("Material uploaded successfully");
+      // Refresh the materials list
+      const materialsResponse = await fetch(
+        `/api/contractor/projects/${params.projectId}/materials`
+      );
+      
+      if (!materialsResponse.ok) {
+        throw new Error("Failed to refresh materials list");
+      }
+      
+      const materialsData = await materialsResponse.json();
+      const processedMaterials = materialsData.map((material: any) => ({
+        ...material,
+        name: material.name || material.product?.title || "Unknown Material",
+      }));
+      
+      setMaterials(processedMaterials);
+      
+      // Clear the selection
+      setSelectedFilesForImport([]);
+      
+      toast.success("Materials imported successfully");
     } catch (error) {
-      console.error("Error uploading material:", error);
-      toast.error("Failed to upload material");
+      console.error("Error importing materials:", error);
+      toast.error("Failed to import materials");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -248,173 +336,221 @@ export default function MaterialsPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <h1 className="text-3xl font-bold mb-8">Project Materials</h1>
 
-      <div className="bg-white shadow rounded-lg p-6 mb-8">
-        <h2 className="text-xl font-semibold mb-4">Add New Material</h2>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <select
-            value={selectedProduct}
-            onChange={(e) => setSelectedProduct(e.target.value)}
-            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-          >
-            <option value="">Select Material</option>
-            {products.map((product) => (
-              <option key={product.id} value={product.id}>
-                {product.title} (In Stock: {product.inStock})
-              </option>
-            ))}
-          </select>
-          <input
-            type="number"
-            min="1"
-            value={newQuantity}
-            onChange={(e) => setNewQuantity(parseInt(e.target.value))}
-            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            placeholder="Quantity"
-          />
-          <button
-            onClick={handleAddMaterial}
-            disabled={!selectedProduct}
-            className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
-          >
-            Add Material
-          </button>
-        </div>
-      </div>
-
-      <div className="bg-white shadow rounded-lg p-6 mb-8">
-        <h2 className="text-xl font-semibold mb-4">Upload Material from PDF</h2>
-        <div className="flex items-center">
-          <select
-            value={selectedFile}
-            onChange={(e) => setSelectedFile(e.target.value)}
-            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-          >
-            <option value="">Select Uploaded PDF</option>
-            {uploadedFiles.map((file) => (
-              <option key={file.path} value={file.path}>
-                {file.name}
-              </option>
-            ))}
-          </select>
-          <button
-            onClick={handleUploadMaterial}
-            disabled={!selectedFile}
-            className="ml-4 inline-flex justify-center rounded-md border border-transparent bg-green-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50"
-          >
-            Upload
-          </button>
-        </div>
-      </div>
-
-      <div className="bg-white shadow rounded-lg overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        {/* Left sidebar - File list */}
+        <div className="lg:col-span-1">
+          <div className="bg-white shadow rounded-lg p-6 h-full">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold">Files</h2>
+              <button
+                onClick={handleImportList}
+                disabled={selectedFilesForImport.length === 0 || loading}
+                className="px-4 py-2 bg-indigo-600 text-white rounded-md text-sm font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
               >
-                Material Name
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Description
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Quantity
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Unit
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {materials.map((material) => (
-              <tr key={material.id}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  {material.name}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {material.description || "-"}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {editingMaterial?.id === material.id ? (
+                Import List
+              </button>
+            </div>
+            
+            {uploadedFiles.length === 0 ? (
+              <p className="text-gray-500 text-sm">No files uploaded yet.</p>
+            ) : (
+              <div className="space-y-2 max-h-[600px] overflow-y-auto">
+                {uploadedFiles.map((file) => (
+                  <div 
+                    key={file.id}
+                    className="flex items-center p-2 rounded-md border border-gray-200"
+                  >
                     <input
-                      type="number"
-                      min="1"
-                      value={editingMaterial.quantity}
-                      onChange={(e) =>
-                        setEditingMaterial({
-                          ...editingMaterial,
-                          quantity: parseInt(e.target.value),
-                        })
-                      }
-                      className="block w-20 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      type="checkbox"
+                      id={`file-${file.id}`}
+                      checked={selectedFilesForImport.includes(file.path)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setSelectedFilesForImport([...selectedFilesForImport, file.path]);
+                        } else {
+                          setSelectedFilesForImport(selectedFilesForImport.filter(path => path !== file.path));
+                        }
+                      }}
+                      className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
                     />
-                  ) : (
-                    material.quantity
-                  )}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {material.unit}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  {editingMaterial?.id === material.id ? (
-                    <>
-                      <button
-                        onClick={() => {
-                          handleUpdateQuantity(
-                            material.id,
-                            editingMaterial.quantity
-                          );
-                          setEditingMaterial(null);
-                        }}
-                        className="text-indigo-600 hover:text-indigo-900 mr-4"
-                      >
-                        Save
-                      </button>
-                      <button
-                        onClick={() => setEditingMaterial(null)}
-                        className="text-gray-600 hover:text-gray-900"
-                      >
-                        Cancel
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <button
-                        onClick={() => setEditingMaterial(material)}
-                        className="text-indigo-600 hover:text-indigo-900 mr-4"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDeleteMaterial(material.id)}
-                        className="text-red-600 hover:text-red-900"
-                      >
-                        Delete
-                      </button>
-                    </>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                    <label 
+                      htmlFor={`file-${file.id}`}
+                      className="ml-3 block text-sm font-medium text-gray-700 truncate"
+                    >
+                      {file.originalname}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Main content area */}
+        <div className="lg:col-span-3 space-y-6">
+          <div className="bg-white shadow rounded-lg p-6">
+            <h2 className="text-xl font-semibold mb-4">Add New Material</h2>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+              <select
+                value={selectedProduct}
+                onChange={(e) => setSelectedProduct(e.target.value)}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              >
+                <option value="">Select Material</option>
+                {products.map((product) => (
+                  <option key={product.id} value={product.id}>
+                    {product.title} (In Stock: {product.inStock})
+                  </option>
+                ))}
+              </select>
+              <input
+                type="number"
+                min="1"
+                value={newQuantity}
+                onChange={(e) => setNewQuantity(parseInt(e.target.value))}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                placeholder="Quantity"
+              />
+              <button
+                onClick={handleAddMaterial}
+                disabled={!selectedProduct}
+                className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
+              >
+                Add Material
+              </button>
+            </div>
+          </div>
+
+          <div className="bg-white shadow rounded-lg p-6">
+            <h2 className="text-xl font-semibold mb-4">Upload Material from PDF</h2>
+            <div className="flex items-center">
+              <input
+                type="file"
+                accept=".pdf"
+                onChange={handleFileChange}
+                className="hidden"
+                id="fileInput"
+              />
+              <label
+                htmlFor="fileInput"
+                className="inline-block px-4 py-2 bg-indigo-600 text-white rounded-md cursor-pointer hover:bg-indigo-700"
+              >
+                Upload PDF
+              </label>
+            </div>
+          </div>
+
+          <div className="bg-white shadow rounded-lg overflow-hidden">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Material Name
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Description
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Quantity
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Unit
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {materials.map((material) => (
+                  <tr key={material.id}>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      {material.name}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {material.description || "-"}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {editingMaterial?.id === material.id ? (
+                        <input
+                          type="number"
+                          min="1"
+                          value={editingMaterial.quantity}
+                          onChange={(e) =>
+                            setEditingMaterial({
+                              ...editingMaterial,
+                              quantity: parseInt(e.target.value),
+                            })
+                          }
+                          className="block w-20 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        />
+                      ) : (
+                        material.quantity
+                      )}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {material.unit}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      {editingMaterial?.id === material.id ? (
+                        <>
+                          <button
+                            onClick={() => {
+                              handleUpdateQuantity(
+                                material.id,
+                                editingMaterial.quantity
+                              );
+                              setEditingMaterial(null);
+                            }}
+                            className="text-indigo-600 hover:text-indigo-900 mr-4"
+                          >
+                            Save
+                          </button>
+                          <button
+                            onClick={() => setEditingMaterial(null)}
+                            className="text-gray-600 hover:text-gray-900"
+                          >
+                            Cancel
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            onClick={() => setEditingMaterial(material)}
+                            className="text-indigo-600 hover:text-indigo-900 mr-4"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => handleDeleteMaterial(material.id)}
+                            className="text-red-600 hover:text-red-900"
+                          >
+                            Delete
+                          </button>
+                        </>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   );
