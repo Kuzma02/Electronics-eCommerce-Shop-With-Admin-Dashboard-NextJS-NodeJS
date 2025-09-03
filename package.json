@@ -36,6 +36,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/uuid": "^10.0.0",
     "autoprefixer": "^10.0.1",
     "daisyui": "^4.7.2",
     "eslint": "^8",

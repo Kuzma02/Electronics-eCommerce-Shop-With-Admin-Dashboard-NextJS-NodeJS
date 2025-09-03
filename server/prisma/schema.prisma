@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -25,8 +19,11 @@ model Product {
   inStock        Int                      @default(1)
   categoryId     String
   category       Category                 @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  customerOrders customer_order_product[]
+  projects       ProjectProduct[]
   Wishlist       Wishlist[]
+  customerOrders customer_order_product[]
+
+  @@index([categoryId], map: "Product_categoryId_fkey")
 }
 
 model Image {
@@ -35,16 +32,73 @@ model Image {
   image     String
 }
 
-model User {
-  id       String     @id @default(uuid())
-  email    String     @unique
-  password String?
-  role     String?    @default("user")
-  Wishlist Wishlist[]
+model customer_order_product {
+  id              String  @id @default(uuid())
+  customerOrderId String
+  productId       String
+  quantity        Int
+  product         Product @relation(fields: [productId], references: [id])
+
+  @@index([customerOrderId], map: "customer_order_product_customerOrderId_fkey")
+  @@index([productId], map: "customer_order_product_productId_fkey")
 }
 
-model Customer_order {
-  id          String                   @id @default(uuid())
+model Category {
+  id       String    @id @default(uuid())
+  name     String    @unique
+  products Product[]
+}
+
+model Wishlist {
+  id        String  @id @default(uuid())
+  productId String
+  userId    String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId], map: "Wishlist_productId_fkey")
+  @@index([userId], map: "Wishlist_userId_fkey")
+}
+
+model Project {
+  id           String           @id @default(uuid())
+  name         String
+  createdAt    DateTime         @default(now())
+  itemCount    Int              @default(0)
+  contractorId String
+  products     ProjectProduct[]
+  files        ProjectFile[]
+
+  @@index([contractorId], map: "Project_contractorId_fkey")
+}
+
+model ProjectProduct {
+  id        String  @id @default(uuid())
+  quantity  Int
+  projectId String
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId], map: "ProjectProduct_projectId_fkey")
+  @@index([productId], map: "ProjectProduct_productId_fkey")
+}
+
+model ProjectFile {
+  id           String   @id @default(uuid())
+  filename     String
+  originalname String
+  mimetype     String
+  size         Int
+  path         String
+  uploadedAt   DateTime @default(now())
+  projectId    String
+  project      Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId], map: "ProjectFile_projectId_fkey")
+}
+
+model customer_order {
+  id          String    @id
   name        String
   lastname    String
   phone       String
@@ -53,34 +107,17 @@ model Customer_order {
   adress      String
   apartment   String
   postalCode  String
-  dateTime    DateTime?                @default(now())
+  dateTime    DateTime? @default(now())
   status      String
+  total       Int
   city        String
   country     String
   orderNotice String?
-  total       Int
-  products    customer_order_product[]
 }
 
-model customer_order_product {
-  id              String         @id @default(uuid())
-  customerOrder   Customer_order @relation(fields: [customerOrderId], references: [id])
-  customerOrderId String
-  product         Product        @relation(fields: [productId], references: [id])
-  productId       String
-  quantity        Int
-}
-
-model Category {
-  id       String    @id @default(uuid())
-  name     String    @unique
-  products Product[] // Define a one-to-many relationship
-}
-
-model Wishlist {
-  id        String  @id @default(uuid())
-  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-  productId String
-  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String
+model user {
+  id       String  @id
+  email    String  @unique(map: "User_email_key")
+  password String?
+  role     String? @default("user")
 }
