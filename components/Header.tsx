@@ -34,35 +34,36 @@ const Header = () => {
   };
 
   // getting all wishlist items by user id
-  const getWishlistByUserId = useCallback(async (id: string) => {
+  const getWishlistByUserId = useCallback(
+    async (id: string) => {
+      const response = await fetch(`http://localhost:3001/api/wishlist/${id}`, {
+        cache: 'no-store',
+      });
+      const wishlist = await response.json();
+      const productArray: {
+        id: string;
+        title: string;
+        price: number;
+        image: string;
+        slug: string;
+        stockAvailabillity: number;
+      }[] = [];
 
-    const response = await fetch(`http://localhost:3001/api/wishlist/${id}`, {
-      cache: 'no-store',
-    });
-    const wishlist = await response.json();
-    const productArray: {
-      id: string;
-      title: string;
-      price: number;
-      image: string;
-      slug: string;
-      stockAvailabillity: number;
-    }[] = [];
+      wishlist.map((item: any) =>
+        productArray.push({
+          id: item?.product?.id,
+          title: item?.product?.title,
+          price: item?.product?.price,
+          image: item?.product?.mainImage,
+          slug: item?.product?.slug,
+          stockAvailabillity: item?.product?.inStock,
+        }),
+      );
 
-    wishlist.map((item: any) =>
-      productArray.push({
-        id: item?.product?.id,
-        title: item?.product?.title,
-        price: item?.product?.price,
-        image: item?.product?.mainImage,
-        slug: item?.product?.slug,
-        stockAvailabillity: item?.product?.inStock,
-      }),
-    );
-
-    setWishlist(productArray);
-
-  }, [setWishlist])
+      setWishlist(productArray);
+    },
+    [setWishlist],
+  );
 
   // getting user by email so I can get his user id
   const getUserByEmail = useCallback(() => {
@@ -75,8 +76,7 @@ const Header = () => {
           getWishlistByUserId(data?.id);
         });
     }
-
-  }, [session?.user?.email, getWishlistByUserId])
+  }, [session?.user?.email, getWishlistByUserId]);
 
   useEffect(() => {
     getUserByEmail();

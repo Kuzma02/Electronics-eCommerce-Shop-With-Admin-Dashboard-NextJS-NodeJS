@@ -116,8 +116,7 @@ const DashboardProductDetails = ({
     });
     const images = await imagesData.json();
     setOtherImages((currentImages) => images);
-
-  }, [id])
+  }, [id]);
 
   // fetching all product categories. It will be used for displaying categories in select category input
   const fetchCategories = async () => {

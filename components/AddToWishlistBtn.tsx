@@ -106,8 +106,7 @@ const AddToWishlistBtn = ({ product, slug }: AddToWishlistBtnProps) => {
           }
         });
     }
-
-  }, [session?.user?.email, product?.id])
+  }, [session?.user?.email, product?.id]);
 
   useEffect(() => {
     isInWishlist();

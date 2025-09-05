@@ -41,8 +41,6 @@ const WishItem = ({
     router.push(`/product/${slug}`);
   };
 
-
-
   const deleteItemFromWishlist = async (productId: string) => {
     if (userId) {
       fetch(`http://localhost:3001/api/wishlist/${userId}/${productId}`, {
@@ -66,7 +64,7 @@ const WishItem = ({
           setUserId(data?.id);
         });
     }
-  }, [session?.user?.email])
+  }, [session?.user?.email]);
 
   useEffect(() => {
     getUserByEmail();
