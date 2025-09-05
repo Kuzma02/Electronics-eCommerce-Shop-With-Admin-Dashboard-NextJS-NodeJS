@@ -1,20 +1,20 @@
-"use client";
-import { CustomButton, SectionTitle } from "@/components";
-import { useSession } from "next-auth/react";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+'use client';
+import { CustomButton, SectionTitle } from '@/components';
+import { useSession } from 'next-auth/react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
 const RegisterPage = () => {
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const router = useRouter();
   const { data: session, status: sessionStatus } = useSession();
 
   useEffect(() => {
     // chechking if user has already registered redirect to home page
-    if (sessionStatus === "authenticated") {
-      router.replace("/");
+    if (sessionStatus === 'authenticated') {
+      router.replace('/');
     }
   }, [sessionStatus, router]);
 
@@ -29,29 +29,29 @@ const RegisterPage = () => {
     const confirmPassword = e.target[4].value;
 
     if (!isValidEmail(email)) {
-      setError("Email is invalid");
-      toast.error("Email is invalid");
+      setError('Email is invalid');
+      toast.error('Email is invalid');
       return;
     }
 
     if (!password || password.length < 8) {
-      setError("Password is invalid");
-      toast.error("Password is invalid");
+      setError('Password is invalid');
+      toast.error('Password is invalid');
       return;
     }
 
     if (confirmPassword !== password) {
-      setError("Passwords are not equal");
-      toast.error("Passwords are not equal");
+      setError('Passwords are not equal');
+      toast.error('Passwords are not equal');
       return;
     }
 
     try {
       // sending API request for registering user
-      const res = await fetch("/api/register", {
-        method: "POST",
+      const res = await fetch('/api/register', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           email,
@@ -60,22 +60,22 @@ const RegisterPage = () => {
       });
 
       if (res.status === 400) {
-        toast.error("This email is already registered");
-        setError("The email already in use");
+        toast.error('This email is already registered');
+        setError('The email already in use');
       }
       if (res.status === 200) {
-        setError("");
-        toast.success("Registration successful");
-        router.push("/login");
+        setError('');
+        toast.success('Registration successful');
+        router.push('/login');
       }
     } catch (error) {
-      toast.error("Error, try again");
-      setError("Error, try again");
+      toast.error('Error, try again');
+      setError('Error, try again');
       console.log(error);
     }
   };
 
-  if (sessionStatus === "loading") {
+  if (sessionStatus === 'loading') {
     return <h1>Loading...</h1>;
   }
   return (

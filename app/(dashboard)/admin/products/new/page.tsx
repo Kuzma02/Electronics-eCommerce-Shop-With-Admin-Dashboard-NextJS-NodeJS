@@ -1,9 +1,9 @@
-"use client";
-import { DashboardSidebar } from "@/components";
-import { convertCategoryNameToURLFriendly as convertSlugToURLFriendly } from "@/utils/categoryFormating";
-import Image from "next/image";
-import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+'use client';
+import { DashboardSidebar } from '@/components';
+import { convertCategoryNameToURLFriendly as convertSlugToURLFriendly } from '@/utils/categoryFormating';
+import Image from 'next/image';
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
 const AddNewProduct = () => {
   const [product, setProduct] = useState<{
@@ -16,31 +16,31 @@ const AddNewProduct = () => {
     slug: string;
     categoryId: string;
   }>({
-    title: "",
+    title: '',
     price: 0,
-    manufacturer: "",
+    manufacturer: '',
     inStock: 1,
-    mainImage: "",
-    description: "",
-    slug: "",
-    categoryId: "",
+    mainImage: '',
+    description: '',
+    slug: '',
+    categoryId: '',
   });
   const [categories, setCategories] = useState<Category[]>([]);
 
   const addProduct = async () => {
     if (
-      product.title === "" ||
-      product.manufacturer === "" ||
-      product.description == "" ||
-      product.slug === ""
+      product.title === '' ||
+      product.manufacturer === '' ||
+      product.description == '' ||
+      product.slug === ''
     ) {
-      toast.error("Please enter values in input fields");
+      toast.error('Please enter values in input fields');
       return;
     }
 
     const requestOptions: any = {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(product),
     };
     fetch(`http://localhost:3001/api/products`, requestOptions)
@@ -48,44 +48,44 @@ const AddNewProduct = () => {
         if (response.status === 201) {
           return response.json();
         } else {
-          throw Error("There was an error while creating product");
+          throw Error('There was an error while creating product');
         }
       })
       .then((data) => {
-        toast.success("Product added successfully");
+        toast.success('Product added successfully');
         setProduct({
-          title: "",
+          title: '',
           price: 0,
-          manufacturer: "",
+          manufacturer: '',
           inStock: 1,
-          mainImage: "",
-          description: "",
-          slug: "",
-          categoryId: "",
+          mainImage: '',
+          description: '',
+          slug: '',
+          categoryId: '',
         });
       })
       .catch((error) => {
-        toast.error("There was an error while creating product");
+        toast.error('There was an error while creating product');
       });
   };
 
   const uploadFile = async (file: any) => {
     const formData = new FormData();
-    formData.append("uploadedFile", file);
+    formData.append('uploadedFile', file);
 
     try {
-      const response = await fetch("http://localhost:3001/api/main-image", {
-        method: "POST",
+      const response = await fetch('http://localhost:3001/api/main-image', {
+        method: 'POST',
         body: formData,
       });
 
       if (response.ok) {
         const data = await response.json();
       } else {
-        console.error("File upload unsuccessfull");
+        console.error('File upload unsuccessfull');
       }
     } catch (error) {
-      console.error("Error happend while sending request:", error);
+      console.error('Error happend while sending request:', error);
     }
   };
 
@@ -97,13 +97,13 @@ const AddNewProduct = () => {
       .then((data) => {
         setCategories(data);
         setProduct({
-          title: "",
+          title: '',
           price: 0,
-          manufacturer: "",
+          manufacturer: '',
           inStock: 1,
-          mainImage: "",
-          description: "",
-          slug: "",
+          mainImage: '',
+          description: '',
+          slug: '',
           categoryId: data[0]?.id,
         });
       });

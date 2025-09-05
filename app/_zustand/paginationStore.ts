@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
 export type State = {
   page: number;
@@ -23,7 +23,7 @@ export const usePaginationStore = create<State & Actions>((set) => ({
         state.page = state.page - 1;
         return { page: state.page };
       }
-      return {page: 1};
+      return { page: 1 };
     });
   },
 }));

@@ -1,13 +1,13 @@
-const { PrismaClient } = require("@prisma/client");
+const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-const bcrypt = require("bcryptjs");
+const bcrypt = require('bcryptjs');
 
 async function getAllUsers(request, response) {
   try {
     const users = await prisma.user.findMany({});
     return response.json(users);
   } catch (error) {
-    return response.status(500).json({ error: "Error fetching users" });
+    return response.status(500).json({ error: 'Error fetching users' });
   }
 }
 
@@ -25,8 +25,8 @@ async function createUser(request, response) {
     });
     return response.status(201).json(user);
   } catch (error) {
-    console.error("Error creating user:", error);
-    return response.status(500).json({ error: "Error creating user" });
+    console.error('Error creating user:', error);
+    return response.status(500).json({ error: 'Error creating user' });
   }
 }
 
@@ -42,7 +42,7 @@ async function updateUser(request, response) {
     });
 
     if (!existingUser) {
-      return response.status(404).json({ error: "User not found" });
+      return response.status(404).json({ error: 'User not found' });
     }
 
     const updatedUser = await prisma.user.update({
@@ -58,7 +58,7 @@ async function updateUser(request, response) {
 
     return response.status(200).json(updatedUser);
   } catch (error) {
-    return response.status(500).json({ error: "Error updating user" });
+    return response.status(500).json({ error: 'Error updating user' });
   }
 }
 
@@ -73,7 +73,7 @@ async function deleteUser(request, response) {
     return response.status(204).send();
   } catch (error) {
     console.log(error);
-    return response.status(500).json({ error: "Error deleting user" });
+    return response.status(500).json({ error: 'Error deleting user' });
   }
 }
 
@@ -85,7 +85,7 @@ async function getUser(request, response) {
     },
   });
   if (!user) {
-    return response.status(404).json({ error: "User not found" });
+    return response.status(404).json({ error: 'User not found' });
   }
   return response.status(200).json(user);
 }
@@ -98,7 +98,7 @@ async function getUserByEmail(request, response) {
     },
   });
   if (!user) {
-    return response.status(404).json({ error: "User not found" });
+    return response.status(404).json({ error: 'User not found' });
   }
   return response.status(200).json(user);
 }

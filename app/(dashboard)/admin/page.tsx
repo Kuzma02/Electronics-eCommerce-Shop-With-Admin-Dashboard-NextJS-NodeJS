@@ -1,7 +1,7 @@
-"use client";
-import { DashboardSidebar, StatsElement } from "@/components";
-import React, { useEffect } from "react";
-import { FaArrowUp } from "react-icons/fa6";
+'use client';
+import { DashboardSidebar, StatsElement } from '@/components';
+import React, { useEffect } from 'react';
+import { FaArrowUp } from 'react-icons/fa6';
 
 const AdminDashboardPage = () => {
   return (

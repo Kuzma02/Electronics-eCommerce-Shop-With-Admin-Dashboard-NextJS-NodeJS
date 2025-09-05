@@ -8,24 +8,22 @@
 // Output: one number input and two buttons
 // *********************
 
-"use client";
-import { ProductInCart, useProductStore } from "@/app/_zustand/store";
-import React, { useState } from "react";
-import { FaPlus } from "react-icons/fa6";
-import { FaMinus } from "react-icons/fa6";
+'use client';
+import { ProductInCart, useProductStore } from '@/app/_zustand/store';
+import React, { useState } from 'react';
+import { FaPlus } from 'react-icons/fa6';
+import { FaMinus } from 'react-icons/fa6';
 
-const QuantityInputCart = ({ product } : { product: ProductInCart }) => {
+const QuantityInputCart = ({ product }: { product: ProductInCart }) => {
   const [quantityCount, setQuantityCount] = useState<number>(product.amount);
   const { updateCartAmount, calculateTotals } = useProductStore();
 
   const handleQuantityChange = (actionName: string): void => {
-    if (actionName === "plus") {
+    if (actionName === 'plus') {
       setQuantityCount(() => quantityCount + 1);
       updateCartAmount(product.id, quantityCount + 1);
       calculateTotals();
-
-      
-    } else if (actionName === "minus" && quantityCount !== 1) {
+    } else if (actionName === 'minus' && quantityCount !== 1) {
       setQuantityCount(() => quantityCount - 1);
       updateCartAmount(product.id, quantityCount - 1);
       calculateTotals();
@@ -35,15 +33,15 @@ const QuantityInputCart = ({ product } : { product: ProductInCart }) => {
   return (
     <div>
       <label htmlFor="Quantity" className="sr-only">
-        {" "}
-        Quantity{" "}
+        {' '}
+        Quantity{' '}
       </label>
 
       <div className="flex items-center justify-center rounded border border-gray-200 w-32">
         <button
           type="button"
           className="size-10 leading-10 text-gray-600 transition hover:opacity-75 flex items-center justify-center"
-          onClick={() => handleQuantityChange("minus")}
+          onClick={() => handleQuantityChange('minus')}
         >
           <FaMinus />
         </button>
@@ -59,7 +57,7 @@ const QuantityInputCart = ({ product } : { product: ProductInCart }) => {
         <button
           type="button"
           className="size-10 leading-10 text-gray-600 transition hover:opacity-75 flex items-center justify-center"
-          onClick={() => handleQuantityChange("plus")}
+          onClick={() => handleQuantityChange('plus')}
         >
           <FaPlus />
         </button>

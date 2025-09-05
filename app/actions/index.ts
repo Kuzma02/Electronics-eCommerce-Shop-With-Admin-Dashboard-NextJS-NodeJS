@@ -1,13 +1,12 @@
-'use server'
+'use server';
 
-import { revalidateTag } from "next/cache";
+import { revalidateTag } from 'next/cache';
 
-export async function deleteWishItem(id: string){
+export async function deleteWishItem(id: string) {
   await fetch(`http://localhost:3001/api/wishlist/${id}`, {
-    method: "DELETE",
+    method: 'DELETE',
   });
 }
-
 
 // import { redirect } from 'next/navigation'
 
@@ -19,7 +18,7 @@ export async function deleteWishItem(id: string){
 //     case "newestSort":
 //       redirect("/cars?sort=newestCars");
 //       break;
-    
+
 //     case "oldestSort":
 //       redirect("/cars?sort=oldestCars");
 //       break;
@@ -31,7 +30,7 @@ export async function deleteWishItem(id: string){
 //     case "highPriceSort":
 //       redirect("/cars?sort=highestPrice");
 //       break;
-  
+
 //     default:
 //       redirect("/cars");
 //       break;
@@ -41,7 +40,6 @@ export async function deleteWishItem(id: string){
 // export async function filterCars(formData: FormData){
 //   redirect(`/cars?condition=${formData.get("conditions") || "all"}&transmission=${formData.get("transmissions") || 'all'}&fuel=${formData.get("fuels") || 'all'}`);
 // }
-
 
 // export async function filterAndSortCars(formData: FormData){
 //   const sort = formData.get("sort");
@@ -53,7 +51,7 @@ export async function deleteWishItem(id: string){
 //     case "newestSort":
 //       sortQuery = "&sort=newestCars";
 //       break;
-    
+
 //     case "oldestSort":
 //       sortQuery = "&sort=oldestCars";
 //       break;
@@ -65,13 +63,13 @@ export async function deleteWishItem(id: string){
 //     case "highPriceSort":
 //       sortQuery = "&sort=highestPrice";
 //       break;
-  
+
 //     default:
 //       sortQuery = "";
 //       break;
 //   }
 //   redirect(`/products?filter=no${sortQuery}`);
 
-  // za kasnije kada dodjem do filtera
+// za kasnije kada dodjem do filtera
 //   redirect(`/products?condition=${formData.get("conditions") || "all"}&transmission=${formData.get("transmissions") || 'all'}&fuel=${formData.get("fuels") || 'all'}${sortQuery}`);
 // }

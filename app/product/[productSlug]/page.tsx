@@ -5,13 +5,13 @@ import {
   ProductTabs,
   SingleProductDynamicFields,
   AddToWishlistBtn,
-} from "@/components";
-import Image from "next/image";
-import { notFound } from "next/navigation";
-import React from "react";
-import { FaSquareFacebook } from "react-icons/fa6";
-import { FaSquareXTwitter } from "react-icons/fa6";
-import { FaSquarePinterest } from "react-icons/fa6";
+} from '@/components';
+import Image from 'next/image';
+import { notFound } from 'next/navigation';
+import React from 'react';
+import { FaSquareFacebook } from 'react-icons/fa6';
+import { FaSquareXTwitter } from 'react-icons/fa6';
+import { FaSquarePinterest } from 'react-icons/fa6';
 
 interface ImageItem {
   imageID: string;
@@ -22,13 +22,13 @@ interface ImageItem {
 const SingleProductPage = async ({ params }: SingleProductPageProps) => {
   // sending API request for a single product with a given product slug
   const data = await fetch(
-    `http://localhost:3001/api/slugs/${params.productSlug}`
+    `http://localhost:3001/api/slugs/${params.productSlug}`,
   );
   const product = await data.json();
 
   // sending API request for more than 1 product image if it exists
   const imagesData = await fetch(
-    `http://localhost:3001/api/images/${product.id}`
+    `http://localhost:3001/api/images/${product.id}`,
   );
   const images = await imagesData.json();
 
@@ -42,7 +42,11 @@ const SingleProductPage = async ({ params }: SingleProductPageProps) => {
         <div className="flex justify-center gap-x-16 pt-10 max-lg:flex-col items-center gap-y-5 px-5">
           <div>
             <Image
-              src={product?.mainImage ? `/${product?.mainImage}` : "/product_placeholder.jpg"}
+              src={
+                product?.mainImage
+                  ? `/${product?.mainImage}`
+                  : '/product_placeholder.jpg'
+              }
               width={500}
               height={500}
               alt="main image"

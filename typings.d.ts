@@ -8,7 +8,7 @@ interface Product {
   mainImage: string;
   manufacturer: string;
   categoryId: string;
-  category: {name: string}?;
+  category: { name: string }?;
   inStock: number;
 }
 
@@ -56,7 +56,7 @@ interface Order {
   name: string;
   phone: string;
   postalCode: string;
-  status: "processing" | "canceled" | "delivered";
+  status: 'processing' | 'canceled' | 'delivered';
   city: string;
   country: string;
   orderNotice: string?;
@@ -67,7 +67,6 @@ interface SingleProductBtnProps {
   product: Product;
   quantityCount: number;
 }
-
 
 interface Category {
   id: string;

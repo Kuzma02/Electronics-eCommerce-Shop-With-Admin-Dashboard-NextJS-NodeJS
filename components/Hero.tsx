@@ -8,10 +8,11 @@
 // Output: Classical hero component with two columns on desktop and one column on smaller devices
 // *********************
 
-import Image from "next/image";
-import React from "react";
+import Image from 'next/image';
+import React from 'react';
 
 const Hero = () => {
+  const value = 'testin';
   return (
     <div className="h-[700px] w-full bg-blue-500 max-lg:h-[900px] max-md:h-[750px]">
       <div className="grid grid-cols-3 items-center justify-items-center px-10 gap-x-10 max-w-screen-2xl mx-auto h-full max-lg:grid-cols-1 max-lg:py-10 max-lg:gap-y-10">

@@ -51,7 +51,6 @@ As the above image shows, we documented each our test example in terms of test I
 
 ![errors in testing script](https://github.com/Kuzma02/Electronics-eCommerce-Shop-With-Admin-Dashboard-NextJS-NodeJS/assets/138793624/507fa099-2039-47ce-a38b-209166a8d5c4)
 
-
 <p>During the software testing process, we documented each error found in the error report form. As shown in the image above, each error has its own unique error ID and a detailed description of the error containing: date of identifying an error, date of troubleshooting an error, error priority, type of error, file name, testing phase.</p>
 
 <h3>6.1. Ad hoc testing</h3>
@@ -108,7 +107,6 @@ We have applied this method by examining the code after each new added functiona
 <h3>Is Next.js good for eCommerce?</h3>
 <p>Next.js is currently one of the best ways for developing custom eCommerce solutions. It’s benefits include improved performance, SEO-friendliness, easy development and deployment, excellent developer experience, and the ability to handle versatile and scalable projects. By leveraging Next.js, developers can create compelling web applications that deliver an exceptional user experience while maintaining optimal performance.</p>
 
-
 <h2>Step-by-step video instructions for running the app</h2>
 
 [https://www.youtube.com/watch?v=Ry0aOMws0gE](https://www.youtube.com/watch?v=Ry0aOMws0gE)
@@ -136,7 +134,6 @@ DATABASE_URL="mysql://username:password@localhost:3306/singitronic_nextjs"
 ```
 
 <p>8. Now you need to open your terminal of choice in the root folder of the project and write:</p>
-
 
 ```
 npm install
@@ -176,7 +173,6 @@ npm run dev
 ```
 
 <p>14. Open <a href="http://localhost:3000" target="_blank">http://localhost:3000</a> and see it live!</p>
-
 
 <h2>Project screenshots</h2>
 

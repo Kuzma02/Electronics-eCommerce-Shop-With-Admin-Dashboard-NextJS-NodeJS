@@ -1,14 +1,14 @@
-"use client";
-import { DashboardSidebar } from "@/components";
-import { isValidEmailAddressFormat } from "@/lib/utils";
-import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+'use client';
+import { DashboardSidebar } from '@/components';
+import { isValidEmailAddressFormat } from '@/lib/utils';
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
 const DashboardCreateNewUser = () => {
   const [userInput, setUserInput] = useState({
-    email: "",
-    password: "",
-    role: "user",
+    email: '',
+    password: '',
+    role: 'user',
   });
 
   const addNewUser = () => {
@@ -18,41 +18,40 @@ const DashboardCreateNewUser = () => {
       userInput.password.length > 0
     ) {
       if (!isValidEmailAddressFormat(userInput.email)) {
-        toast.error("You entered invalid email address format");
+        toast.error('You entered invalid email address format');
         return;
       }
 
       if (userInput.password.length > 7) {
         const requestOptions: any = {
-          method: "post",
-          headers: { "Content-Type": "application/json" },
+          method: 'post',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(userInput),
         };
         fetch(`http://localhost:3001/api/users`, requestOptions)
           .then((response) => {
-            if(response.status === 201){
+            if (response.status === 201) {
               return response.json();
-
-            }else{
-              
-              throw Error("Error while creating user");
+            } else {
+              throw Error('Error while creating user');
             }
           })
           .then((data) => {
-            toast.success("User added successfully");
+            toast.success('User added successfully');
             setUserInput({
-              email: "",
-              password: "",
-              role: "user",
+              email: '',
+              password: '',
+              role: 'user',
             });
-          }).catch(error => {
-            toast.error("Error while creating user");
+          })
+          .catch((error) => {
+            toast.error('Error while creating user');
           });
       } else {
-        toast.error("Password must be longer than 7 characters");
+        toast.error('Password must be longer than 7 characters');
       }
     } else {
-      toast.error("You must enter all input values to add a user");
+      toast.error('You must enter all input values to add a user');
     }
   };
 

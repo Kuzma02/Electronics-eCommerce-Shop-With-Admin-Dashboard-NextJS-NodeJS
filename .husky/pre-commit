@@ -1,0 +1,2 @@
+bun run lint
+bun run prettier

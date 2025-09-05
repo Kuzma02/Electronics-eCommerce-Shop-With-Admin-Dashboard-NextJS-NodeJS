@@ -8,11 +8,11 @@
 // Output: Button with buy now functionality
 // *********************
 
-"use client";
-import { useProductStore } from "@/app/_zustand/store";
-import React from "react";
-import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
+'use client';
+import { useProductStore } from '@/app/_zustand/store';
+import React from 'react';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
 const BuyNowSingleProductBtn = ({
   product,
@@ -30,8 +30,8 @@ const BuyNowSingleProductBtn = ({
       amount: quantityCount,
     });
     calculateTotals();
-    toast.success("Product added to the cart");
-    router.push("/checkout");
+    toast.success('Product added to the cart');
+    router.push('/checkout');
   };
   return (
     <button

@@ -8,33 +8,33 @@
 // Output: products grid
 // *********************
 
-import React from "react";
-import ProductItem from "./ProductItem";
+import React from 'react';
+import ProductItem from './ProductItem';
 
 const Products = async ({ slug }: any) => {
   // getting all data from URL slug and preparing everything for sending GET request
-  const inStockNum = slug?.searchParams?.inStock === "true" ? 1 : 0;
-  const outOfStockNum = slug?.searchParams?.outOfStock === "true" ? 1 : 0;
+  const inStockNum = slug?.searchParams?.inStock === 'true' ? 1 : 0;
+  const outOfStockNum = slug?.searchParams?.outOfStock === 'true' ? 1 : 0;
   const page = slug?.searchParams?.page ? Number(slug?.searchParams?.page) : 1;
 
-  let stockMode: string = "lte";
-  
+  let stockMode: string = 'lte';
+
   // preparing inStock and out of stock filter for GET request
   // If in stock checkbox is checked, stockMode is "equals"
   if (inStockNum === 1) {
-    stockMode = "equals";
+    stockMode = 'equals';
   }
- // If out of stock checkbox is checked, stockMode is "lt"
+  // If out of stock checkbox is checked, stockMode is "lt"
   if (outOfStockNum === 1) {
-    stockMode = "lt";
+    stockMode = 'lt';
   }
-   // If in stock and out of stock checkboxes are checked, stockMode is "lte"
+  // If in stock and out of stock checkboxes are checked, stockMode is "lte"
   if (inStockNum === 1 && outOfStockNum === 1) {
-    stockMode = "lte";
+    stockMode = 'lte';
   }
-   // If in stock and out of stock checkboxes aren't checked, stockMode is "gt"
+  // If in stock and out of stock checkboxes aren't checked, stockMode is "gt"
   if (inStockNum === 0 && outOfStockNum === 0) {
-    stockMode = "gt";
+    stockMode = 'gt';
   }
 
   // sending API request with filtering, sorting and pagination for getting all products
@@ -46,8 +46,8 @@ const Products = async ({ slug }: any) => {
     }&filters[inStock][$${stockMode}]=1&${
       slug?.params?.slug?.length > 0
         ? `filters[category][$equals]=${slug?.params?.slug}&`
-        : ""
-    }sort=${slug?.searchParams?.sort}&page=${page}`
+        : ''
+    }sort=${slug?.searchParams?.sort}&page=${page}`,
   );
 
   const products = await data.json();

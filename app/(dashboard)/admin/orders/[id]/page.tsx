@@ -1,11 +1,11 @@
-"use client";
-import { DashboardSidebar } from "@/components";
-import { isValidEmailAddressFormat, isValidNameOrLastname } from "@/lib/utils";
-import Image from "next/image";
-import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+'use client';
+import { DashboardSidebar } from '@/components';
+import { isValidEmailAddressFormat, isValidNameOrLastname } from '@/lib/utils';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useParams, useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
 interface OrderProduct {
   id: string;
@@ -29,20 +29,20 @@ interface OrderProduct {
 const AdminSingleOrder = () => {
   const [orderProducts, setOrderProducts] = useState<OrderProduct[]>();
   const [order, setOrder] = useState<Order>({
-    id: "",
-    adress: "",
-    apartment: "",
-    company: "",
-    dateTime: "",
-    email: "",
-    lastname: "",
-    name: "",
-    phone: "",
-    postalCode: "",
-    city: "",
-    country: "",
-    orderNotice: "",
-    status: "processing",
+    id: '',
+    adress: '',
+    apartment: '',
+    company: '',
+    dateTime: '',
+    email: '',
+    lastname: '',
+    name: '',
+    phone: '',
+    postalCode: '',
+    city: '',
+    country: '',
+    orderNotice: '',
+    status: 'processing',
     total: 0,
   });
   const params = useParams<{ id: string }>();
@@ -52,7 +52,7 @@ const AdminSingleOrder = () => {
   useEffect(() => {
     const fetchOrderData = async () => {
       const response = await fetch(
-        `http://localhost:3001/api/orders/${params?.id}`
+        `http://localhost:3001/api/orders/${params?.id}`,
       );
       const data: Order = await response.json();
       setOrder(data);
@@ -60,7 +60,7 @@ const AdminSingleOrder = () => {
 
     const fetchOrderProducts = async () => {
       const response = await fetch(
-        `http://localhost:3001/api/order-product/${params?.id}`
+        `http://localhost:3001/api/order-product/${params?.id}`,
       );
       const data: OrderProduct[] = await response.json();
       setOrderProducts(data);
@@ -84,57 +84,57 @@ const AdminSingleOrder = () => {
       order?.postalCode.length > 0
     ) {
       if (!isValidNameOrLastname(order?.name)) {
-        toast.error("You entered invalid name format");
+        toast.error('You entered invalid name format');
         return;
       }
 
       if (!isValidNameOrLastname(order?.lastname)) {
-        toast.error("You entered invalid lastname format");
+        toast.error('You entered invalid lastname format');
         return;
       }
 
       if (!isValidEmailAddressFormat(order?.email)) {
-        toast.error("You entered invalid email format");
+        toast.error('You entered invalid email format');
         return;
       }
 
       fetch(`http://localhost:3001/api/orders/${order?.id}`, {
-        method: "PUT", // or 'PUT'
+        method: 'PUT', // or 'PUT'
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(order),
       })
         .then((response) => {
           if (response.status === 200) {
-            toast.success("Order updated successfuly");
+            toast.success('Order updated successfuly');
           } else {
-            throw Error("There was an error while updating a order");
+            throw Error('There was an error while updating a order');
           }
         })
         .catch((error) =>
-          toast.error("There was an error while updating a order")
+          toast.error('There was an error while updating a order'),
         );
     } else {
-      toast.error("Please fill all fields");
+      toast.error('Please fill all fields');
     }
   };
 
   const deleteOrder = async () => {
     const requestOptions = {
-      method: "DELETE",
+      method: 'DELETE',
     };
 
     fetch(
       `http://localhost:3001/api/order-product/${order?.id}`,
-      requestOptions
+      requestOptions,
     ).then((response) => {
       fetch(
         `http://localhost:3001/api/orders/${order?.id}`,
-        requestOptions
+        requestOptions,
       ).then((response) => {
-        toast.success("Order deleted successfully");
-        router.push("/admin/orders");
+        toast.success('Order deleted successfully');
+        router.push('/admin/orders');
       });
     });
   };
@@ -317,9 +317,9 @@ const AdminSingleOrder = () => {
                 setOrder({
                   ...order,
                   status: e.target.value as
-                    | "processing"
-                    | "delivered"
-                    | "canceled",
+                    | 'processing'
+                    | 'delivered'
+                    | 'canceled',
                 })
               }
             >
@@ -336,7 +336,7 @@ const AdminSingleOrder = () => {
             </div>
             <textarea
               className="textarea textarea-bordered h-24"
-              value={order?.orderNotice || ""}
+              value={order?.orderNotice || ''}
               onChange={(e) =>
                 setOrder({ ...order, orderNotice: e.target.value })
               }
@@ -347,7 +347,11 @@ const AdminSingleOrder = () => {
           {orderProducts?.map((product) => (
             <div className="flex items-center gap-x-4" key={product?.id}>
               <Image
-                src={product?.product?.mainImage ? `/${product?.product?.mainImage}` : "/product_placeholder.jpg"}
+                src={
+                  product?.product?.mainImage
+                    ? `/${product?.product?.mainImage}`
+                    : '/product_placeholder.jpg'
+                }
                 alt={product?.product?.title}
                 width={50}
                 height={50}

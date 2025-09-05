@@ -8,24 +8,25 @@
 // Output: one number input and two buttons
 // *********************
 
-"use client";
+'use client';
 
-import React from "react";
-import { FaPlus } from "react-icons/fa6";
-import { FaMinus } from "react-icons/fa6";
+import React from 'react';
+import { FaPlus } from 'react-icons/fa6';
+import { FaMinus } from 'react-icons/fa6';
 
 interface QuantityInputProps {
   quantityCount: number;
   setQuantityCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const QuantityInput = ({quantityCount, setQuantityCount} : QuantityInputProps) => {
-
-
+const QuantityInput = ({
+  quantityCount,
+  setQuantityCount,
+}: QuantityInputProps) => {
   const handleQuantityChange = (actionName: string): void => {
-    if (actionName === "plus") {
+    if (actionName === 'plus') {
       setQuantityCount(quantityCount + 1);
-    } else if (actionName === "minus" && quantityCount !== 1) {
+    } else if (actionName === 'minus' && quantityCount !== 1) {
       setQuantityCount(quantityCount - 1);
     }
   };
@@ -38,7 +39,7 @@ const QuantityInput = ({quantityCount, setQuantityCount} : QuantityInputProps) =
         <button
           type="button"
           className="size-10 leading-10 text-gray-600 transition hover:opacity-75 flex justify-center items-center border"
-          onClick={() => handleQuantityChange("minus")}
+          onClick={() => handleQuantityChange('minus')}
         >
           <FaMinus />
         </button>
@@ -54,7 +55,7 @@ const QuantityInput = ({quantityCount, setQuantityCount} : QuantityInputProps) =
         <button
           type="button"
           className="size-10 leading-10 text-gray-600 transition hover:opacity-75 flex justify-center items-center border"
-          onClick={() => handleQuantityChange("plus")}
+          onClick={() => handleQuantityChange('plus')}
         >
           <FaPlus />
         </button>

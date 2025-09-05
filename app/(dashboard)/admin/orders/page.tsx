@@ -1,6 +1,6 @@
-"use client";
-import { AdminOrders, DashboardSidebar } from "@/components";
-import React from "react";
+'use client';
+import { AdminOrders, DashboardSidebar } from '@/components';
+import React from 'react';
 
 const DashboardOrdersPage = () => {
   return (

@@ -1,52 +1,54 @@
-"use client"
-import { useWishlistStore } from "@/app/_zustand/wishlistStore";
-import WishItem from "@/components/WishItem";
-import { nanoid } from "nanoid";
-import { useSession } from "next-auth/react";
-import { useEffect } from "react";
+'use client';
+import { useWishlistStore } from '@/app/_zustand/wishlistStore';
+import WishItem from '@/components/WishItem';
+import { useSession } from 'next-auth/react';
+import { useCallback, useEffect } from 'react';
 
 export const WishlistModule = () => {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const { wishlist, setWishlist } = useWishlistStore();
 
-  const getWishlistByUserId = async (id: string) => {
-    const response = await fetch(`http://localhost:3001/api/wishlist/${id}`, {
-      cache: "no-store",
-    });
-    const wishlist = await response.json();
+  const getWishlistByUserId = useCallback(
+    async (id: string) => {
+      const response = await fetch(`http://localhost:3001/api/wishlist/${id}`, {
+        cache: 'no-store',
+      });
+      const wishlistData = await response.json();
 
-    const productArray: {
-      id: string;
-      title: string;
-      price: number;
-      image: string;
-      slug: string
-      stockAvailabillity: number;
-    }[] = [];
+      const productArray = wishlistData.map((item: any) => ({
+        id: item?.product?.id,
+        title: item?.product?.title,
+        price: item?.product?.price,
+        image: item?.product?.mainImage,
+        slug: item?.product?.slug,
+        stockAvailabillity: item?.product?.inStock,
+      }));
 
-    wishlist.map((item: any) => productArray.push({ id: item?.product?.id, title: item?.product?.title, price: item?.product?.price, image: item?.product?.mainImage, slug: item?.product?.slug, stockAvailabillity: item?.product?.inStock }));
+      setWishlist(productArray);
+    },
+    [setWishlist],
+  );
 
-    setWishlist(productArray);
-  };
-
-  const getUserByEmail = async () => {
+  const getUserByEmail = useCallback(() => {
     if (session?.user?.email) {
-      fetch(`http://localhost:3001/api/users/email/${session?.user?.email}`, {
-        cache: "no-store",
+      fetch(`http://localhost:3001/api/users/email/${session.user.email}`, {
+        cache: 'no-store',
       })
         .then((response) => response.json())
         .then((data) => {
-          getWishlistByUserId(data?.id);
+          if (data?.id) {
+            getWishlistByUserId(data.id);
+          }
         });
     }
-  };
+  }, [session?.user?.email, getWishlistByUserId]);
 
   useEffect(() => {
     getUserByEmail();
-  }, [session?.user?.email, wishlist.length]);
+  }, [getUserByEmail]);
+
   return (
     <>
-
       {wishlist && wishlist.length === 0 ? (
         <h3 className="text-center text-4xl py-10 text-black max-lg:text-3xl max-sm:text-2xl max-sm:pt-5 max-[400px]:text-xl">
           No items found in the wishlist
@@ -65,23 +67,22 @@ export const WishlistModule = () => {
                 </tr>
               </thead>
               <tbody>
-                {wishlist &&
-                  wishlist?.map((item) => (
-                    <WishItem
-                      id={item?.id}
-                      title={item?.title}
-                      price={item?.price}
-                      image={item?.image}
-                      slug={item?.slug}
-                      stockAvailabillity={item?.stockAvailabillity}
-                      key={nanoid()}
-                    />
-                  ))}
+                {wishlist?.map((item) => (
+                  <WishItem
+                    key={item.id} // ✅ stable key
+                    id={item.id}
+                    title={item.title}
+                    price={item.price}
+                    image={item.image}
+                    slug={item.slug}
+                    stockAvailabillity={item.stockAvailabillity}
+                  />
+                ))}
               </tbody>
             </table>
           </div>
         </div>
       )}
     </>
-  )
-}
+  );
+};

@@ -8,13 +8,13 @@
 // Output: custom button component
 // *********************
 
-import React from "react";
+import React from 'react';
 
 interface CustomButtonProps {
   paddingX: number;
   paddingY: number;
   text: string;
-  buttonType: "submit" | "reset" | "button";
+  buttonType: 'submit' | 'reset' | 'button';
   customWidth: string;
   textSize: string;
 }
@@ -25,14 +25,12 @@ const CustomButton = ({
   text,
   buttonType,
   customWidth,
-  textSize
+  textSize,
 }: CustomButtonProps) => {
-
-
   return (
     <button
       type={`${buttonType}`}
-      className={`${customWidth !== "no" && `w-${customWidth}`} uppercase bg-white px-${paddingX} py-${paddingY} text-${textSize} border border-black border-gray-300 font-bold text-blue-600 shadow-sm hover:bg-black hover:bg-gray-100 focus:outline-none focus:ring-2`}
+      className={`${customWidth !== 'no' && `w-${customWidth}`} uppercase bg-white px-${paddingX} py-${paddingY} text-${textSize} border border-black border-gray-300 font-bold text-blue-600 shadow-sm hover:bg-black hover:bg-gray-100 focus:outline-none focus:ring-2`}
     >
       {text}
     </button>

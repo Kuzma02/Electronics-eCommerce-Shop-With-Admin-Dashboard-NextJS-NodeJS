@@ -1,10 +1,7 @@
-
-import {
-  SectionTitle
-} from "@/components";
-import { Loader } from "@/components/Loader";
-import { CartModule } from "@/components/modules/cart";
-import { Suspense } from "react";
+import { SectionTitle } from '@/components';
+import { Loader } from '@/components/Loader';
+import { CartModule } from '@/components/modules/cart';
+import { Suspense } from 'react';
 
 const CartPage = () => {
   return (

@@ -1,9 +1,9 @@
-"use client";
-import { DashboardSidebar } from "@/components";
-import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
-import { isValidEmailAddressFormat } from "@/lib/utils";
+'use client';
+import { DashboardSidebar } from '@/components';
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
+import { isValidEmailAddressFormat } from '@/lib/utils';
 
 interface DashboardUserDetailsProps {
   params: { id: number };
@@ -17,27 +17,27 @@ const DashboardSingleUserPage = ({
     newPassword: string;
     role: string;
   }>({
-    email: "",
-    newPassword: "",
-    role: "",
+    email: '',
+    newPassword: '',
+    role: '',
   });
   const router = useRouter();
 
   const deleteUser = async () => {
     const requestOptions = {
-      method: "DELETE",
+      method: 'DELETE',
     };
     fetch(`http://localhost:3001/api/users/${id}`, requestOptions)
       .then((response) => {
         if (response.status === 204) {
-          toast.success("User deleted successfully");
-          router.push("/admin/users");
+          toast.success('User deleted successfully');
+          router.push('/admin/users');
         } else {
-          throw Error("There was an error while deleting user");
+          throw Error('There was an error while deleting user');
         }
       })
       .catch((error) => {
-        toast.error("There was an error while deleting user");
+        toast.error('There was an error while deleting user');
       });
   };
 
@@ -48,14 +48,14 @@ const DashboardSingleUserPage = ({
       userInput.newPassword.length > 0
     ) {
       if (!isValidEmailAddressFormat(userInput.email)) {
-        toast.error("You entered invalid email address format");
+        toast.error('You entered invalid email address format');
         return;
       }
 
       if (userInput.newPassword.length > 7) {
         const requestOptions = {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             email: userInput.email,
             password: userInput.newPassword,
@@ -67,19 +67,19 @@ const DashboardSingleUserPage = ({
             if (response.status === 200) {
               return response.json();
             } else {
-              throw Error("Error while updating user");
+              throw Error('Error while updating user');
             }
           })
-          .then((data) => toast.success("User successfully updated"))
+          .then((data) => toast.success('User successfully updated'))
           .catch((error) => {
-            toast.error("There was an error while updating user");
+            toast.error('There was an error while updating user');
           });
       } else {
-        toast.error("Password must be longer than 7 characters");
+        toast.error('Password must be longer than 7 characters');
         return;
       }
     } else {
-      toast.error("For updating a user you must enter all values");
+      toast.error('For updating a user you must enter all values');
       return;
     }
   };
@@ -93,7 +93,7 @@ const DashboardSingleUserPage = ({
       .then((data) => {
         setUserInput({
           email: data?.email,
-          newPassword: "",
+          newPassword: '',
           role: data?.role,
         });
       });

@@ -8,12 +8,12 @@
 // Output: Single product tabs containing product description, main product info and reviews
 // *********************
 
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import RatingPercentElement from "./RatingPercentElement";
-import SingleReview from "./SingleReview";
-import { formatCategoryName } from "@/utils/categoryFormating";
+import React, { useState } from 'react';
+import RatingPercentElement from './RatingPercentElement';
+import SingleReview from './SingleReview';
+import { formatCategoryName } from '@/utils/categoryFormating';
 
 const ProductTabs = ({ product }: { product: Product }) => {
   const [currentProductTab, setCurrentProductTab] = useState<number>(0);
@@ -24,7 +24,7 @@ const ProductTabs = ({ product }: { product: Product }) => {
         <a
           role="tab"
           className={`tab text-lg text-black pb-8 max-[500px]:text-base max-[400px]:text-sm max-[370px]:text-xs ${
-            currentProductTab === 0 && "tab-active"
+            currentProductTab === 0 && 'tab-active'
           }`}
           onClick={() => setCurrentProductTab(0)}
         >
@@ -33,7 +33,7 @@ const ProductTabs = ({ product }: { product: Product }) => {
         <a
           role="tab"
           className={`tab text-black text-lg pb-8 max-[500px]:text-base max-[400px]:text-sm max-[370px]:text-xs ${
-            currentProductTab === 1 && "tab-active"
+            currentProductTab === 1 && 'tab-active'
           }`}
           onClick={() => setCurrentProductTab(1)}
         >
@@ -62,7 +62,7 @@ const ProductTabs = ({ product }: { product: Product }) => {
                   <td>
                     {product?.category?.name
                       ? formatCategoryName(product?.category?.name)
-                      : "No category"}
+                      : 'No category'}
                   </td>
                 </tr>
                 {/* row 3 */}

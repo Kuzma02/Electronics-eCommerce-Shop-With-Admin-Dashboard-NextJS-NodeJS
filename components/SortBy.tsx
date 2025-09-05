@@ -8,9 +8,9 @@
 // Output: select input with options for sorting by a-z, z-a, price low, price high
 // *********************
 
-"use client";
-import React from "react";
-import { useSortStore } from "@/app/_zustand/sortStore";
+'use client';
+import React from 'react';
+import { useSortStore } from '@/app/_zustand/sortStore';
 
 const SortBy = () => {
   // getting values from Zustand sort store

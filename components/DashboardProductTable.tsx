@@ -8,18 +8,20 @@
 // Output: products table
 // *********************
 
-"use client";
-import { nanoid } from "nanoid";
-import Image from "next/image";
-import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import CustomButton from "./CustomButton";
+'use client';
+import { nanoid } from 'nanoid';
+import Image from 'next/image';
+import Link from 'next/link';
+import React, { useEffect, useState } from 'react';
+import CustomButton from './CustomButton';
 
 const DashboardProductTable = () => {
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/products?mode=admin", {cache: "no-store"})
+    fetch('http://localhost:3001/api/products?mode=admin', {
+      cache: 'no-store',
+    })
       .then((res) => {
         return res.json();
       })
@@ -78,7 +80,11 @@ const DashboardProductTable = () => {
                           <Image
                             width={48}
                             height={48}
-                            src={product?.mainImage ? `/${product?.mainImage}` : "/product_placeholder.jpg"}
+                            src={
+                              product?.mainImage
+                                ? `/${product?.mainImage}`
+                                : '/product_placeholder.jpg'
+                            }
                             alt="Avatar Tailwind CSS Component"
                             className="w-auto h-auto"
                           />
@@ -94,12 +100,15 @@ const DashboardProductTable = () => {
                   </td>
 
                   <td>
-                    { product?.inStock ? (<span className="badge badge-success text-white badge-sm">
-                      In stock
-                    </span>) : (<span className="badge badge-error text-white badge-sm">
-                      Out of stock
-                    </span>) }
-                    
+                    {product?.inStock ? (
+                      <span className="badge badge-success text-white badge-sm">
+                        In stock
+                      </span>
+                    ) : (
+                      <span className="badge badge-error text-white badge-sm">
+                        Out of stock
+                      </span>
+                    )}
                   </td>
                   <td>${product?.price}</td>
                   <th>
