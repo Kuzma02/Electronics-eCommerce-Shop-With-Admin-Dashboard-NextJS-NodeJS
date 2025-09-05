@@ -14,6 +14,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Link from 'next/link';
+import Image from "next/image"
 
 function SimpleSlider() {
   const settings = {
@@ -45,7 +46,10 @@ function SimpleSlider() {
               Shop now
             </Link>
           </div>
-          <img src="/slider image 1.webp" alt="slider 1" className="h-full" />
+          <Image
+            width={300}
+            height={300}
+            src="/slider image 1.webp" alt="slider 1" className="h-full" />
         </div>
         <div className="h-[500px] max-lg:h-[400px] max-md:h-[250px] max-[500px]:h-[200px] max-[400px]:h-[150px] relative">
           <div className="absolute left-[50%] translate-x-[-50%] translate-y-[30%] h-full text-center max-lg:translate-y-[25%] max-md:translate-y-[20%] max-sm:hidden">
@@ -66,7 +70,10 @@ function SimpleSlider() {
               Shop now
             </Link>
           </div>
-          <img src="/slider image 2.webp" alt="slider 1" className="h-full" />
+          <Image
+            width={400}
+            height={300}
+            src="/slider image 2.webp" alt="slider 1" className="h-full" />
         </div>
       </Slider>
     </div>

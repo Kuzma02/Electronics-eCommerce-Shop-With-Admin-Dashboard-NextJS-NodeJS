@@ -171,7 +171,7 @@ const CheckoutPage = () => {
       toast.error("You don't have items in your cart");
       router.push('/cart');
     }
-  }, []);
+  }, [products.length, router]);
 
   return (
     <div className="bg-white">

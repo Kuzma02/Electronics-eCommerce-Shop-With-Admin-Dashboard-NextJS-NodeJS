@@ -47,7 +47,7 @@ const Filters = () => {
     params.set('sort', sortBy);
     params.set('page', page.toString());
     replace(`${pathname}?${params}`);
-  }, [inputCategory, sortBy, page]);
+  }, [inputCategory, sortBy, page, pathname, replace]);
 
   return (
     <div>
