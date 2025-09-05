@@ -1,6 +1,6 @@
-const { PrismaClient } = require("@prisma/client");
+const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-const bcrypt = require("bcryptjs");
+const bcrypt = require('bcryptjs');
 
 async function getAllWishlist(request, response) {
   try {
@@ -11,7 +11,7 @@ async function getAllWishlist(request, response) {
     });
     return response.json(wishlist);
   } catch (error) {
-    return response.status(500).json({ error: "Error fetching wishlist" });
+    return response.status(500).json({ error: 'Error fetching wishlist' });
   }
 }
 
@@ -29,7 +29,7 @@ async function getAllWishlistByUserId(request, response) {
     });
     return response.json(wishlist);
   } catch (error) {
-    return response.status(500).json({ error: "Error fetching wishlist" });
+    return response.status(500).json({ error: 'Error fetching wishlist' });
   }
 }
 
@@ -44,72 +44,68 @@ async function createWishItem(request, response) {
     });
     return response.status(201).json(wishItem);
   } catch (error) {
-    console.error("Error creating wish item:", error);
-    return response.status(500).json({ error: "Error creating wish item" });
+    console.error('Error creating wish item:', error);
+    return response.status(500).json({ error: 'Error creating wish item' });
   }
 }
 
 async function deleteWishItem(request, response) {
   try {
     const { userId, productId } = request.params;
-    
+
     await prisma.wishlist.deleteMany({
       where: {
         userId: userId,
         productId: productId,
       },
     });
-    
-    return response.status(204).send();
 
+    return response.status(204).send();
   } catch (error) {
     console.log(error);
-    return response.status(500).json({ error: "Error deleting wish item" });
+    return response.status(500).json({ error: 'Error deleting wish item' });
   }
 }
 
-async function getSingleProductFromWishlist(request, response){
+async function getSingleProductFromWishlist(request, response) {
   try {
     const { userId, productId } = request.params;
-    
+
     const wishItem = await prisma.wishlist.findMany({
       where: {
         userId: userId,
         productId: productId,
       },
     });
-    
-    return response.status(200).json(wishItem);
 
+    return response.status(200).json(wishItem);
   } catch (error) {
     console.log(error);
-    return response.status(500).json({ error: "Error getting wish item" });
+    return response.status(500).json({ error: 'Error getting wish item' });
   }
 }
 
 async function deleteAllWishItemByUserId(request, response) {
   try {
     const { userId } = request.params;
-    
+
     await prisma.wishlist.deleteMany({
       where: {
         userId: userId,
       },
     });
-    
-    return response.status(204).send();
 
+    return response.status(204).send();
   } catch (error) {
     console.log(error);
-    return response.status(500).json({ error: "Error deleting wish item" });
+    return response.status(500).json({ error: 'Error deleting wish item' });
   }
 }
-
 
 module.exports = {
   getAllWishlistByUserId,
   getAllWishlist,
   createWishItem,
   deleteWishItem,
-  getSingleProductFromWishlist
+  getSingleProductFromWishlist,
 };

@@ -2,24 +2,24 @@
 // IN DEVELOPMENT
 // *********************
 
-import Image from "next/image";
-import React from "react";
-import { FaStar } from "react-icons/fa6";
+import Image from 'next/image';
+import React from 'react';
+import { FaStar } from 'react-icons/fa6';
 
 const SingleReview = () => {
   return (
     <article className="w-[900px] mx-auto py-10 max-[1000px]:w-[700px] max-[750px]:w-[90%]">
       <div className="flex items-center mb-4">
         <Image
-        width={40}
-        height={40}
+          width={40}
+          height={40}
           className="w-10 h-10 me-4 rounded-full"
           src="/randomuser.jpg"
           alt="user image"
         />
         <div className="font-medium dark:text-white">
           <p>
-            Jese Leos{" "}
+            Jese Leos{' '}
             <time className="block text-sm text-gray-500 dark:text-gray-400">
               Joined on August 2014
             </time>

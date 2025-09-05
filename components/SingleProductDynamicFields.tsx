@@ -8,11 +8,11 @@
 // Output: Quantity, add to cart and buy now component on the single product page
 // *********************
 
-"use client";
-import React, { useState } from "react";
-import QuantityInput from "./QuantityInput";
-import AddToCartSingleProductBtn from "./AddToCartSingleProductBtn";
-import BuyNowSingleProductBtn from "./BuyNowSingleProductBtn";
+'use client';
+import React, { useState } from 'react';
+import QuantityInput from './QuantityInput';
+import AddToCartSingleProductBtn from './AddToCartSingleProductBtn';
+import BuyNowSingleProductBtn from './BuyNowSingleProductBtn';
 
 const SingleProductDynamicFields = ({ product }: { product: Product }) => {
   const [quantityCount, setQuantityCount] = useState<number>(1);

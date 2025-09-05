@@ -1,19 +1,19 @@
-"use client";
-import { DashboardSidebar } from "@/components";
-import React, { useState } from "react";
-import toast from "react-hot-toast";
-import { convertCategoryNameToURLFriendly } from "../../../../../utils/categoryFormating";
+'use client';
+import { DashboardSidebar } from '@/components';
+import React, { useState } from 'react';
+import toast from 'react-hot-toast';
+import { convertCategoryNameToURLFriendly } from '../../../../../utils/categoryFormating';
 
 const DashboardNewCategoryPage = () => {
   const [categoryInput, setCategoryInput] = useState({
-    name: "",
+    name: '',
   });
 
   const addNewCategory = () => {
     if (categoryInput.name.length > 0) {
       const requestOptions = {
-        method: "post",
-        headers: { "Content-Type": "application/json" },
+        method: 'post',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: convertCategoryNameToURLFriendly(categoryInput.name),
         }),
@@ -24,20 +24,20 @@ const DashboardNewCategoryPage = () => {
           if (response.status === 201) {
             return response.json();
           } else {
-            throw Error("There was an error while creating category");
+            throw Error('There was an error while creating category');
           }
         })
         .then((data) => {
-          toast.success("Category added successfully");
+          toast.success('Category added successfully');
           setCategoryInput({
-            name: "",
+            name: '',
           });
         })
         .catch((error) => {
-          toast.error("There was an error while creating category");
+          toast.error('There was an error while creating category');
         });
     } else {
-      toast.error("You need to enter values to add a category");
+      toast.error('You need to enter values to add a category');
     }
   };
   return (

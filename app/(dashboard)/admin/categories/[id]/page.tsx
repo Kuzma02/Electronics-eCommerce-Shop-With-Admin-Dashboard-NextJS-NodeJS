@@ -1,10 +1,10 @@
-"use client";
-import { DashboardSidebar } from "@/components";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import { formatCategoryName } from "../../../../../utils/categoryFormating";
-import { convertCategoryNameToURLFriendly } from "../../../../../utils/categoryFormating";
+'use client';
+import { DashboardSidebar } from '@/components';
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { formatCategoryName } from '../../../../../utils/categoryFormating';
+import { convertCategoryNameToURLFriendly } from '../../../../../utils/categoryFormating';
 
 interface DashboardSingleCategoryProps {
   params: { id: number };
@@ -14,34 +14,34 @@ const DashboardSingleCategory = ({
   params: { id },
 }: DashboardSingleCategoryProps) => {
   const [categoryInput, setCategoryInput] = useState<{ name: string }>({
-    name: "",
+    name: '',
   });
   const router = useRouter();
 
   const deleteCategory = async () => {
     const requestOptions = {
-      method: "DELETE",
+      method: 'DELETE',
     };
     // sending API request for deleting a category
     fetch(`http://localhost:3001/api/categories/${id}`, requestOptions)
       .then((response) => {
         if (response.status === 204) {
-          toast.success("Category deleted successfully");
-          router.push("/admin/categories");
+          toast.success('Category deleted successfully');
+          router.push('/admin/categories');
         } else {
-          throw Error("There was an error deleting a category");
+          throw Error('There was an error deleting a category');
         }
       })
       .catch((error) => {
-        toast.error("There was an error deleting category");
+        toast.error('There was an error deleting category');
       });
   };
 
   const updateCategory = async () => {
     if (categoryInput.name.length > 0) {
       const requestOptions = {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: convertCategoryNameToURLFriendly(categoryInput.name),
         }),
@@ -52,15 +52,15 @@ const DashboardSingleCategory = ({
           if (response.status === 200) {
             return response.json();
           } else {
-            throw Error("Error updating a category");
+            throw Error('Error updating a category');
           }
         })
-        .then((data) => toast.success("Category successfully updated"))
+        .then((data) => toast.success('Category successfully updated'))
         .catch((error) => {
-          toast.error("There was an error while updating a category");
+          toast.error('There was an error while updating a category');
         });
     } else {
-      toast.error("For updating a category you must enter all values");
+      toast.error('For updating a category you must enter all values');
       return;
     }
   };

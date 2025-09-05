@@ -1,4 +1,4 @@
-const { PrismaClient } = require("@prisma/client");
+const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 async function getSingleProductImages(request, response) {
@@ -7,7 +7,7 @@ async function getSingleProductImages(request, response) {
     where: { productID: id },
   });
   if (!images) {
-    return response.json({ error: "Images not found" }, { status: 404 });
+    return response.json({ error: 'Images not found' }, { status: 404 });
   }
   return response.json(images);
 }
@@ -23,8 +23,8 @@ async function createImage(request, response) {
     });
     return response.status(201).json(createImage);
   } catch (error) {
-    console.error("Error creating image:", error);
-    return response.status(500).json({ error: "Error creating image" });
+    console.error('Error creating image:', error);
+    return response.status(500).json({ error: 'Error creating image' });
   }
 }
 
@@ -44,7 +44,7 @@ async function updateImage(request, response) {
     if (!existingImage) {
       return response
         .status(404)
-        .json({ error: "Image not found for the provided productID" });
+        .json({ error: 'Image not found for the provided productID' });
     }
 
     // Updating photo using coresponding imageID
@@ -60,8 +60,8 @@ async function updateImage(request, response) {
 
     return response.json(updatedImage);
   } catch (error) {
-    console.error("Error updating image:", error);
-    return response.status(500).json({ error: "Error updating image" });
+    console.error('Error updating image:', error);
+    return response.status(500).json({ error: 'Error updating image' });
   }
 }
 
@@ -75,12 +75,10 @@ async function deleteImage(request, response) {
     });
     return response.status(204).send();
   } catch (error) {
-    console.error("Error deleting image:", error);
-    return response.status(500).json({ error: "Error deleting image" });
+    console.error('Error deleting image:', error);
+    return response.status(500).json({ error: 'Error deleting image' });
   }
 }
-
-
 
 module.exports = {
   getSingleProductImages,

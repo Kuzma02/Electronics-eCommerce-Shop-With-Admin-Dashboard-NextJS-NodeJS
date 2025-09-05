@@ -1,4 +1,4 @@
-const { PrismaClient } = require("@prisma/client");
+const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 async function createCustomerOrder(request, response) {
@@ -37,8 +37,8 @@ async function createCustomerOrder(request, response) {
     });
     return response.status(201).json(corder);
   } catch (error) {
-    console.error("Error creating order:", error);
-    return response.status(500).json({ error: "Error creating order" });
+    console.error('Error creating order:', error);
+    return response.status(500).json({ error: 'Error creating order' });
   }
 }
 
@@ -69,7 +69,7 @@ async function updateCustomerOrder(request, response) {
     });
 
     if (!existingOrder) {
-      return response.status(404).json({ error: "Order not found" });
+      return response.status(404).json({ error: 'Order not found' });
     }
 
     const updatedOrder = await prisma.customer_order.update({
@@ -96,7 +96,7 @@ async function updateCustomerOrder(request, response) {
 
     return response.status(200).json(updatedOrder);
   } catch (error) {
-    return response.status(500).json({ error: "Error updating order" });
+    return response.status(500).json({ error: 'Error updating order' });
   }
 }
 
@@ -110,7 +110,7 @@ async function deleteCustomerOrder(request, response) {
     });
     return response.status(204).send();
   } catch (error) {
-    return response.status(500).json({ error: "Error deleting order" });
+    return response.status(500).json({ error: 'Error deleting order' });
   }
 }
 
@@ -122,7 +122,7 @@ async function getCustomerOrder(request, response) {
     },
   });
   if (!order) {
-    return response.status(404).json({ error: "Order not found" });
+    return response.status(404).json({ error: 'Order not found' });
   }
   return response.status(200).json(order);
 }
@@ -133,7 +133,7 @@ async function getAllOrders(request, response) {
     return response.json(orders);
   } catch (error) {
     console.log(error);
-    return response.status(500).json({ error: "Error fetching orders" });
+    return response.status(500).json({ error: 'Error fetching orders' });
   }
 }
 

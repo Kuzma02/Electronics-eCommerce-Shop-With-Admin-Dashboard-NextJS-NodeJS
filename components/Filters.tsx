@@ -8,18 +8,18 @@
 // Output: stock, rating and price filter
 // *********************
 
-"use client";
-import React, { useEffect, useState } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
-import { useRouter } from "next/navigation";
-import { useSortStore } from "@/app/_zustand/sortStore";
-import { usePaginationStore } from "@/app/_zustand/paginationStore";
+'use client';
+import React, { useEffect, useState } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { useSortStore } from '@/app/_zustand/sortStore';
+import { usePaginationStore } from '@/app/_zustand/paginationStore';
 
 interface InputCategory {
-  inStock: { text: string, isChecked: boolean },
-  outOfStock: { text: string, isChecked: boolean },
-  priceFilter: { text: string, value: number },
-  ratingFilter: { text: string, value: number },
+  inStock: { text: string; isChecked: boolean };
+  outOfStock: { text: string; isChecked: boolean };
+  priceFilter: { text: string; value: number };
+  ratingFilter: { text: string; value: number };
 }
 
 const Filters = () => {
@@ -30,22 +30,22 @@ const Filters = () => {
   const { page } = usePaginationStore();
 
   const [inputCategory, setInputCategory] = useState<InputCategory>({
-    inStock: { text: "instock", isChecked: true },
-    outOfStock: { text: "outofstock", isChecked: true },
-    priceFilter: { text: "price", value: 3000 },
-    ratingFilter: { text: "rating", value: 0 },
+    inStock: { text: 'instock', isChecked: true },
+    outOfStock: { text: 'outofstock', isChecked: true },
+    priceFilter: { text: 'price', value: 3000 },
+    ratingFilter: { text: 'rating', value: 0 },
   });
   const { sortBy } = useSortStore();
 
   useEffect(() => {
     const params = new URLSearchParams();
     // setting URL params and after that putting them all in URL
-    params.set("outOfStock", inputCategory.outOfStock.isChecked.toString());
-    params.set("inStock", inputCategory.inStock.isChecked.toString());
-    params.set("rating", inputCategory.ratingFilter.value.toString());
-    params.set("price", inputCategory.priceFilter.value.toString());
-    params.set("sort", sortBy);
-    params.set("page", page.toString());
+    params.set('outOfStock', inputCategory.outOfStock.isChecked.toString());
+    params.set('inStock', inputCategory.inStock.isChecked.toString());
+    params.set('rating', inputCategory.ratingFilter.value.toString());
+    params.set('price', inputCategory.priceFilter.value.toString());
+    params.set('sort', sortBy);
+    params.set('page', page.toString());
     replace(`${pathname}?${params}`);
   }, [inputCategory, sortBy, page]);
 
@@ -64,7 +64,7 @@ const Filters = () => {
                 setInputCategory({
                   ...inputCategory,
                   inStock: {
-                    text: "instock",
+                    text: 'instock',
                     isChecked: !inputCategory.inStock.isChecked,
                   },
                 })
@@ -84,7 +84,7 @@ const Filters = () => {
                 setInputCategory({
                   ...inputCategory,
                   outOfStock: {
-                    text: "outofstock",
+                    text: 'outofstock',
                     isChecked: !inputCategory.outOfStock.isChecked,
                   },
                 })
@@ -113,7 +113,7 @@ const Filters = () => {
               setInputCategory({
                 ...inputCategory,
                 priceFilter: {
-                  text: "price",
+                  text: 'price',
                   value: Number(e.target.value),
                 },
               })
@@ -135,7 +135,7 @@ const Filters = () => {
           onChange={(e) =>
             setInputCategory({
               ...inputCategory,
-              ratingFilter: { text: "rating", value: Number(e.target.value) },
+              ratingFilter: { text: 'rating', value: Number(e.target.value) },
             })
           }
           className="range range-info"

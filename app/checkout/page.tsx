@@ -1,29 +1,35 @@
-"use client";
-import { SectionTitle } from "@/components";
-import { useProductStore } from "../_zustand/store";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
-import { isValidCardNumber, isValidCreditCardCVVOrCVC, isValidCreditCardExpirationDate, isValidEmailAddressFormat, isValidNameOrLastname } from "@/lib/utils";
+'use client';
+import { SectionTitle } from '@/components';
+import { useProductStore } from '../_zustand/store';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
+import {
+  isValidCardNumber,
+  isValidCreditCardCVVOrCVC,
+  isValidCreditCardExpirationDate,
+  isValidEmailAddressFormat,
+  isValidNameOrLastname,
+} from '@/lib/utils';
 
 const CheckoutPage = () => {
   const [checkoutForm, setCheckoutForm] = useState({
-    name: "",
-    lastname: "",
-    phone: "",
-    email: "",
-    cardName: "",
-    cardNumber: "",
-    expirationDate: "",
-    cvc: "",
-    company: "",
-    adress: "",
-    apartment: "",
-    city: "",
-    country: "",
-    postalCode: "",
-    orderNotice: "",
+    name: '',
+    lastname: '',
+    phone: '',
+    email: '',
+    cardName: '',
+    cardNumber: '',
+    expirationDate: '',
+    cvc: '',
+    company: '',
+    adress: '',
+    apartment: '',
+    city: '',
+    country: '',
+    postalCode: '',
+    orderNotice: '',
   });
   const { products, total, clearCart } = useProductStore();
   const router = useRouter();
@@ -45,47 +51,47 @@ const CheckoutPage = () => {
       checkoutForm.postalCode.length > 0
     ) {
       if (!isValidNameOrLastname(checkoutForm.name)) {
-        toast.error("You entered invalid format for name");
+        toast.error('You entered invalid format for name');
         return;
       }
 
       if (!isValidNameOrLastname(checkoutForm.lastname)) {
-        toast.error("You entered invalid format for lastname");
+        toast.error('You entered invalid format for lastname');
         return;
       }
 
       if (!isValidEmailAddressFormat(checkoutForm.email)) {
-        toast.error("You entered invalid format for email address");
+        toast.error('You entered invalid format for email address');
         return;
       }
 
       if (!isValidNameOrLastname(checkoutForm.cardName)) {
-        toast.error("You entered invalid format for card name");
+        toast.error('You entered invalid format for card name');
         return;
       }
 
       if (!isValidCardNumber(checkoutForm.cardNumber)) {
-        toast.error("You entered invalid format for credit card number");
+        toast.error('You entered invalid format for credit card number');
         return;
       }
 
       if (!isValidCreditCardExpirationDate(checkoutForm.expirationDate)) {
         toast.error(
-          "You entered invalid format for credit card expiration date"
+          'You entered invalid format for credit card expiration date',
         );
         return;
       }
 
       if (!isValidCreditCardCVVOrCVC(checkoutForm.cvc)) {
-        toast.error("You entered invalid format for credit card CVC or CVV");
+        toast.error('You entered invalid format for credit card CVC or CVV');
         return;
       }
 
       // sending API request for creating a order
-      const response = fetch("http://localhost:3001/api/orders", {
-        method: "POST",
+      const response = fetch('http://localhost:3001/api/orders', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           name: checkoutForm.name,
@@ -96,7 +102,7 @@ const CheckoutPage = () => {
           adress: checkoutForm.adress,
           apartment: checkoutForm.apartment,
           postalCode: checkoutForm.postalCode,
-          status: "processing",
+          status: 'processing',
           total: total,
           city: checkoutForm.city,
           country: checkoutForm.country,
@@ -114,43 +120,43 @@ const CheckoutPage = () => {
         })
         .then(() => {
           setCheckoutForm({
-            name: "",
-            lastname: "",
-            phone: "",
-            email: "",
-            cardName: "",
-            cardNumber: "",
-            expirationDate: "",
-            cvc: "",
-            company: "",
-            adress: "",
-            apartment: "",
-            city: "",
-            country: "",
-            postalCode: "",
-            orderNotice: "",
+            name: '',
+            lastname: '',
+            phone: '',
+            email: '',
+            cardName: '',
+            cardNumber: '',
+            expirationDate: '',
+            cvc: '',
+            company: '',
+            adress: '',
+            apartment: '',
+            city: '',
+            country: '',
+            postalCode: '',
+            orderNotice: '',
           });
           clearCart();
-          toast.success("Order created successfuly");
+          toast.success('Order created successfuly');
           setTimeout(() => {
-            router.push("/");
+            router.push('/');
           }, 1000);
         });
     } else {
-      toast.error("You need to enter values in the input fields");
+      toast.error('You need to enter values in the input fields');
     }
   };
 
   const addOrderProduct = async (
     orderId: string,
     productId: string,
-    productQuantity: number
+    productQuantity: number,
   ) => {
     // sending API POST request for the table customer_order_product that does many to many relatioship for order and product
-    const response = await fetch("http://localhost:3001/api/order-product", {
-      method: "POST", // or 'PUT'
+    const response = await fetch('http://localhost:3001/api/order-product', {
+      method: 'POST', // or 'PUT'
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         customerOrderId: orderId,
@@ -160,12 +166,10 @@ const CheckoutPage = () => {
     });
   };
 
-  
-
   useEffect(() => {
     if (products.length === 0) {
       toast.error("You don't have items in your cart");
-      router.push("/cart");
+      router.push('/cart');
     }
   }, []);
 
@@ -207,7 +211,11 @@ const CheckoutPage = () => {
                   className="flex items-start space-x-4 py-6"
                 >
                   <Image
-                    src={product?.image ? `/${product?.image}` : "/product_placeholder.jpg"}
+                    src={
+                      product?.image
+                        ? `/${product?.image}`
+                        : '/product_placeholder.jpg'
+                    }
                     alt={product?.title}
                     width={80}
                     height={80}

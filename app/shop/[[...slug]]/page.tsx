@@ -1,4 +1,4 @@
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 import {
@@ -7,22 +7,21 @@ import {
   Pagination,
   Products,
   SortBy,
-} from "@/components";
-import React from "react";
+} from '@/components';
+import React from 'react';
 
 // improve readabillity of category text, for example category text "smart-watches" will be "smart watches"
 const improveCategoryText = (text: string): string => {
-  if (text.indexOf("-") !== -1) {
-    let textArray = text.split("-");
+  if (text.indexOf('-') !== -1) {
+    let textArray = text.split('-');
 
-    return textArray.join(" ");
+    return textArray.join(' ');
   } else {
     return text;
   }
 };
 
 const ShopPage = (slug: any) => {
-  
   return (
     <div className="text-black bg-white">
       <div className=" max-w-screen-2xl mx-auto px-10 max-sm:px-5">
@@ -34,7 +33,7 @@ const ShopPage = (slug: any) => {
               <h2 className="text-2xl font-bold max-sm:text-xl max-[400px]:text-lg uppercase">
                 {slug?.params?.slug && slug?.params?.slug[0]?.length > 0
                   ? improveCategoryText(slug?.params?.slug[0])
-                  : "All products"}
+                  : 'All products'}
               </h2>
 
               <SortBy />

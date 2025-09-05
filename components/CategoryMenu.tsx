@@ -8,11 +8,11 @@
 // Output: section title and category items
 // *********************
 
-import React from "react";
-import CategoryItem from "./CategoryItem";
-import Image from "next/image";
-import { categoryMenuList } from "@/lib/utils";
-import Heading from "./Heading";
+import React from 'react';
+import CategoryItem from './CategoryItem';
+import Image from 'next/image';
+import { categoryMenuList } from '@/lib/utils';
+import Heading from './Heading';
 
 const CategoryMenu = () => {
   return (

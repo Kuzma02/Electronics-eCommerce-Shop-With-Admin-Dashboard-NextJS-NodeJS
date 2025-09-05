@@ -8,9 +8,9 @@
 // Output: range input with the labels
 // *********************
 
-"use client";
+'use client';
 
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 const RangeWithLabels = () => {
   const [currentRangeWLabelsValue, setCurrentRangeWLabelsValue] =

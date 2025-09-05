@@ -1,22 +1,22 @@
-"use client";
-import { CustomButton, SectionTitle } from "@/components";
-import { isValidEmailAddressFormat } from "@/lib/utils";
-import { signIn, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import { FcGoogle } from "react-icons/fc";
+'use client';
+import { CustomButton, SectionTitle } from '@/components';
+import { isValidEmailAddressFormat } from '@/lib/utils';
+import { signIn, useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { FcGoogle } from 'react-icons/fc';
 
 const LoginPage = () => {
   const router = useRouter();
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   // const session = useSession();
   const { data: session, status: sessionStatus } = useSession();
 
   useEffect(() => {
     // if user has already logged in redirect to home page
-    if (sessionStatus === "authenticated") {
-      router.replace("/");
+    if (sessionStatus === 'authenticated') {
+      router.replace('/');
     }
   }, [sessionStatus, router]);
 
@@ -26,34 +26,34 @@ const LoginPage = () => {
     const password = e.target[1].value;
 
     if (!isValidEmailAddressFormat(email)) {
-      setError("Email is invalid");
-      toast.error("Email is invalid");
+      setError('Email is invalid');
+      toast.error('Email is invalid');
       return;
     }
 
     if (!password || password.length < 8) {
-      setError("Password is invalid");
-      toast.error("Password is invalid");
+      setError('Password is invalid');
+      toast.error('Password is invalid');
       return;
     }
 
-    const res = await signIn("credentials", {
+    const res = await signIn('credentials', {
       redirect: false,
       email,
       password,
     });
 
     if (res?.error) {
-      setError("Invalid email or password");
-      toast.error("Invalid email or password");
-      if (res?.url) router.replace("/");
+      setError('Invalid email or password');
+      toast.error('Invalid email or password');
+      if (res?.url) router.replace('/');
     } else {
-      setError("");
-      toast.success("Successful login");
+      setError('');
+      toast.success('Successful login');
     }
   };
 
-  if (sessionStatus === "loading") {
+  if (sessionStatus === 'loading') {
     return <h1>Loading...</h1>;
   }
   return (
@@ -164,7 +164,7 @@ const LoginPage = () => {
                 <button
                   className="flex w-full items-center border border-gray-300 justify-center gap-3 rounded-md bg-white px-3 py-1.5 text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                   onClick={() => {
-                    signIn("google");
+                    signIn('google');
                   }}
                 >
                   <FcGoogle />
@@ -176,7 +176,7 @@ const LoginPage = () => {
                 <button
                   className="flex w-full items-center justify-center gap-3 rounded-md bg-[#24292F] px-3 py-1.5 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#24292F]"
                   onClick={() => {
-                    signIn("github");
+                    signIn('github');
                   }}
                 >
                   <svg

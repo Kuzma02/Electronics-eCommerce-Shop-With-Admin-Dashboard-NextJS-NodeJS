@@ -1,23 +1,21 @@
-"use client"
+'use client';
 
-import { useProductStore } from "@/app/_zustand/store";
-import toast from "react-hot-toast";
-import Image from "next/image"
-import Link from "next/link";
-import { FaCircleQuestion } from "react-icons/fa6";
+import { useProductStore } from '@/app/_zustand/store';
+import toast from 'react-hot-toast';
+import Image from 'next/image';
+import Link from 'next/link';
+import { FaCircleQuestion } from 'react-icons/fa6';
 
 export const CartModule = () => {
-
   const { products, removeFromCart, calculateTotals, total } =
     useProductStore();
 
   const handleRemoveItem = (id: string) => {
     removeFromCart(id);
     calculateTotals();
-    toast.success("Product removed from the cart");
+    toast.success('Product removed from the cart');
   };
   return (
-
     <form className="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
       <section aria-labelledby="cart-heading" className="lg:col-span-7">
         <h2 id="cart-heading" className="sr-only">
@@ -34,7 +32,11 @@ export const CartModule = () => {
                 <Image
                   width={192}
                   height={192}
-                  src={product?.image ? `/${product.image}` : "/product_placeholder.jpg"}
+                  src={
+                    product?.image
+                      ? `/${product.image}`
+                      : '/product_placeholder.jpg'
+                  }
                   alt="laptop image"
                   className="h-24 w-24 rounded-md object-cover object-center sm:h-48 sm:w-48"
                 />
@@ -92,7 +94,7 @@ export const CartModule = () => {
                     />
                   )}
 
-                  <span>{1 ? "In stock" : `Ships in 3 days`}</span>
+                  <span>{1 ? 'In stock' : `Ships in 3 days`}</span>
                 </p>
               </div>
             </li>
@@ -105,19 +107,14 @@ export const CartModule = () => {
         aria-labelledby="summary-heading"
         className="mt-16 rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8"
       >
-        <h2
-          id="summary-heading"
-          className="text-lg font-medium text-gray-900"
-        >
+        <h2 id="summary-heading" className="text-lg font-medium text-gray-900">
           Order summary
         </h2>
 
         <dl className="mt-6 space-y-4">
           <div className="flex items-center justify-between">
             <dt className="text-sm text-gray-600">Subtotal</dt>
-            <dd className="text-sm font-medium text-gray-900">
-              ${total}
-            </dd>
+            <dd className="text-sm font-medium text-gray-900">${total}</dd>
           </div>
           <div className="flex items-center justify-between border-t border-gray-200 pt-4">
             <dt className="flex items-center text-sm text-gray-600">
@@ -129,10 +126,7 @@ export const CartModule = () => {
                 <span className="sr-only">
                   Learn more about how shipping is calculated
                 </span>
-                <FaCircleQuestion
-                  className="h-5 w-5"
-                  aria-hidden="true"
-                />
+                <FaCircleQuestion className="h-5 w-5" aria-hidden="true" />
               </a>
             </dt>
             <dd className="text-sm font-medium text-gray-900">$5.00</dd>
@@ -147,20 +141,13 @@ export const CartModule = () => {
                 <span className="sr-only">
                   Learn more about how tax is calculated
                 </span>
-                <FaCircleQuestion
-                  className="h-5 w-5"
-                  aria-hidden="true"
-                />
+                <FaCircleQuestion className="h-5 w-5" aria-hidden="true" />
               </a>
             </dt>
-            <dd className="text-sm font-medium text-gray-900">
-              ${total / 5}
-            </dd>
+            <dd className="text-sm font-medium text-gray-900">${total / 5}</dd>
           </div>
           <div className="flex items-center justify-between border-t border-gray-200 pt-4">
-            <dt className="text-base font-medium text-gray-900">
-              Order total
-            </dt>
+            <dt className="text-base font-medium text-gray-900">Order total</dt>
             <dd className="text-base font-medium text-gray-900">
               ${total === 0 ? 0 : Math.round(total + total / 5 + 5)}
             </dd>
@@ -178,7 +165,5 @@ export const CartModule = () => {
         )}
       </section>
     </form>
-
-  )
-
-}
+  );
+};

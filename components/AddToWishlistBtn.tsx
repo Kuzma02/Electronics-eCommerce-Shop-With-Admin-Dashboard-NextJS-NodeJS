@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 // *********************
 // Role of the component: Button for adding and removing product to the wishlist on the single product page
@@ -10,12 +10,12 @@
 // Output: Two buttons with adding and removing from the wishlist functionality
 // *********************
 
-import { useWishlistStore } from "@/app/_zustand/wishlistStore";
-import { useSession } from "next-auth/react";
-import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import { FaHeartCrack } from "react-icons/fa6";
-import { FaHeart } from "react-icons/fa6";
+import { useWishlistStore } from '@/app/_zustand/wishlistStore';
+import { useSession } from 'next-auth/react';
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { FaHeartCrack } from 'react-icons/fa6';
+import { FaHeart } from 'react-icons/fa6';
 
 interface AddToWishlistBtnProps {
   product: Product;
@@ -32,15 +32,15 @@ const AddToWishlistBtn = ({ product, slug }: AddToWishlistBtnProps) => {
     if (session?.user?.email) {
       // sending fetch request to get user id because we will need it for saving wish item
       fetch(`http://localhost:3001/api/users/email/${session?.user?.email}`, {
-        cache: "no-store",
+        cache: 'no-store',
       })
         .then((response) => response.json())
         .then((data) =>
-          fetch("http://localhost:3001/api/wishlist", {
-            method: "POST",
+          fetch('http://localhost:3001/api/wishlist', {
+            method: 'POST',
             headers: {
-              Accept: "application/json, text/plain, */*",
-              "Content-Type": "application/json",
+              Accept: 'application/json, text/plain, */*',
+              'Content-Type': 'application/json',
             },
             body: JSON.stringify({ productId: product?.id, userId: data?.id }),
           })
@@ -54,11 +54,11 @@ const AddToWishlistBtn = ({ product, slug }: AddToWishlistBtnProps) => {
                 slug: product?.slug,
                 stockAvailabillity: product?.inStock,
               });
-              toast.success("Product added to the wishlist");
-            })
+              toast.success('Product added to the wishlist');
+            }),
         );
     } else {
-      toast.error("You need to be logged in to add a product to the wishlist");
+      toast.error('You need to be logged in to add a product to the wishlist');
     }
   };
 
@@ -66,20 +66,20 @@ const AddToWishlistBtn = ({ product, slug }: AddToWishlistBtnProps) => {
     if (session?.user?.email) {
       // sending fetch request to get user id because we will need to delete wish item
       fetch(`http://localhost:3001/api/users/email/${session?.user?.email}`, {
-        cache: "no-store",
+        cache: 'no-store',
       })
         .then((response) => response.json())
         .then((data) => {
           return fetch(
             `http://localhost:3001/api/wishlist/${data?.id}/${product?.id}`,
             {
-              method: "DELETE",
-            }
+              method: 'DELETE',
+            },
           );
         })
         .then((response) => {
           removeFromWishlist(product?.id);
-          toast.success("Product removed from the wishlist");
+          toast.success('Product removed from the wishlist');
         });
     }
   };
@@ -88,13 +88,13 @@ const AddToWishlistBtn = ({ product, slug }: AddToWishlistBtnProps) => {
     // sending fetch request to get user id because we will need it for cheching whether the product is in wishlist
     if (session?.user?.email) {
       fetch(`http://localhost:3001/api/users/email/${session?.user?.email}`, {
-        cache: "no-store",
+        cache: 'no-store',
       })
         .then((response) => response.json())
         .then((data) => {
           // checking is product in wishlist
           return fetch(
-            `http://localhost:3001/api/wishlist/${data?.id}/${product?.id}`
+            `http://localhost:3001/api/wishlist/${data?.id}/${product?.id}`,
           );
         })
         .then((response) => response.json())

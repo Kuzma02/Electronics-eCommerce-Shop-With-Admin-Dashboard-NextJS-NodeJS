@@ -8,12 +8,12 @@
 // Output: form with search input and button
 // *********************
 
-"use client";
-import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+'use client';
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
 
 const SearchInput = () => {
-  const [searchInput, setSearchInput] = useState<string>("");
+  const [searchInput, setSearchInput] = useState<string>('');
   const router = useRouter();
 
   // function for modifying URL for searching products
@@ -21,7 +21,7 @@ const SearchInput = () => {
   const searchProducts = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     router.push(`/search?search=${searchInput}`);
-    setSearchInput("");
+    setSearchInput('');
   };
 
   return (
@@ -33,7 +33,10 @@ const SearchInput = () => {
         placeholder="Type here"
         className="bg-gray-50 input input-bordered w-[70%] rounded-r-none outline-none focus:outline-none max-sm:w-full"
       />
-      <button type="submit" className="btn bg-blue-500 text-white rounded-l-none rounded-r-xl hover:bg-blue-600">
+      <button
+        type="submit"
+        className="btn bg-blue-500 text-white rounded-l-none rounded-r-xl hover:bg-blue-600"
+      >
         Search
       </button>
     </form>

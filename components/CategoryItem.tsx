@@ -8,8 +8,8 @@
 // Output: Category icon, category name and link to the category
 // *********************
 
-import Link from "next/link";
-import React, { type ReactNode } from "react";
+import Link from 'next/link';
+import React, { type ReactNode } from 'react';
 
 interface CategoryItemProps {
   children: ReactNode;

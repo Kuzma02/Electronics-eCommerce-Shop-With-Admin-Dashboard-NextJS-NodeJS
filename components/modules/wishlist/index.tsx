@@ -1,9 +1,9 @@
-"use client"
-import { useWishlistStore } from "@/app/_zustand/wishlistStore";
-import WishItem from "@/components/WishItem";
-import { nanoid } from "nanoid";
-import { useSession } from "next-auth/react";
-import { useEffect } from "react";
+'use client';
+import { useWishlistStore } from '@/app/_zustand/wishlistStore';
+import WishItem from '@/components/WishItem';
+import { nanoid } from 'nanoid';
+import { useSession } from 'next-auth/react';
+import { useEffect } from 'react';
 
 export const WishlistModule = () => {
   const { data: session, status } = useSession();
@@ -11,7 +11,7 @@ export const WishlistModule = () => {
 
   const getWishlistByUserId = async (id: string) => {
     const response = await fetch(`http://localhost:3001/api/wishlist/${id}`, {
-      cache: "no-store",
+      cache: 'no-store',
     });
     const wishlist = await response.json();
 
@@ -20,11 +20,20 @@ export const WishlistModule = () => {
       title: string;
       price: number;
       image: string;
-      slug: string
+      slug: string;
       stockAvailabillity: number;
     }[] = [];
 
-    wishlist.map((item: any) => productArray.push({ id: item?.product?.id, title: item?.product?.title, price: item?.product?.price, image: item?.product?.mainImage, slug: item?.product?.slug, stockAvailabillity: item?.product?.inStock }));
+    wishlist.map((item: any) =>
+      productArray.push({
+        id: item?.product?.id,
+        title: item?.product?.title,
+        price: item?.product?.price,
+        image: item?.product?.mainImage,
+        slug: item?.product?.slug,
+        stockAvailabillity: item?.product?.inStock,
+      }),
+    );
 
     setWishlist(productArray);
   };
@@ -32,7 +41,7 @@ export const WishlistModule = () => {
   const getUserByEmail = async () => {
     if (session?.user?.email) {
       fetch(`http://localhost:3001/api/users/email/${session?.user?.email}`, {
-        cache: "no-store",
+        cache: 'no-store',
       })
         .then((response) => response.json())
         .then((data) => {
@@ -46,7 +55,6 @@ export const WishlistModule = () => {
   }, [session?.user?.email, wishlist.length]);
   return (
     <>
-
       {wishlist && wishlist.length === 0 ? (
         <h3 className="text-center text-4xl py-10 text-black max-lg:text-3xl max-sm:text-2xl max-sm:pt-5 max-[400px]:text-xl">
           No items found in the wishlist
@@ -83,5 +91,5 @@ export const WishlistModule = () => {
         </div>
       )}
     </>
-  )
-}
+  );
+};

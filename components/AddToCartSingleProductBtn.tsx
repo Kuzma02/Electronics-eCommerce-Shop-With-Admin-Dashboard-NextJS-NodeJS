@@ -7,17 +7,16 @@
 // Input parameters: SingleProductBtnProps interface
 // Output: Button with adding to cart functionality
 // *********************
-"use client";
+'use client';
 
+import React from 'react';
+import { useProductStore } from '@/app/_zustand/store';
+import toast from 'react-hot-toast';
 
-
-import React from "react";
-import { useProductStore } from "@/app/_zustand/store";
-import toast from "react-hot-toast";
-
-
-
-const AddToCartSingleProductBtn = ({ product, quantityCount } : SingleProductBtnProps) => {
+const AddToCartSingleProductBtn = ({
+  product,
+  quantityCount,
+}: SingleProductBtnProps) => {
   const { addToCart, calculateTotals } = useProductStore();
 
   const handleAddToCart = () => {
@@ -26,10 +25,10 @@ const AddToCartSingleProductBtn = ({ product, quantityCount } : SingleProductBtn
       title: product?.title,
       price: product?.price,
       image: product?.mainImage,
-      amount: quantityCount
+      amount: quantityCount,
     });
     calculateTotals();
-    toast.success("Product added to the cart");
+    toast.success('Product added to the cart');
   };
   return (
     <button

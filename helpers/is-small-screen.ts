@@ -1,4 +1,4 @@
-import isBrowser from "./is-browser";
+import isBrowser from './is-browser';
 
 function isSmallScreen(): boolean {
   return isBrowser() && window.innerWidth < 768;

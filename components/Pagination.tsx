@@ -8,9 +8,9 @@
 // Output: Component with the current page and buttons for incrementing and decrementing page
 // *********************
 
-"use client";
-import { usePaginationStore } from "@/app/_zustand/paginationStore";
-import React from "react";
+'use client';
+import { usePaginationStore } from '@/app/_zustand/paginationStore';
+import React from 'react';
 
 const Pagination = () => {
   // getting from Zustand store current page and methods for incrementing and decrementing current page

@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
 export type State = {
   sortBy: string;
@@ -9,7 +9,7 @@ export type Actions = {
 };
 
 export const useSortStore = create<State & Actions>((set) => ({
-  sortBy: "defaultSort",
+  sortBy: 'defaultSort',
   changeSortBy: (mode: string) => {
     set((state) => {
       return { sortBy: mode };
