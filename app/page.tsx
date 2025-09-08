@@ -3,10 +3,10 @@ import { CategoryMenu, Hero, Incentives, IntroducingSection, Newsletter, Product
 export default function Home() {
   return (
     <>
-    <Hero />
-    <IntroducingSection />
-    <CategoryMenu />
-    <ProductsSection />
+      <Hero />
+      <IntroducingSection />
+      <CategoryMenu />
+      <ProductsSection />
     </>
   );
 }
