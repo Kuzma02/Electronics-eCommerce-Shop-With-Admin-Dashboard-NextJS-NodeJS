@@ -19,16 +19,21 @@ interface ImageItem {
   image: string;
 }
 
+interface SingleProductPageProps {
+  params: Promise<{  productSlug: string, id: string }>;
+}
+
 const SingleProductPage = async ({ params }: SingleProductPageProps) => {
+  const paramsAwaited = await params;
   // sending API request for a single product with a given product slug
   const data = await fetch(
-    `http://localhost:3001/api/slugs/${params.productSlug}`
+    `http://localhost:3001/api/slugs/${paramsAwaited?.productSlug}`
   );
   const product = await data.json();
 
   // sending API request for more than 1 product image if it exists
   const imagesData = await fetch(
-    `http://localhost:3001/api/images/${product.id}`
+    `http://localhost:3001/api/images/${paramsAwaited?.id}`
   );
   const images = await imagesData.json();
 
@@ -68,7 +73,7 @@ const SingleProductPage = async ({ params }: SingleProductPageProps) => {
             <StockAvailabillity stock={94} inStock={product?.inStock} />
             <SingleProductDynamicFields product={product} />
             <div className="flex flex-col gap-y-2 max-[500px]:items-center">
-              <AddToWishlistBtn product={product} slug={params.productSlug} />
+              <AddToWishlistBtn product={product} slug={paramsAwaited.productSlug} />
               <p className="text-lg">
                 SKU: <span className="ml-1">abccd-18</span>
               </p>
