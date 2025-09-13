@@ -5,19 +5,16 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { isValidCardNumber, isValidCreditCardCVVOrCVC, isValidCreditCardExpirationDate, isValidEmailAddressFormat, isValidNameOrLastname } from "@/lib/utils";
+import { isValidEmailAddressFormat, isValidNameOrLastname } from "@/lib/utils";
 import apiClient from "@/lib/api";
 
 const CheckoutPage = () => {
+
   const [checkoutForm, setCheckoutForm] = useState({
     name: "",
     lastname: "",
     phone: "",
     email: "",
-    cardName: "",
-    cardNumber: "",
-    expirationDate: "",
-    cvc: "",
     company: "",
     adress: "",
     apartment: "",
@@ -26,18 +23,17 @@ const CheckoutPage = () => {
     postalCode: "",
     orderNotice: "",
   });
+  
   const { products, total, clearCart } = useProductStore();
   const router = useRouter();
 
   const makePurchase = async () => {
+    // Validate only non-payment fields
     if (
       checkoutForm.name.length > 0 &&
       checkoutForm.lastname.length > 0 &&
       checkoutForm.phone.length > 0 &&
       checkoutForm.email.length > 0 &&
-      checkoutForm.cardName.length > 0 &&
-      checkoutForm.expirationDate.length > 0 &&
-      checkoutForm.cvc.length > 0 &&
       checkoutForm.company.length > 0 &&
       checkoutForm.adress.length > 0 &&
       checkoutForm.apartment.length > 0 &&
@@ -45,50 +41,27 @@ const CheckoutPage = () => {
       checkoutForm.country.length > 0 &&
       checkoutForm.postalCode.length > 0
     ) {
+      // Validate name format
       if (!isValidNameOrLastname(checkoutForm.name)) {
         toast.error("You entered invalid format for name");
         return;
       }
 
+      // Validate lastname format
       if (!isValidNameOrLastname(checkoutForm.lastname)) {
         toast.error("You entered invalid format for lastname");
         return;
       }
 
+      // Validate email format
       if (!isValidEmailAddressFormat(checkoutForm.email)) {
         toast.error("You entered invalid format for email address");
         return;
       }
 
-      if (!isValidNameOrLastname(checkoutForm.cardName)) {
-        toast.error("You entered invalid format for card name");
-        return;
-      }
-
-      if (!isValidCardNumber(checkoutForm.cardNumber)) {
-        toast.error("You entered invalid format for credit card number");
-        return;
-      }
-
-      if (!isValidCreditCardExpirationDate(checkoutForm.expirationDate)) {
-        toast.error(
-          "You entered invalid format for credit card expiration date"
-        );
-        return;
-      }
-
-      if (!isValidCreditCardCVVOrCVC(checkoutForm.cvc)) {
-        toast.error("You entered invalid format for credit card CVC or CVV");
-        return;
-      }
-
-      // sending API request for creating a order
-      const response = apiClient.post("/api/orders", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      try {
+        
+        const response = await apiClient.post("/api/orders", {
           name: checkoutForm.name,
           lastname: checkoutForm.lastname,
           phone: checkoutForm.phone,
@@ -97,48 +70,46 @@ const CheckoutPage = () => {
           adress: checkoutForm.adress,
           apartment: checkoutForm.apartment,
           postalCode: checkoutForm.postalCode,
-          status: "processing",
+          status: "pending",
           total: total,
           city: checkoutForm.city,
           country: checkoutForm.country,
           orderNotice: checkoutForm.orderNotice,
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          const orderId: string = data.id;
-          // for every product in the order we are calling addOrderProduct function that adds fields to the customer_order_product table
-          for (let i = 0; i < products.length; i++) {
-            let productId: string = products[i].id;
-            addOrderProduct(orderId, products[i].id, products[i].amount);
-          }
-        })
-        .then(() => {
-          setCheckoutForm({
-            name: "",
-            lastname: "",
-            phone: "",
-            email: "",
-            cardName: "",
-            cardNumber: "",
-            expirationDate: "",
-            cvc: "",
-            company: "",
-            adress: "",
-            apartment: "",
-            city: "",
-            country: "",
-            postalCode: "",
-            orderNotice: "",
-          });
-          clearCart();
-          toast.success("Order created successfuly");
-          setTimeout(() => {
-            router.push("/");
-          }, 1000);
         });
+
+        const data = await response.json();
+        const orderId: string = data.id;
+
+        // Add products to order
+        for (let i = 0; i < products.length; i++) {
+          await addOrderProduct(orderId, products[i].id, products[i].amount);
+        }
+
+        // Clear form and cart
+        setCheckoutForm({
+          name: "",
+          lastname: "",
+          phone: "",
+          email: "",
+          company: "",
+          adress: "",
+          apartment: "",
+          city: "",
+          country: "",
+          postalCode: "",
+          orderNotice: "",
+        });
+        clearCart();
+        toast.success("Order created successfully! You will be contacted for payment.");
+        setTimeout(() => {
+          router.push("/");
+        }, 1000);
+      } catch (error) {
+        console.error("Error creating order:", error);
+        toast.error("Failed to create order. Please try again.");
+      }
     } else {
-      toast.error("You need to enter values in the input fields");
+      toast.error("You need to enter values in all required fields");
     }
   };
 
@@ -147,21 +118,18 @@ const CheckoutPage = () => {
     productId: string,
     productQuantity: number
   ) => {
-    // sending API POST request for the table customer_order_product that does many to many relatioship for order and product
-    const response = await apiClient.post("/api/order-product", {
-      method: "POST", // or 'PUT'
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    try {
+
+      await apiClient.post("/api/order-product", {
         customerOrderId: orderId,
         productId: productId,
         quantity: productQuantity,
-      }),
-    });
+      });
+    } catch (error) {
+      console.error("Error creating product order:", error);
+      throw error;
+    }
   };
-
-  
 
   useEffect(() => {
     if (products.length === 0) {
@@ -173,28 +141,20 @@ const CheckoutPage = () => {
   return (
     <div className="bg-white">
       <SectionTitle title="Checkout" path="Home | Cart | Checkout" />
-      {/* Background color split screen for large screens */}
-      <div
-        className="hidden h-full w-1/2 bg-white lg:block"
-        aria-hidden="true"
-      />
-      <div
-        className="hidden h-full w-1/2 bg-gray-50 lg:block"
-        aria-hidden="true"
-      />
+      
+      <div className="hidden h-full w-1/2 bg-white lg:block" aria-hidden="true" />
+      <div className="hidden h-full w-1/2 bg-gray-50 lg:block" aria-hidden="true" />
 
       <main className="relative mx-auto grid max-w-screen-2xl grid-cols-1 gap-x-16 lg:grid-cols-2 lg:px-8 xl:gap-x-48">
         <h1 className="sr-only">Order information</h1>
 
+        {/* Order Summary */}
         <section
           aria-labelledby="summary-heading"
           className="bg-gray-50 px-4 pb-10 pt-16 sm:px-6 lg:col-start-2 lg:row-start-1 lg:bg-transparent lg:px-0 lg:pb-16"
         >
           <div className="mx-auto max-w-lg lg:max-w-none">
-            <h2
-              id="summary-heading"
-              className="text-lg font-medium text-gray-900"
-            >
+            <h2 id="summary-heading" className="text-lg font-medium text-gray-900">
               Order summary
             </h2>
 
@@ -203,10 +163,7 @@ const CheckoutPage = () => {
               className="divide-y divide-gray-200 text-sm font-medium text-gray-900"
             >
               {products.map((product) => (
-                <li
-                  key={product?.id}
-                  className="flex items-start space-x-4 py-6"
-                >
+                <li key={product?.id} className="flex items-start space-x-4 py-6">
                   <Image
                     src={product?.image ? `/${product?.image}` : "/product_placeholder.jpg"}
                     alt={product?.title}
@@ -221,7 +178,6 @@ const CheckoutPage = () => {
                   <p className="flex-none text-base font-medium">
                     ${product?.price}
                   </p>
-                  <p></p>
                 </li>
               ))}
             </ul>
@@ -231,17 +187,14 @@ const CheckoutPage = () => {
                 <dt className="text-gray-600">Subtotal</dt>
                 <dd>${total}</dd>
               </div>
-
               <div className="flex items-center justify-between">
                 <dt className="text-gray-600">Shipping</dt>
                 <dd>$5</dd>
               </div>
-
               <div className="flex items-center justify-between">
                 <dt className="text-gray-600">Taxes</dt>
                 <dd>${total / 5}</dd>
               </div>
-
               <div className="flex items-center justify-between border-t border-gray-200 pt-6">
                 <dt className="text-base">Total</dt>
                 <dd className="text-base">
@@ -252,8 +205,10 @@ const CheckoutPage = () => {
           </div>
         </section>
 
+
         <form className="px-4 pt-16 sm:px-6 lg:col-start-1 lg:row-start-1 lg:px-0">
           <div className="mx-auto max-w-lg lg:max-w-none">
+            {/* Contact Information */}
             <section aria-labelledby="contact-info-heading">
               <h2
                 id="contact-info-heading"
@@ -267,7 +222,7 @@ const CheckoutPage = () => {
                   htmlFor="name-input"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Name
+                  Name *
                 </label>
                 <div className="mt-1">
                   <input
@@ -282,6 +237,7 @@ const CheckoutPage = () => {
                     id="name-input"
                     name="name-input"
                     autoComplete="text"
+                    required
                     className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                   />
                 </div>
@@ -292,7 +248,7 @@ const CheckoutPage = () => {
                   htmlFor="lastname-input"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Lastname
+                  Lastname *
                 </label>
                 <div className="mt-1">
                   <input
@@ -307,6 +263,7 @@ const CheckoutPage = () => {
                     id="lastname-input"
                     name="lastname-input"
                     autoComplete="text"
+                    required
                     className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                   />
                 </div>
@@ -317,7 +274,7 @@ const CheckoutPage = () => {
                   htmlFor="phone-input"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Phone number
+                  Phone number *
                 </label>
                 <div className="mt-1">
                   <input
@@ -331,7 +288,8 @@ const CheckoutPage = () => {
                     type="tel"
                     id="phone-input"
                     name="phone-input"
-                    autoComplete="text"
+                    autoComplete="tel"
+                    required
                     className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                   />
                 </div>
@@ -342,7 +300,7 @@ const CheckoutPage = () => {
                   htmlFor="email-address"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Email address
+                  Email address *
                 </label>
                 <div className="mt-1">
                   <input
@@ -357,123 +315,35 @@ const CheckoutPage = () => {
                     id="email-address"
                     name="email-address"
                     autoComplete="email"
+                    required
                     className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                   />
                 </div>
               </div>
             </section>
 
-            <section aria-labelledby="payment-heading" className="mt-10">
-              <h2
-                id="payment-heading"
-                className="text-lg font-medium text-gray-900"
-              >
-                Payment details
-              </h2>
-
-              <div className="mt-6 grid grid-cols-3 gap-x-4 gap-y-6 sm:grid-cols-4">
-                <div className="col-span-3 sm:col-span-4">
-                  <label
-                    htmlFor="name-on-card"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Name on card
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      type="text"
-                      id="name-on-card"
-                      name="name-on-card"
-                      autoComplete="cc-name"
-                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                      value={checkoutForm.cardName}
-                      onChange={(e) =>
-                        setCheckoutForm({
-                          ...checkoutForm,
-                          cardName: e.target.value,
-                        })
-                      }
-                    />
+            {/* Payment Notice */}
+            <section className="mt-10">
+              <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
+                <div className="flex">
+                  <div className="flex-shrink-0">
+                    <svg className="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                    </svg>
                   </div>
-                </div>
-
-                <div className="col-span-3 sm:col-span-4">
-                  <label
-                    htmlFor="card-number"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Card number
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      type="text"
-                      id="card-number"
-                      name="card-number"
-                      autoComplete="cc-number"
-                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                      value={checkoutForm.cardNumber}
-                      onChange={(e) =>
-                        setCheckoutForm({
-                          ...checkoutForm,
-                          cardNumber: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                </div>
-
-                <div className="col-span-2 sm:col-span-3">
-                  <label
-                    htmlFor="expiration-date"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Expiration date (MM/YY)
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      type="text"
-                      name="expiration-date"
-                      id="expiration-date"
-                      autoComplete="cc-exp"
-                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                      value={checkoutForm.expirationDate}
-                      onChange={(e) =>
-                        setCheckoutForm({
-                          ...checkoutForm,
-                          expirationDate: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="cvc"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    CVC or CVV
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      type="text"
-                      name="cvc"
-                      id="cvc"
-                      autoComplete="csc"
-                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                      value={checkoutForm.cvc}
-                      onChange={(e) =>
-                        setCheckoutForm({
-                          ...checkoutForm,
-                          cvc: e.target.value,
-                        })
-                      }
-                    />
+                  <div className="ml-3">
+                    <h3 className="text-sm font-medium text-blue-800">
+                      Payment Information
+                    </h3>
+                    <div className="mt-2 text-sm text-blue-700">
+                      <p>Payment will be processed after order confirmation. You will be contacted for payment details.</p>
+                    </div>
                   </div>
                 </div>
               </div>
             </section>
 
+            {/* Shipping Address */}
             <section aria-labelledby="shipping-heading" className="mt-10">
               <h2
                 id="shipping-heading"
@@ -488,13 +358,14 @@ const CheckoutPage = () => {
                     htmlFor="company"
                     className="block text-sm font-medium text-gray-700"
                   >
-                    Company
+                    Company *
                   </label>
                   <div className="mt-1">
                     <input
                       type="text"
                       id="company"
                       name="company"
+                      required
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                       value={checkoutForm.company}
                       onChange={(e) =>
@@ -512,7 +383,7 @@ const CheckoutPage = () => {
                     htmlFor="address"
                     className="block text-sm font-medium text-gray-700"
                   >
-                    Address
+                    Address *
                   </label>
                   <div className="mt-1">
                     <input
@@ -520,6 +391,7 @@ const CheckoutPage = () => {
                       id="address"
                       name="address"
                       autoComplete="street-address"
+                      required
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                       value={checkoutForm.adress}
                       onChange={(e) =>
@@ -537,13 +409,14 @@ const CheckoutPage = () => {
                     htmlFor="apartment"
                     className="block text-sm font-medium text-gray-700"
                   >
-                    Apartment, suite, etc.
+                    Apartment, suite, etc. *
                   </label>
                   <div className="mt-1">
                     <input
                       type="text"
                       id="apartment"
                       name="apartment"
+                      required
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                       value={checkoutForm.apartment}
                       onChange={(e) =>
@@ -561,7 +434,7 @@ const CheckoutPage = () => {
                     htmlFor="city"
                     className="block text-sm font-medium text-gray-700"
                   >
-                    City
+                    City *
                   </label>
                   <div className="mt-1">
                     <input
@@ -569,6 +442,7 @@ const CheckoutPage = () => {
                       id="city"
                       name="city"
                       autoComplete="address-level2"
+                      required
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                       value={checkoutForm.city}
                       onChange={(e) =>
@@ -586,7 +460,7 @@ const CheckoutPage = () => {
                     htmlFor="region"
                     className="block text-sm font-medium text-gray-700"
                   >
-                    Country
+                    Country *
                   </label>
                   <div className="mt-1">
                     <input
@@ -594,6 +468,7 @@ const CheckoutPage = () => {
                       id="region"
                       name="region"
                       autoComplete="address-level1"
+                      required
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                       value={checkoutForm.country}
                       onChange={(e) =>
@@ -611,7 +486,7 @@ const CheckoutPage = () => {
                     htmlFor="postal-code"
                     className="block text-sm font-medium text-gray-700"
                   >
-                    Postal code
+                    Postal code *
                   </label>
                   <div className="mt-1">
                     <input
@@ -619,6 +494,7 @@ const CheckoutPage = () => {
                       id="postal-code"
                       name="postal-code"
                       autoComplete="postal-code"
+                      required
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                       value={checkoutForm.postalCode}
                       onChange={(e) =>
@@ -663,7 +539,7 @@ const CheckoutPage = () => {
                 onClick={makePurchase}
                 className="w-full rounded-md border border-transparent bg-blue-500 px-20 py-2 text-lg font-medium text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-gray-50 sm:order-last"
               >
-                Pay Now
+                Place Order
               </button>
             </div>
           </div>
