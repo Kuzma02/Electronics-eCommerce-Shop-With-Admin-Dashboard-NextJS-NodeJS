@@ -22,6 +22,7 @@ const RegisterPage = () => {
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
     return emailRegex.test(email);
   };
+  
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     const email = e.target[2].value;
@@ -59,14 +60,27 @@ const RegisterPage = () => {
         }),
       });
 
-      if (res.status === 400) {
-        toast.error("This email is already registered");
-        setError("The email already in use");
-      }
-      if (res.status === 200) {
+      const data = await res.json();
+
+      if (res.ok) {
         setError("");
         toast.success("Registration successful");
         router.push("/login");
+      } else {
+        // Handle different types of errors
+        if (data.details && Array.isArray(data.details)) {
+          // Validation errors
+          const errorMessage = data.details.map((err: any) => err.message).join(", ");
+          setError(errorMessage);
+          toast.error(errorMessage);
+        } else if (data.error) {
+          // General errors
+          setError(data.error);
+          toast.error(data.error);
+        } else {
+          setError("Registration failed");
+          toast.error("Registration failed");
+        }
       }
     } catch (error) {
       toast.error("Error, try again");
