@@ -2,10 +2,19 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const bcrypt = require("bcryptjs");
 
+// Helper function to exclude password from user object
+function excludePassword(user) {
+  if (!user) return user;
+  const { password, ...userWithoutPassword } = user;
+  return userWithoutPassword;
+}
+
 async function getAllUsers(request, response) {
   try {
     const users = await prisma.user.findMany({});
-    return response.json(users);
+    // Exclude password from all users
+    const usersWithoutPasswords = users.map(user => excludePassword(user));
+    return response.json(usersWithoutPasswords);
   } catch (error) {
     return response.status(500).json({ error: "Error fetching users" });
   }
@@ -23,7 +32,8 @@ async function createUser(request, response) {
         role,
       },
     });
-    return response.status(201).json(user);
+    // Exclude password from response
+    return response.status(201).json(excludePassword(user));
   } catch (error) {
     console.error("Error creating user:", error);
     return response.status(500).json({ error: "Error creating user" });
@@ -56,7 +66,8 @@ async function updateUser(request, response) {
       },
     });
 
-    return response.status(200).json(updatedUser);
+    // Exclude password from response
+    return response.status(200).json(excludePassword(updatedUser));
   } catch (error) {
     return response.status(500).json({ error: "Error updating user" });
   }
@@ -87,7 +98,8 @@ async function getUser(request, response) {
   if (!user) {
     return response.status(404).json({ error: "User not found" });
   }
-  return response.status(200).json(user);
+  // Exclude password from response
+  return response.status(200).json(excludePassword(user));
 }
 
 async function getUserByEmail(request, response) {
@@ -100,7 +112,8 @@ async function getUserByEmail(request, response) {
   if (!user) {
     return response.status(404).json({ error: "User not found" });
   }
-  return response.status(200).json(user);
+  // Exclude password from response
+  return response.status(200).json(excludePassword(user));
 }
 
 module.exports = {
