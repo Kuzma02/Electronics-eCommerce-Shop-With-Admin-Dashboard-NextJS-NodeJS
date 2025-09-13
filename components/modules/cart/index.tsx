@@ -4,7 +4,8 @@ import { useProductStore } from "@/app/_zustand/store";
 import toast from "react-hot-toast";
 import Image from "next/image"
 import Link from "next/link";
-import { FaCircleQuestion } from "react-icons/fa6";
+import { FaCheck, FaCircleQuestion, FaClock, FaXmark } from "react-icons/fa6";
+import QuantityInputCart from "@/components/QuantityInputCart";
 
 export const CartModule = () => {
 
