@@ -6,6 +6,7 @@ import {
   SingleProductDynamicFields,
   AddToWishlistBtn,
 } from "@/components";
+import apiClient from "@/lib/api";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import React from "react";
@@ -26,14 +27,14 @@ interface SingleProductPageProps {
 const SingleProductPage = async ({ params }: SingleProductPageProps) => {
   const paramsAwaited = await params;
   // sending API request for a single product with a given product slug
-  const data = await fetch(
-    `http://localhost:3001/api/slugs/${paramsAwaited?.productSlug}`
+  const data = await apiClient.get(
+    `/api/slugs/${paramsAwaited?.productSlug}`
   );
   const product = await data.json();
 
   // sending API request for more than 1 product image if it exists
-  const imagesData = await fetch(
-    `http://localhost:3001/api/images/${paramsAwaited?.id}`
+  const imagesData = await apiClient.get(
+    `/api/images/${paramsAwaited?.id}`
   );
   const images = await imagesData.json();
 

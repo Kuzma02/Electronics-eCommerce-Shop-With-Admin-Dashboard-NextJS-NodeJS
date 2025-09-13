@@ -9,6 +9,7 @@ import {
   formatCategoryName,
 } from "../../../../../utils/categoryFormating";
 import { nanoid } from "nanoid";
+import apiClient from "@/lib/api";
 
 interface DashboardProductDetailsProps {
   params: { id: number };
@@ -27,7 +28,7 @@ const DashboardProductDetails = ({
     const requestOptions = {
       method: "DELETE",
     };
-    fetch(`http://localhost:3001/api/products/${id}`, requestOptions)
+    apiClient.delete(`/api/products/${id}`, requestOptions)
       .then((response) => {
         if (response.status !== 204) {
           if (response.status === 400) {
@@ -65,7 +66,7 @@ const DashboardProductDetails = ({
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(product),
     };
-    fetch(`http://localhost:3001/api/products/${id}`, requestOptions)
+    apiClient.put(`/api/products/${id}`, requestOptions)
       .then((response) => {
         if (response.status === 200) {
           return response.json();
@@ -85,7 +86,7 @@ const DashboardProductDetails = ({
     formData.append("uploadedFile", file);
 
     try {
-      const response = await fetch("http://localhost:3001/api/main-image", {
+      const response = await apiClient.post("/api/main-image", {
         method: "POST",
         body: formData,
       });
@@ -103,7 +104,7 @@ const DashboardProductDetails = ({
 
   // fetching main product data including other product images
   const fetchProductData = async () => {
-    fetch(`http://localhost:3001/api/products/${id}`)
+    apiClient.get(`/api/products/${id}`)
       .then((res) => {
         return res.json();
       })
@@ -111,7 +112,7 @@ const DashboardProductDetails = ({
         setProduct(data);
       });
 
-    const imagesData = await fetch(`http://localhost:3001/api/images/${id}`, {
+    const imagesData = await apiClient.get(`/api/images/${id}`, {
       cache: "no-store",
     });
     const images = await imagesData.json();
@@ -120,7 +121,7 @@ const DashboardProductDetails = ({
 
   // fetching all product categories. It will be used for displaying categories in select category input
   const fetchCategories = async () => {
-    fetch(`http://localhost:3001/api/categories`)
+    apiClient.get(`/api/categories`)
       .then((res) => {
         return res.json();
       })

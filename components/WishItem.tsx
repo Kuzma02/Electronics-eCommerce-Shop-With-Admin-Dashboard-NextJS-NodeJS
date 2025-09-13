@@ -18,6 +18,7 @@ import toast from "react-hot-toast";
 import { FaHeartCrack } from "react-icons/fa6";
 import { deleteWishItem } from "@/app/actions";
 import { useSession } from "next-auth/react";
+import apiClient from "@/lib/api";
 
 interface wishItemStateTrackers {
   isWishItemDeleted: boolean;
@@ -43,7 +44,7 @@ const WishItem = ({
 
   const getUserByEmail = async () => {
     if (session?.user?.email) {
-      fetch(`http://localhost:3001/api/users/email/${session?.user?.email}`, {
+      apiClient.get(`/api/users/email/${session?.user?.email}`, {
         cache: "no-store",
       })
         .then((response) => response.json())
@@ -57,7 +58,7 @@ const WishItem = ({
     
     if (userId) {
 
-      fetch(`http://localhost:3001/api/wishlist/${userId}/${productId}`, {method: "DELETE"}).then(
+      apiClient.delete(`/api/wishlist/${userId}/${productId}`, {method: "DELETE"}).then(
         (response) => {
           removeFromWishlist(productId);
           toast.success("Item removed from your wishlist");

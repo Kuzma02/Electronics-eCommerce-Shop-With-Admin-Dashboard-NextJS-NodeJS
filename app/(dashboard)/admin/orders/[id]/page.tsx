@@ -1,5 +1,6 @@
 "use client";
 import { DashboardSidebar } from "@/components";
+import apiClient from "@/lib/api";
 import { isValidEmailAddressFormat, isValidNameOrLastname } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
@@ -51,16 +52,16 @@ const AdminSingleOrder = () => {
 
   useEffect(() => {
     const fetchOrderData = async () => {
-      const response = await fetch(
-        `http://localhost:3001/api/orders/${params?.id}`
+      const response = await apiClient.get(
+        `/api/orders/${params?.id}`
       );
       const data: Order = await response.json();
       setOrder(data);
     };
 
     const fetchOrderProducts = async () => {
-      const response = await fetch(
-        `http://localhost:3001/api/order-product/${params?.id}`
+      const response = await apiClient.get(
+        `/api/order-product/${params?.id}`
       );
       const data: OrderProduct[] = await response.json();
       setOrderProducts(data);
@@ -98,7 +99,7 @@ const AdminSingleOrder = () => {
         return;
       }
 
-      fetch(`http://localhost:3001/api/orders/${order?.id}`, {
+      apiClient.put(`/api/orders/${order?.id}`, {
         method: "PUT", // or 'PUT'
         headers: {
           "Content-Type": "application/json",
@@ -125,12 +126,12 @@ const AdminSingleOrder = () => {
       method: "DELETE",
     };
 
-    fetch(
-      `http://localhost:3001/api/order-product/${order?.id}`,
+    apiClient.delete(
+      `/api/order-product/${order?.id}`,
       requestOptions
     ).then((response) => {
-      fetch(
-        `http://localhost:3001/api/orders/${order?.id}`,
+      apiClient.delete(
+        `/api/orders/${order?.id}`,
         requestOptions
       ).then((response) => {
         toast.success("Order deleted successfully");

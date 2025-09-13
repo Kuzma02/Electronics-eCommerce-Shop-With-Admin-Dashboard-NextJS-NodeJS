@@ -1,5 +1,6 @@
 "use client";
 import { DashboardSidebar } from "@/components";
+import apiClient from "@/lib/api";
 import { convertCategoryNameToURLFriendly as convertSlugToURLFriendly } from "@/utils/categoryFormating";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
@@ -43,7 +44,7 @@ const AddNewProduct = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(product),
     };
-    fetch(`http://localhost:3001/api/products`, requestOptions)
+    apiClient.post(`/api/products`, requestOptions)
       .then((response) => {
         if (response.status === 201) {
           return response.json();
@@ -74,7 +75,7 @@ const AddNewProduct = () => {
     formData.append("uploadedFile", file);
 
     try {
-      const response = await fetch("http://localhost:3001/api/main-image", {
+      const response = await apiClient.post("/api/main-image", {
         method: "POST",
         body: formData,
       });
@@ -90,7 +91,7 @@ const AddNewProduct = () => {
   };
 
   const fetchCategories = async () => {
-    fetch(`http://localhost:3001/api/categories`)
+    apiClient.get(`/api/categories`)
       .then((res) => {
         return res.json();
       })

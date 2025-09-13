@@ -10,6 +10,7 @@
 
 import React from "react";
 import ProductItem from "./ProductItem";
+import apiClient from "@/lib/api";
 
 const Products = async ({ params, searchParams }: { params: { slug?: string[] }, searchParams: { [key: string]: string | string[] | undefined } }) => {
   // getting all data from URL slug and preparing everything for sending GET request
@@ -38,8 +39,7 @@ const Products = async ({ params, searchParams }: { params: { slug?: string[] },
   }
 
   // sending API request with filtering, sorting and pagination for getting all products
-  const data = await fetch(
-    `http://localhost:3001/api/products?filters[price][$lte]=${
+  const data = await apiClient.get(`/api/products?filters[price][$lte]=${
       searchParams?.price || 3000
     }&filters[rating][$gte]=${
       Number(searchParams?.rating) || 0
