@@ -13,6 +13,14 @@ const orderProductRouter = require('./routes/customer_order_product');
 const wishlistRouter = require('./routes/wishlist');
 var cors = require("cors");
 
+// Import logging middleware
+const { 
+  addRequestId, 
+  requestLogger, 
+  errorLogger, 
+  securityLogger 
+} = require('./middleware/requestLogger');
+
 // Import rate limiting middleware
 const {
   generalLimiter,
@@ -32,6 +40,21 @@ const {
 } = require('./middleware/advancedRateLimiter');
 
 const app = express();
+
+// Trust proxy for accurate IP addresses
+app.set('trust proxy', 1);
+
+// Add request ID to all requests
+app.use(addRequestId);
+
+// Security logging (check for suspicious patterns)
+app.use(securityLogger);
+
+// Standard request logging
+app.use(requestLogger);
+
+// Error logging (only logs 4xx and 5xx responses)
+app.use(errorLogger);
 
 const allowedOrigins = [
   'http://localhost:3000',
@@ -104,7 +127,8 @@ app.get('/health', (req, res) => {
   res.status(200).json({ 
     status: 'OK', 
     timestamp: new Date().toISOString(),
-    rateLimiting: 'enabled'
+    rateLimiting: 'enabled',
+    requestId: req.reqId
   });
 });
 
@@ -118,12 +142,31 @@ app.get('/rate-limit-info', (req, res) => {
     search: '30 searches per minute',
     orders: '15 order operations per 15 minutes',
     wishlist: '20 operations per 5 minutes',
-    products: '60 requests per minute'
+    products: '60 requests per minute',
+    requestId: req.reqId
+  });
+});
+
+// 404 handler
+app.use('*', (req, res) => {
+  res.status(404).json({
+    error: 'Route not found',
+    requestId: req.reqId
+  });
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error('Error:', err.message);
+  res.status(500).json({
+    error: 'Internal server error',
+    requestId: req.reqId
   });
 });
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-  console.log('Rate limiting enabled for all endpoints');
+  console.log('Rate limiting and request logging enabled for all endpoints');
+  console.log('Logs are being written to server/logs/ directory');
 });

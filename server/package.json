@@ -4,7 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "logs": "node view-logs.js",
+    "logs:access": "node view-logs.js access",
+    "logs:error": "node view-logs.js error",
+    "logs:security": "node view-logs.js security",
+    "logs:analyze": "node view-logs.js analyze"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +21,7 @@
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "express": "^4.18.3",
+    "morgan": "^1.10.0",
     "mysql": "^2.18.1",
     "nanoid": "^5.0.6",
     "prisma": "^5.12.1"
