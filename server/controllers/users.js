@@ -1,5 +1,4 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = require("../utills/db"); // ✅ Fixed: removed .default
 const bcrypt = require("bcryptjs");
 
 // Helper function to exclude password from user object

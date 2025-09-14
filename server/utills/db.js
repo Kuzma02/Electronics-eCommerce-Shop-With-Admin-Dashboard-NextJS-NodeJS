@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client"; 
+const { PrismaClient } = require("@prisma/client");
 
 const prismaClientSingleton = () => {
     // Validate that DATABASE_URL is present
@@ -24,14 +24,10 @@ const prismaClientSingleton = () => {
     });
 }
 
-type PrismaClientSingleton = ReturnType<typeof prismaClientSingleton>;
-
-const globalForPrisma = globalThis as unknown as {
-    prisma: PrismaClientSingleton | undefined;
-}
+const globalForPrisma = globalThis;
 
 const prisma = globalForPrisma.prisma ?? prismaClientSingleton();
 
-export default prisma;
+module.exports = prisma;
 
 if(process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;

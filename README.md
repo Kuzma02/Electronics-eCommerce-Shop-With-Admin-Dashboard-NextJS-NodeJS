@@ -124,7 +124,8 @@ We have applied this method by examining the code after each new added functiona
 </ol>
 
 ```
-DATABASE_URL="mysql://username:password@localhost:3306/singitronic_nextjs"
+NODE_ENV=development
+DATABASE_URL="mysql://username:password@localhost:3306/singitronic_nextjs?sslmode=disabled"
 NEXTAUTH_SECRET=12D16C923BA17672F89B18C1DB22A
 NEXTAUTH_URL=http://localhost:3000
 ```
@@ -132,7 +133,8 @@ NEXTAUTH_URL=http://localhost:3000
 <p>7. After you do it, you need to create another .env file in the server folder and put the same DATABASE_URL you used in the previous .env file:</p>
 
 ```
-DATABASE_URL="mysql://username:password@localhost:3306/singitronic_nextjs"
+NODE_ENV=development
+DATABASE_URL="mysql://username:password@localhost:3306/singitronic_nextjs?sslmode=disabled"
 ```
 
 <p>8. Now you need to open your terminal of choice in the root folder of the project and write:</p>
