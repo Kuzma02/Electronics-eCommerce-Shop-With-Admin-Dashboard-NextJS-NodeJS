@@ -36,8 +36,22 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# Database backups
+/backups/
+*.sql
+*.dump
+*.backup
 
-# application logs (contains sensitive data)
-/server/logs/
-/logs/
+# Logs
 *.log
+logs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+Thumbs.db
+.DS_Store

@@ -1,8 +1,31 @@
-node_modules
-# Keep environment variables out of version control
-.env
+# Dependencies
+node_modules/
 
-# application logs (contains sensitive data)
-/server/logs/
-/logs/
+# Environment variables
+.env
+.env.local
+.env.production
+
+# Logs
+logs/
 *.log
+
+# Database backups
+backups/
+*.sql
+*.dump
+*.backup
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Temporary files
+tmp/
+temp/

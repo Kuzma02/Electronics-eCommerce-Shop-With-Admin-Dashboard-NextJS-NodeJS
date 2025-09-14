@@ -10,7 +10,12 @@
     "logs:access": "node view-logs.js access",
     "logs:error": "node view-logs.js error",
     "logs:security": "node view-logs.js security",
-    "logs:analyze": "node view-logs.js analyze"
+    "logs:analyze": "node view-logs.js analyze",
+    "migrate:validate": "node scripts/migration-validator.js validate",
+    "migrate:backup": "node scripts/migration-validator.js backup",
+    "migrate:safe": "node scripts/migration-validator.js safe-migrate",
+    "db:backup": "node scripts/backup-database.js",
+    "db:restore": "node scripts/restore-database.js"
   },
   "keywords": [],
   "author": "",
@@ -21,7 +26,7 @@
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "express": "^4.18.3",
-    "morgan": "^1.10.0",
+    "morgan": "^1.10.1",
     "mysql": "^2.18.1",
     "nanoid": "^5.0.6",
     "prisma": "^5.12.1"
