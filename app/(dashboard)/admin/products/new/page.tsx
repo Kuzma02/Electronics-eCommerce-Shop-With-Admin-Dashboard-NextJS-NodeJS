@@ -2,6 +2,7 @@
 import { DashboardSidebar } from "@/components";
 import apiClient from "@/lib/api";
 import { convertCategoryNameToURLFriendly as convertSlugToURLFriendly } from "@/utils/categoryFormating";
+import { sanitizeFormData } from "@/lib/form-sanitize";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -39,17 +40,18 @@ const AddNewProduct = () => {
       return;
     }
 
+    // Sanitize form data before sending to API
+    const sanitizedProduct = sanitizeFormData(product);
+
     const requestOptions: any = {
       method: "post",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(product),
+      body: JSON.stringify(sanitizedProduct),
     };
     apiClient.post(`/api/products`, requestOptions)
       .then((response) => {
         if (response.status === 201) {
           return response.json();
-        } else {
-          throw Error("There was an error while creating product");
         }
       })
       .then((data) => {
@@ -66,7 +68,7 @@ const AddNewProduct = () => {
         });
       })
       .catch((error) => {
-        toast.error("There was an error while creating product");
+        toast.error("Error adding product");
       });
   };
 

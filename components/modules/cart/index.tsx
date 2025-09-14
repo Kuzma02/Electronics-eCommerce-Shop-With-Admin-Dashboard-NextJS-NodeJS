@@ -6,6 +6,7 @@ import Image from "next/image"
 import Link from "next/link";
 import { FaCheck, FaCircleQuestion, FaClock, FaXmark } from "react-icons/fa6";
 import QuantityInputCart from "@/components/QuantityInputCart";
+import { sanitize } from "@/lib/sanitize";
 
 export const CartModule = () => {
 
@@ -50,7 +51,7 @@ export const CartModule = () => {
                           href={`#`}
                           className="font-medium text-gray-700 hover:text-gray-800"
                         >
-                          {product.title}
+                          {sanitize(product.title)}
                         </Link>
                       </h3>
                     </div>

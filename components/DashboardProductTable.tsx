@@ -15,6 +15,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import CustomButton from "./CustomButton";
 import apiClient from "@/lib/api";
+import { sanitize } from "@/lib/sanitize";
 
 const DashboardProductTable = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -80,15 +81,15 @@ const DashboardProductTable = () => {
                             width={48}
                             height={48}
                             src={product?.mainImage ? `/${product?.mainImage}` : "/product_placeholder.jpg"}
-                            alt="Avatar Tailwind CSS Component"
+                            alt={sanitize(product?.title) || "Product image"}
                             className="w-auto h-auto"
                           />
                         </div>
                       </div>
                       <div>
-                        <div className="font-bold">{product?.title}</div>
+                        <div className="font-bold">{sanitize(product?.title)}</div>
                         <div className="text-sm opacity-50">
-                          {product?.manufacturer}
+                          {sanitize(product?.manufacturer)}
                         </div>
                       </div>
                     </div>

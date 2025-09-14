@@ -1,17 +1,30 @@
 "use client";
 import { DashboardSidebar } from "@/components";
 import { isValidEmailAddressFormat } from "@/lib/utils";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
+import { sanitizeFormData } from "@/lib/form-sanitize";
 
 const DashboardCreateNewUser = () => {
-  const [userInput, setUserInput] = useState({
+  const [userInput, setUserInput] = useState<{
+    email: string;
+    password: string;
+    role: string;
+  }>({
     email: "",
     password: "",
     role: "user",
   });
 
-  const addNewUser = () => {
+  const addNewUser = async () => {
+    if (userInput.email === "" || userInput.password === "") {
+      toast.error("You must enter all input values to add a user");
+      return;
+    }
+
+    // Sanitize form data before sending to API
+    const sanitizedUserInput = sanitizeFormData(userInput);
+
     if (
       userInput.email.length > 3 &&
       userInput.role.length > 0 &&
@@ -26,7 +39,7 @@ const DashboardCreateNewUser = () => {
         const requestOptions: any = {
           method: "post",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(userInput),
+          body: JSON.stringify(sanitizedUserInput),
         };
         ap(`/api/users`, requestOptions)
           .then((response) => {
