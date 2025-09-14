@@ -21,7 +21,8 @@ const AdminOrders = () => {
     const fetchOrders = async () => {
       const response = await apiClient.get("/api/orders");
       const data = await response.json();
-      setOrders(data);
+      
+      setOrders(data?.orders);
     };
     fetchOrders();
   }, []);
@@ -49,7 +50,7 @@ const AdminOrders = () => {
           </thead>
           <tbody>
             {/* row 1 */}
-            {orders &&
+            {orders && orders.length > 0 &&
               orders.map((order) => (
                 <tr key={order?.id}>
                   <th>

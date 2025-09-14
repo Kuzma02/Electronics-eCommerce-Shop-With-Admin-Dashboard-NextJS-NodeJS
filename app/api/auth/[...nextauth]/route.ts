@@ -1,4 +1,4 @@
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import { Account, User as AuthUser } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -7,7 +7,7 @@ import bcrypt from "bcryptjs";
 import prisma from "@/utils/db";
 import { nanoid } from "nanoid";
 
-export const authOptions: any = {
+export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   providers: [
     CredentialsProvider({
@@ -40,33 +40,84 @@ export const authOptions: any = {
         } catch (err: any) {
           throw new Error(err);
         }
+        return null;
       },
-    })
-    // ... existing providers ...
+    }),
+    // Uncomment and configure these providers as needed
+    // GithubProvider({
+    //   clientId: process.env.GITHUB_ID!,
+    //   clientSecret: process.env.GITHUB_SECRET!,
+    // }),
+    // GoogleProvider({
+    //   clientId: process.env.GOOGLE_CLIENT_ID!,
+    //   clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    // }),
   ],
   callbacks: {
     async signIn({ user, account }: { user: AuthUser; account: Account }) {
-      if (account?.provider == "credentials") {
+      if (account?.provider === "credentials") {
         return true;
       }
-      // ... existing provider logic ...
+      
+      // Handle OAuth providers
+      if (account?.provider === "github" || account?.provider === "google") {
+        try {
+          // Check if user exists in database
+          const existingUser = await prisma.user.findFirst({
+            where: {
+              email: user.email!,
+            },
+          });
+
+          if (!existingUser) {
+            // Create new user for OAuth providers
+            await prisma.user.create({
+              data: {
+                id: nanoid(),
+                email: user.email!,
+                role: "user",
+                // OAuth users don't have passwords
+                password: null,
+              },
+            });
+          }
+          return true;
+        } catch (error) {
+          console.error("Error in signIn callback:", error);
+          return false;
+        }
+      }
+      
+      return true;
     },
     async jwt({ token, user }) {
       if (user) {
         token.role = user.role;
+        token.id = user.id;
       }
       return token;
     },
     async session({ session, token }) {
       if (token) {
-        session.user.role = token.role;
+        session.user.role = token.role as string;
+        session.user.id = token.id as string;
       }
       return session;
     },
   },
   pages: {
     signIn: '/login',
+    error: '/login', // Redirect to login page on auth errors
   },
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+  },
+  jwt: {
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+  debug: process.env.NODE_ENV === "development",
 };
 
 export const handler = NextAuth(authOptions);

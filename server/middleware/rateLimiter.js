@@ -3,7 +3,7 @@ const rateLimit = require('express-rate-limit');
 // General API rate limiter - applies to all API routes
 const generalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per windowMs
+  max: 200, // Limit each IP to 100 requests per windowMs
   message: {
     error: 'Too many requests from this IP, please try again later.',
     retryAfter: '15 minutes'
@@ -21,7 +21,7 @@ const generalLimiter = rateLimit({
 // Strict rate limiter for authentication endpoints
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5, // Limit each IP to 5 login attempts per windowMs
+  max: 10, // Limit each IP to 5 login attempts per windowMs
   message: {
     error: 'Too many authentication attempts, please try again later.',
     retryAfter: '15 minutes'
@@ -40,7 +40,7 @@ const authLimiter = rateLimit({
 // Strict rate limiter for user registration
 const registerLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
-  max: 3, // Limit each IP to 3 registration attempts per hour
+  max: 6, // Limit each IP to 3 registration attempts per hour
   message: {
     error: 'Too many registration attempts, please try again later.',
     retryAfter: '1 hour'
@@ -58,7 +58,7 @@ const registerLimiter = rateLimit({
 // Moderate rate limiter for user management endpoints
 const userManagementLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 20, // Limit each IP to 20 requests per windowMs
+  max: 40, // Limit each IP to 20 requests per windowMs
   message: {
     error: 'Too many user management requests, please try again later.',
     retryAfter: '15 minutes'
@@ -76,7 +76,7 @@ const userManagementLimiter = rateLimit({
 // Rate limiter for file uploads
 const uploadLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 10, // Limit each IP to 10 uploads per windowMs
+  max: 20, // Limit each IP to 10 uploads per windowMs
   message: {
     error: 'Too many file uploads, please try again later.',
     retryAfter: '15 minutes'
@@ -94,7 +94,7 @@ const uploadLimiter = rateLimit({
 // Rate limiter for search endpoints
 const searchLimiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
-  max: 30, // Limit each IP to 30 search requests per minute
+  max: 60, // Limit each IP to 30 search requests per minute
   message: {
     error: 'Too many search requests, please try again later.',
     retryAfter: '1 minute'
@@ -112,7 +112,7 @@ const searchLimiter = rateLimit({
 // Rate limiter for order operations
 const orderLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 15, // Limit each IP to 15 order operations per windowMs
+  max: 20, // Limit each IP to 15 order operations per windowMs
   message: {
     error: 'Too many order operations, please try again later.',
     retryAfter: '15 minutes'
