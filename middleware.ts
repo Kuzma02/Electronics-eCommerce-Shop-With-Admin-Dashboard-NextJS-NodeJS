@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 export default withAuth(
   function middleware(req) {
-    // Additional server-side check for admin routes
+    // Check for admin routes
     if (req.nextUrl.pathname.startsWith("/admin")) {
       if (req.nextauth.token?.role !== "admin") {
         return NextResponse.redirect(new URL("/", req.url));
@@ -13,7 +13,7 @@ export default withAuth(
   {
     callbacks: {
       authorized: ({ token, req }) => {
-        // Allow access to admin routes only if user is authenticated and has admin role
+        // Admin routes require admin token
         if (req.nextUrl.pathname.startsWith("/admin")) {
           return !!token && token.role === "admin";
         }
