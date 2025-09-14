@@ -1,11 +1,6 @@
-import { NextResponse } from "next/server";
-import { ZodError } from "zod";
-
-export class AppError extends Error {
-  public statusCode: number;
-  public isOperational: boolean;
-
-  constructor(message: string, statusCode: number = 500, isOperational: boolean = true) {
+// Server-side error handler for Express.js
+class AppError extends Error {
+  constructor(message, statusCode = 500, isOperational = true) {
     super(message);
     this.statusCode = statusCode;
     this.isOperational = isOperational;
@@ -14,16 +9,8 @@ export class AppError extends Error {
   }
 }
 
-// Enhanced error response interface
-export interface ErrorResponse {
-  error: string;
-  details?: any;
-  requestId?: string;
-  timestamp?: string;
-}
-
-// Standardized error logging
-export const logError = (error: unknown, context?: string) => {
+// Server-side error logging
+const logError = (error, context = '') => {
   const timestamp = new Date().toISOString();
   const contextStr = context ? ` [${context}]` : '';
   
@@ -43,8 +30,8 @@ export const logError = (error: unknown, context?: string) => {
   }
 };
 
-// Enhanced Prisma error handling
-export const handlePrismaError = (error: any): ErrorResponse => {
+// Enhanced Prisma error handling for server
+const handlePrismaError = (error) => {
   if (!error || typeof error !== 'object' || !('code' in error)) {
     return {
       error: "Internal server error. Please try again later.",
@@ -52,7 +39,7 @@ export const handlePrismaError = (error: any): ErrorResponse => {
     };
   }
 
-  const prismaError = error as any;
+  const prismaError = error;
   
   switch (prismaError.code) {
     case 'P2002':
@@ -95,82 +82,8 @@ export const handlePrismaError = (error: any): ErrorResponse => {
   }
 };
 
-// Enhanced API error handler for Next.js
-export const handleApiError = (error: unknown, requestId?: string): NextResponse => {
-  const timestamp = new Date().toISOString();
-  
-  // Log the error
-  logError(error, 'API');
-
-  // Zod validation errors
-  if (error instanceof ZodError) {
-    const errors = error.errors.map(err => ({
-      field: err.path.join('.'),
-      message: err.message
-    }));
-    
-    return new NextResponse(
-      JSON.stringify({ 
-        error: "Validation failed", 
-        details: errors,
-        requestId,
-        timestamp
-      }),
-      { 
-        status: 400,
-        headers: { "Content-Type": "application/json" }
-      }
-    );
-  }
-
-  // Custom application errors
-  if (error instanceof AppError) {
-    return new NextResponse(
-      JSON.stringify({ 
-        error: error.message,
-        requestId,
-        timestamp
-      }),
-      { 
-        status: error.statusCode,
-        headers: { "Content-Type": "application/json" }
-      }
-    );
-  }
-
-  // Prisma errors
-  if (error && typeof error === 'object' && 'code' in error) {
-    const errorResponse = handlePrismaError(error);
-    const statusCode = getStatusCodeFromPrismaError(error as any);
-    
-    return new NextResponse(
-      JSON.stringify({ 
-        ...errorResponse,
-        requestId
-      }),
-      { 
-        status: statusCode,
-        headers: { "Content-Type": "application/json" }
-      }
-    );
-  }
-
-  // Generic server error
-  return new NextResponse(
-    JSON.stringify({ 
-      error: "Internal server error. Please try again later.",
-      requestId,
-      timestamp
-    }),
-    { 
-      status: 500,
-      headers: { "Content-Type": "application/json" }
-    }
-  );
-};
-
-// Helper function to get status code from Prisma error
-const getStatusCodeFromPrismaError = (error: any): number => {
+// Get status code from Prisma error
+const getStatusCodeFromPrismaError = (error) => {
   switch (error.code) {
     case 'P2002':
       return 409; // Conflict
@@ -187,8 +100,8 @@ const getStatusCodeFromPrismaError = (error: any): number => {
   }
 };
 
-// Server-side error handler for Express.js routes
-export const handleServerError = (error: unknown, res: any, context?: string): void => {
+// Server-side error handler
+const handleServerError = (error, res, context = '') => {
   const timestamp = new Date().toISOString();
   
   // Log the error
@@ -206,7 +119,7 @@ export const handleServerError = (error: unknown, res: any, context?: string): v
   // Prisma errors
   if (error && typeof error === 'object' && 'code' in error) {
     const errorResponse = handlePrismaError(error);
-    const statusCode = getStatusCodeFromPrismaError(error as any);
+    const statusCode = getStatusCodeFromPrismaError(error);
     
     res.status(statusCode).json(errorResponse);
     return;
@@ -220,24 +133,20 @@ export const handleServerError = (error: unknown, res: any, context?: string): v
 };
 
 // Async wrapper for server functions
-export const asyncHandler = (fn: Function) => {
-  return (req: any, res: any, next?: any) => {
+const asyncHandler = (fn) => {
+  return (req, res, next) => {
     Promise.resolve(fn(req, res, next)).catch((error) => {
       handleServerError(error, res, `${req.method} ${req.path}`);
     });
   };
 };
 
-// Async wrapper for Next.js API routes
-export const asyncApiHandler = (fn: Function) => {
-  return async (req: Request, context?: any) => {
-    try {
-      return await fn(req, context);
-    } catch (error) {
-      const requestId = req.headers.get('x-request-id') || 
-                       req.headers.get('x-forwarded-for') || 
-                       'unknown';
-      return handleApiError(error, requestId);
-    }
-  };
+module.exports = {
+  AppError,
+  logError,
+  handlePrismaError,
+  getStatusCodeFromPrismaError,
+  handleServerError,
+  asyncHandler
 };
+

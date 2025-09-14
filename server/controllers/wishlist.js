@@ -1,114 +1,143 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+const { asyncHandler, AppError } = require("../utills/errorHandler");
 
-async function getAllWishlist(request, response) {
-  try {
-    const wishlist = await prisma.wishlist.findMany({
-      include: {
-        product: true, // Include product details
-      },
-    });
-    return response.json(wishlist);
-  } catch (error) {
-    return response.status(500).json({ error: "Error fetching wishlist" });
-  }
-}
+const getAllWishlist = asyncHandler(async (request, response) => {
+  const wishlist = await prisma.wishlist.findMany({
+    include: {
+      product: true, // Include product details
+    },
+  });
+  return response.json(wishlist);
+});
 
-async function getAllWishlistByUserId(request, response) {
+const getAllWishlistByUserId = asyncHandler(async (request, response) => {
   const { userId } = request.params;
-  try {
-    // getting all products by userId
-    const wishlist = await prisma.wishlist.findMany({
-      where: {
-        userId: userId,
-      },
-      include: {
-        product: true, // Include product details
-      },
-    });
-    return response.json(wishlist);
-  } catch (error) {
-    return response.status(500).json({ error: "Error fetching wishlist" });
+
+  if (!userId) {
+    throw new AppError("User ID is required", 400);
   }
-}
 
-async function createWishItem(request, response) {
-  try {
-    const { userId, productId } = request.body;
-    const wishItem = await prisma.wishlist.create({
-      data: {
-        userId,
-        productId,
-      },
-    });
-    return response.status(201).json(wishItem);
-  } catch (error) {
-    console.error("Error creating wish item:", error);
-    return response.status(500).json({ error: "Error creating wish item" });
+  // getting all products by userId
+  const wishlist = await prisma.wishlist.findMany({
+    where: {
+      userId: userId,
+    },
+    include: {
+      product: true, // Include product details
+    },
+  });
+  return response.json(wishlist);
+});
+
+const createWishItem = asyncHandler(async (request, response) => {
+  const { userId, productId } = request.body;
+
+  if (!userId) {
+    throw new AppError("User ID is required", 400);
   }
-}
 
-async function deleteWishItem(request, response) {
-  try {
-    const { userId, productId } = request.params;
-    
-    await prisma.wishlist.deleteMany({
-      where: {
-        userId: userId,
-        productId: productId,
-      },
-    });
-    
-    return response.status(204).send();
-
-  } catch (error) {
-    console.log(error);
-    return response.status(500).json({ error: "Error deleting wish item" });
+  if (!productId) {
+    throw new AppError("Product ID is required", 400);
   }
-}
 
-async function getSingleProductFromWishlist(request, response){
-  try {
-    const { userId, productId } = request.params;
-    
-    const wishItem = await prisma.wishlist.findMany({
-      where: {
-        userId: userId,
-        productId: productId,
-      },
-    });
-    
-    return response.status(200).json(wishItem);
+  // Check if product exists
+  const product = await prisma.product.findUnique({
+    where: { id: productId }
+  });
 
-  } catch (error) {
-    console.log(error);
-    return response.status(500).json({ error: "Error getting wish item" });
+  if (!product) {
+    throw new AppError("Product not found", 404);
   }
-}
 
-async function deleteAllWishItemByUserId(request, response) {
-  try {
-    const { userId } = request.params;
-    
-    await prisma.wishlist.deleteMany({
-      where: {
-        userId: userId,
-      },
-    });
-    
-    return response.status(204).send();
+  // Check if wishlist item already exists
+  const existingWishItem = await prisma.wishlist.findFirst({
+    where: {
+      userId,
+      productId,
+    },
+  });
 
-  } catch (error) {
-    console.log(error);
-    return response.status(500).json({ error: "Error deleting wish item" });
+  if (existingWishItem) {
+    throw new AppError("Product is already in wishlist", 409);
   }
-}
 
+  const wishItem = await prisma.wishlist.create({
+    data: {
+      userId,
+      productId,
+    },
+  });
+  return response.status(201).json(wishItem);
+});
+
+const deleteWishItem = asyncHandler(async (request, response) => {
+  const { userId, productId } = request.params;
+
+  if (!userId) {
+    throw new AppError("User ID is required", 400);
+  }
+
+  if (!productId) {
+    throw new AppError("Product ID is required", 400);
+  }
+
+  const deletedItems = await prisma.wishlist.deleteMany({
+    where: {
+      userId: userId,
+      productId: productId,
+    },
+  });
+
+  if (deletedItems.count === 0) {
+    throw new AppError("Wishlist item not found", 404);
+  }
+  
+  return response.status(204).send();
+});
+
+const getSingleProductFromWishlist = asyncHandler(async (request, response) => {
+  const { userId, productId } = request.params;
+
+  if (!userId) {
+    throw new AppError("User ID is required", 400);
+  }
+
+  if (!productId) {
+    throw new AppError("Product ID is required", 400);
+  }
+  
+  const wishItem = await prisma.wishlist.findMany({
+    where: {
+      userId: userId,
+      productId: productId,
+    },
+  });
+  
+  return response.status(200).json(wishItem);
+});
+
+const deleteAllWishItemByUserId = asyncHandler(async (request, response) => {
+  const { userId } = request.params;
+
+  if (!userId) {
+    throw new AppError("User ID is required", 400);
+  }
+  
+  await prisma.wishlist.deleteMany({
+    where: {
+      userId: userId,
+    },
+  });
+  
+  return response.status(204).send();
+});
 
 module.exports = {
   getAllWishlistByUserId,
   getAllWishlist,
   createWishItem,
   deleteWishItem,
-  getSingleProductFromWishlist
+  getSingleProductFromWishlist,
+  deleteAllWishItemByUserId
 };

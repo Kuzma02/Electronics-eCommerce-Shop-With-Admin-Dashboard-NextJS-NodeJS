@@ -39,6 +39,10 @@ const {
   productLimiter
 } = require('./middleware/advancedRateLimiter');
 
+const {
+  handleServerError
+} = require('./utills/errorHandler');
+
 const app = express();
 
 // Trust proxy for accurate IP addresses
@@ -157,11 +161,7 @@ app.use('*', (req, res) => {
 
 // Global error handler
 app.use((err, req, res, next) => {
-  console.error('Error:', err.message);
-  res.status(500).json({
-    error: 'Internal server error',
-    requestId: req.reqId
-  });
+  handleServerError(err, res, `${req.method} ${req.path}`);
 });
 
 const PORT = process.env.PORT || 3001;

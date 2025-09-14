@@ -1,4 +1,5 @@
 const prisma = require("../utills/db"); // ✅ Use shared connection with SSL
+const { asyncHandler, handleServerError, AppError } = require("../utills/errorHandler");
 
 // Security: Define whitelists for allowed filter types and operators
 const ALLOWED_FILTER_TYPES = ['price', 'rating', 'category', 'inStock', 'outOfStock'];
@@ -68,17 +69,13 @@ function buildSafeFilterObject(filterArray) {
   return filterObj;
 }
 
-async function getAllProducts(request, response) {
+const getAllProducts = asyncHandler(async (request, response) => {
   const mode = request.query.mode || "";
   
   // checking if we are on the admin products page because we don't want to have filtering, sorting and pagination there
   if(mode === "admin"){
-    try {
-      const adminProducts = await prisma.product.findMany({});
-      return response.json(adminProducts);
-    } catch (error) {
-      return response.status(500).json({ error: "Error fetching products" });
-    }
+    const adminProducts = await prisma.product.findMany({});
+    return response.json(adminProducts);
   } else {
     const dividerLocation = request.url.indexOf("?");
     let filterObj = {};
@@ -192,8 +189,22 @@ async function getAllProducts(request, response) {
 
     let products;
 
-    try {
-      if (Object.keys(filterObj).length === 0) {
+    if (Object.keys(filterObj).length === 0) {
+      products = await prisma.product.findMany({
+        skip: (validatedPage - 1) * 10,
+        take: 12,
+        include: {
+          category: {
+            select: {
+              name: true,
+            },
+          },
+        },
+        orderBy: sortObj,
+      });
+    } else {
+      // Security: Handle category filter with proper validation
+      if (filterObj.category && filterObj.category.equals) {
         products = await prisma.product.findMany({
           skip: (validatedPage - 1) * 10,
           take: 12,
@@ -204,217 +215,196 @@ async function getAllProducts(request, response) {
               },
             },
           },
+          where: {
+            ...whereClause,
+            category: {
+              name: {
+                equals: filterObj.category.equals,
+              },
+            },
+          },
           orderBy: sortObj,
         });
       } else {
-        // Security: Handle category filter with proper validation
-        if (filterObj.category && filterObj.category.equals) {
-          products = await prisma.product.findMany({
-            skip: (validatedPage - 1) * 10,
-            take: 12,
-            include: {
-              category: {
-                select: {
-                  name: true,
-                },
+        products = await prisma.product.findMany({
+          skip: (validatedPage - 1) * 10,
+          take: 12,
+          include: {
+            category: {
+              select: {
+                name: true,
               },
             },
-            where: {
-              ...whereClause,
-              category: {
-                name: {
-                  equals: filterObj.category.equals,
-                },
-              },
-            },
-            orderBy: sortObj,
-          });
-        } else {
-          products = await prisma.product.findMany({
-            skip: (validatedPage - 1) * 10,
-            take: 12,
-            include: {
-              category: {
-                select: {
-                  name: true,
-                },
-              },
-            },
-            where: whereClause,
-            orderBy: sortObj,
-          });
-        }
-      }
-
-      return response.json(products);
-    } catch (error) {
-      console.error("Database query error:", error);
-      return response.status(500).json({ error: "Error fetching products" });
-    }
-  }
-}
-
-async function getAllProductsOld(request, response) {
-  try {
-    const products = await prisma.product.findMany({
-      include: {
-        category: {
-          select: {
-            name: true,
           },
-        },
-      },
-    });
-    response.status(200).json(products);
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-async function createProduct(request, response) {
-  try {
-    const {
-      slug,
-      title,
-      mainImage,
-      price,
-      description,
-      manufacturer,
-      categoryId,
-      inStock,
-    } = request.body;
-    const product = await prisma.product.create({
-      data: {
-        slug,
-        title,
-        mainImage,
-        price,
-        rating: 5,
-        description,
-        manufacturer,
-        categoryId,
-        inStock,
-      },
-    });
-    return response.status(201).json(product);
-  } catch (error) {
-    console.error("Error creating product:", error); // Dodajemo log za proveru
-    return response.status(500).json({ error: "Error creating product" });
-  }
-}
-
-// Method for updating existing product
-async function updateProduct(request, response) {
-  try {
-    const { id } = request.params; // Getting a slug from params
-    const {
-      slug,
-      title,
-      mainImage,
-      price,
-      rating,
-      description,
-      manufacturer,
-      categoryId,
-      inStock,
-    } = request.body;
-    // Finding a product by slug
-    const existingProduct = await prisma.product.findUnique({
-      where: {
-        id,
-      },
-    });
-
-    if (!existingProduct) {
-      return response.status(404).json({ error: "Product not found" });
-    }
-
-    // Updating found product
-    const updatedProduct = await prisma.product.update({
-      where: {
-        id, // Using id of the found product
-      },
-      data: {
-        title: title,
-        mainImage: mainImage,
-        slug: slug,
-        price: price,
-        rating: rating,
-        description: description,
-        manufacturer: manufacturer,
-        categoryId: categoryId,
-        inStock: inStock,
-      },
-    });
-
-    return response.status(200).json(updatedProduct);
-  } catch (error) {
-    return response.status(500).json({ error: "Error updating product" });
-  }
-}
-
-// Method for deleting a product
-async function deleteProduct(request, response) {
-  try {
-    const { id } = request.params;
-
-        // Check for related records in wishlist table
-        const relatedOrderProductItems = await prisma.customer_order_product.findMany({
-          where: {
-            productId: id,
-          },
+          where: whereClause,
+          orderBy: sortObj,
         });
-        if(relatedOrderProductItems.length > 0){
-          return response.status(400).json({ error: 'Cannot delete product because of foreign key constraint. ' });
-        }
-
-    await prisma.product.delete({
-      where: {
-        id,
-      },
-    });
-    return response.status(204).send();
-  } catch (error) {
-    console.log(error);
-    return response.status(500).json({ error: "Error deleting product" });
-  }
-}
-
-async function searchProducts(request, response) {
-  try {
-    const { query } = request.query;
-    if (!query) {
-      return response
-        .status(400)
-        .json({ error: "Query parameter is required" });
+      }
     }
-
-    const products = await prisma.product.findMany({
-      where: {
-        OR: [
-          {
-            title: {
-              contains: query,
-            },
-          },
-          {
-            description: {
-              contains: query,
-            },
-          },
-        ],
-      },
-    });
 
     return response.json(products);
-  } catch (error) {
-    console.error("Error searching products:", error);
-    return response.status(500).json({ error: "Error searching products" });
   }
-}
+});
 
-async function getProductById(request, response) {
+const getAllProductsOld = asyncHandler(async (request, response) => {
+  const products = await prisma.product.findMany({
+    include: {
+      category: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
+  response.status(200).json(products);
+});
+
+const createProduct = asyncHandler(async (request, response) => {
+  const {
+    slug,
+    title,
+    mainImage,
+    price,
+    description,
+    manufacturer,
+    categoryId,
+    inStock,
+  } = request.body;
+
+  // Basic validation
+  if (!title || !slug || !price || !categoryId) {
+    throw new AppError("Missing required fields: title, slug, price, and categoryId are required", 400);
+  }
+
+  const product = await prisma.product.create({
+    data: {
+      slug,
+      title,
+      mainImage,
+      price,
+      rating: 5,
+      description,
+      manufacturer,
+      categoryId,
+      inStock,
+    },
+  });
+  return response.status(201).json(product);
+});
+
+// Method for updating existing product
+const updateProduct = asyncHandler(async (request, response) => {
   const { id } = request.params;
+  const {
+    slug,
+    title,
+    mainImage,
+    price,
+    rating,
+    description,
+    manufacturer,
+    categoryId,
+    inStock,
+  } = request.body;
+
+  // Basic validation
+  if (!id) {
+    throw new AppError("Product ID is required", 400);
+  }
+
+  // Finding a product by id
+  const existingProduct = await prisma.product.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!existingProduct) {
+    throw new AppError("Product not found", 404);
+  }
+
+  // Updating found product
+  const updatedProduct = await prisma.product.update({
+    where: {
+      id,
+    },
+    data: {
+      title: title,
+      mainImage: mainImage,
+      slug: slug,
+      price: price,
+      rating: rating,
+      description: description,
+      manufacturer: manufacturer,
+      categoryId: categoryId,
+      inStock: inStock,
+    },
+  });
+
+  return response.status(200).json(updatedProduct);
+});
+
+// Method for deleting a product
+const deleteProduct = asyncHandler(async (request, response) => {
+  const { id } = request.params;
+
+  if (!id) {
+    throw new AppError("Product ID is required", 400);
+  }
+
+  // Check for related records in order_product table
+  const relatedOrderProductItems = await prisma.customer_order_product.findMany({
+    where: {
+      productId: id,
+    },
+  });
+  
+  if(relatedOrderProductItems.length > 0){
+    throw new AppError("Cannot delete product because of foreign key constraint", 400);
+  }
+
+  await prisma.product.delete({
+    where: {
+      id,
+    },
+  });
+  return response.status(204).send();
+});
+
+const searchProducts = asyncHandler(async (request, response) => {
+  const { query } = request.query;
+  
+  if (!query) {
+    throw new AppError("Query parameter is required", 400);
+  }
+
+  const products = await prisma.product.findMany({
+    where: {
+      OR: [
+        {
+          title: {
+            contains: query,
+          },
+        },
+        {
+          description: {
+            contains: query,
+          },
+        },
+      ],
+    },
+  });
+
+  return response.json(products);
+});
+
+const getProductById = asyncHandler(async (request, response) => {
+  const { id } = request.params;
+  
+  if (!id) {
+    throw new AppError("Product ID is required", 400);
+  }
+
   const product = await prisma.product.findUnique({
     where: {
       id: id,
@@ -423,11 +413,13 @@ async function getProductById(request, response) {
       category: true,
     },
   });
+  
   if (!product) {
-    return response.status(404).json({ error: "Product not found" });
+    throw new AppError("Product not found", 404);
   }
+  
   return response.status(200).json(product);
-}
+});
 
 module.exports = {
   getAllProducts,
