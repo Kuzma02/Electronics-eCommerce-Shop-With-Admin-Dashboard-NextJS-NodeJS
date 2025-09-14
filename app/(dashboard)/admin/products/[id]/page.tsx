@@ -2,7 +2,7 @@
 import { CustomButton, DashboardSidebar, SectionTitle } from "@/components";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, use } from "react";
 import toast from "react-hot-toast";
 import {
   convertCategoryNameToURLFriendly as convertSlugToURLFriendly,
@@ -12,12 +12,15 @@ import { nanoid } from "nanoid";
 import apiClient from "@/lib/api";
 
 interface DashboardProductDetailsProps {
-  params: { id: number };
+  params: Promise<{ id: string }>;
 }
 
 const DashboardProductDetails = ({
-  params: { id },
+  params,
 }: DashboardProductDetailsProps) => {
+  const resolvedParams = use(params);
+  const id = resolvedParams.id;
+  
   const [product, setProduct] = useState<Product>();
   const [categories, setCategories] = useState<Category[]>();
   const [otherImages, setOtherImages] = useState<OtherImages[]>([]);
@@ -149,7 +152,7 @@ const DashboardProductDetails = ({
             <input
               type="text"
               className="input input-bordered w-full max-w-xs"
-              value={product?.title}
+              value={product?.title || ""}
               onChange={(e) =>
                 setProduct({ ...product!, title: e.target.value })
               }
@@ -167,7 +170,7 @@ const DashboardProductDetails = ({
             <input
               type="text"
               className="input input-bordered w-full max-w-xs"
-              value={product?.price}
+              value={product?.price || ""}
               onChange={(e) =>
                 setProduct({ ...product!, price: Number(e.target.value) })
               }
@@ -184,7 +187,7 @@ const DashboardProductDetails = ({
             <input
               type="text"
               className="input input-bordered w-full max-w-xs"
-              value={product?.manufacturer}
+              value={product?.manufacturer || ""}
               onChange={(e) =>
                 setProduct({ ...product!, manufacturer: e.target.value })
               }
@@ -202,7 +205,7 @@ const DashboardProductDetails = ({
             <input
               type="text"
               className="input input-bordered w-full max-w-xs"
-              value={product?.slug && convertSlugToURLFriendly(product?.slug)}
+              value={product?.slug ? convertSlugToURLFriendly(product?.slug) : ""}
               onChange={(e) =>
                 setProduct({
                   ...product!,
@@ -222,7 +225,7 @@ const DashboardProductDetails = ({
             </div>
             <select
               className="select select-bordered"
-              value={product?.inStock}
+              value={product?.inStock ?? 1}
               onChange={(e) => {
                 setProduct({ ...product!, inStock: Number(e.target.value) });
               }}
@@ -241,7 +244,7 @@ const DashboardProductDetails = ({
             </div>
             <select
               className="select select-bordered"
-              value={product?.categoryId}
+              value={product?.categoryId || ""}
               onChange={(e) =>
                 setProduct({
                   ...product!,
@@ -308,7 +311,7 @@ const DashboardProductDetails = ({
             </div>
             <textarea
               className="textarea textarea-bordered h-24"
-              value={product?.description}
+              value={product?.description || ""}
               onChange={(e) =>
                 setProduct({ ...product!, description: e.target.value })
               }

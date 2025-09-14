@@ -1,19 +1,22 @@
 "use client";
 import { DashboardSidebar } from "@/components";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, use } from "react";
 import toast from "react-hot-toast";
 import { formatCategoryName } from "../../../../../utils/categoryFormating";
 import { convertCategoryNameToURLFriendly } from "../../../../../utils/categoryFormating";
 import apiClient from "@/lib/api";
 
 interface DashboardSingleCategoryProps {
-  params: { id: number };
+  params: Promise<{ id: string }>;
 }
 
 const DashboardSingleCategory = ({
-  params: { id },
+  params,
 }: DashboardSingleCategoryProps) => {
+  const resolvedParams = use(params);
+  const id = resolvedParams.id;
+  
   const [categoryInput, setCategoryInput] = useState<{ name: string }>({
     name: "",
   });

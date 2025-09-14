@@ -1,18 +1,21 @@
 "use client";
 import { DashboardSidebar } from "@/components";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, use } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { isValidEmailAddressFormat } from "@/lib/utils";
 import apiClient from "@/lib/api";
 
 interface DashboardUserDetailsProps {
-  params: { id: number };
+  params: Promise<{ id: string }>;
 }
 
 const DashboardSingleUserPage = ({
-  params: { id },
+  params,
 }: DashboardUserDetailsProps) => {
+  const resolvedParams = use(params);
+  const id = resolvedParams.id;
+  
   const [userInput, setUserInput] = useState<{
     email: string;
     newPassword: string;
