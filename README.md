@@ -124,6 +124,7 @@ We have applied this method by examining the code after each new added functiona
 </ol>
 
 ```
+NEXT_PUBLIC_API_BASE_URL=http://localhost:3001
 NODE_ENV=development
 DATABASE_URL="mysql://username:password@localhost:3306/singitronic_nextjs?sslmode=disabled"
 NEXTAUTH_SECRET=12D16C923BA17672F89B18C1DB22A
