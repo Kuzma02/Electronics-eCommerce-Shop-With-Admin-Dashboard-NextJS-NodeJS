@@ -474,3 +474,28 @@
 ::1 - - [14/Sep/2025:09:42:24 +0000] "GET /api/wishlist/AT9Z7Hmu4dQYGzV_ITgiA HTTP/1.1" 200 2 "http://localhost:3000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36" reqId=LRTxU1Eb userId=anonymous
 ::1 - - [14/Sep/2025:09:42:24 +0000] "GET /api/wishlist/AT9Z7Hmu4dQYGzV_ITgiA HTTP/1.1" 200 2 "http://localhost:3000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36" reqId=XogmRrJP userId=anonymous
 ::1 - - [14/Sep/2025:09:42:26 +0000] "GET /api/products HTTP/1.1" 200 3367 "-" "node" reqId=_tDSCmLv userId=anonymous
+::1 - - [28/Sep/2025:13:43:09 +0000] "GET /api/products HTTP/1.1" 200 3367 "-" "node" reqId=Jp_TYHpB userId=anonymous
+::1 - - [28/Sep/2025:13:45:09 +0000] "GET /api/slugs/notebook-horizon-demo HTTP/1.1" 200 323 "-" "node" reqId=RuuJd_lh userId=anonymous
+::1 - - [28/Sep/2025:13:45:10 +0000] "GET /api/images/undefined HTTP/1.1" 200 2 "-" "node" reqId=TZhKEr9y userId=anonymous
+::1 - - [28/Sep/2025:13:51:45 +0000] "GET /api/products HTTP/1.1" 200 3367 "-" "node" reqId=tRGJF6KO userId=anonymous
+::1 - - [28/Sep/2025:13:54:22 +0000] "GET /api/slugs/smart-watch-demo HTTP/1.1" 200 321 "-" "node" reqId=Squi79Vz userId=anonymous
+::1 - - [28/Sep/2025:13:54:23 +0000] "GET /api/images/undefined HTTP/1.1" 200 2 "-" "node" reqId=ccaTf7Vi userId=anonymous
+::1 - - [28/Sep/2025:13:57:33 +0000] "OPTIONS /api/orders HTTP/1.1" 500 97 "http://192.168.1.20:3000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36" reqId=qLdfMmBO userId=anonymous
+::1 - - [28/Sep/2025:13:58:03 +0000] "OPTIONS /api/orders HTTP/1.1" 500 97 "http://192.168.1.20:3000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36" reqId=-D6euEvo userId=anonymous
+::1 - - [28/Sep/2025:14:54:40 +0000] "GET /api/products HTTP/1.1" 200 3367 "-" "node" reqId=GPYi3iyQ userId=anonymous
+::1 - - [28/Sep/2025:14:55:56 +0000] "GET /api/products HTTP/1.1" 200 3367 "-" "node" reqId=GCfsO_4O userId=anonymous
+::1 - - [28/Sep/2025:14:56:15 +0000] "GET /api/slugs/notebook-horizon-demo HTTP/1.1" 200 323 "-" "node" reqId=Dybkb-Wh userId=anonymous
+::1 - - [28/Sep/2025:14:56:15 +0000] "GET /api/images/undefined HTTP/1.1" 200 2 "-" "node" reqId=tUGyERJG userId=anonymous
+::1 - - [28/Sep/2025:15:02:52 +0000] "GET /api/slugs/notebook-horizon-demo HTTP/1.1" 200 323 "-" "node" reqId=G2iJ7Ofj userId=anonymous
+::1 - - [28/Sep/2025:15:02:53 +0000] "GET /api/images/undefined HTTP/1.1" 200 2 "-" "node" reqId=Ii3IbZEh userId=anonymous
+::1 - - [28/Sep/2025:15:03:43 +0000] "GET /api/slugs/notebook-horizon-demo HTTP/1.1" 200 323 "-" "node" reqId=WHeF6Hzi userId=anonymous
+::1 - - [28/Sep/2025:15:03:43 +0000] "GET /api/images/undefined HTTP/1.1" 200 2 "-" "node" reqId=TvWM4Jc7 userId=anonymous
+::1 - - [28/Sep/2025:15:03:56 +0000] "GET /api/products HTTP/1.1" 200 3367 "-" "node" reqId=zdbjBObG userId=anonymous
+::1 - - [28/Sep/2025:15:08:47 +0000] "GET /api/products HTTP/1.1" 200 3367 "-" "node" reqId=q8eCZFA9 userId=anonymous
+::1 - - [28/Sep/2025:15:25:37 +0000] "GET /api/products HTTP/1.1" 200 3367 "-" "node" reqId=ophEj-ja userId=anonymous
+::1 - - [28/Sep/2025:15:25:37 +0000] "GET /api/products HTTP/1.1" 200 3367 "-" "node" reqId=vTrwA_aI userId=anonymous
+::1 - - [28/Sep/2025:15:29:11 +0000] "GET /api/products HTTP/1.1" 200 3367 "-" "node" reqId=5jvSwETN userId=anonymous
+::1 - - [28/Sep/2025:15:29:26 +0000] "GET /api/slugs/smart-watch-demo HTTP/1.1" 200 321 "-" "node" reqId=8tgQfPdA userId=anonymous
+::1 - - [28/Sep/2025:15:29:26 +0000] "GET /api/images/undefined HTTP/1.1" 200 2 "-" "node" reqId=QKg_wFai userId=anonymous
+::1 - - [28/Sep/2025:15:30:35 +0000] "GET /api/slugs/smart-watch-demo HTTP/1.1" 200 321 "-" "node" reqId=40yczMcs userId=anonymous
+::1 - - [28/Sep/2025:15:30:35 +0000] "GET /api/images/undefined HTTP/1.1" 200 2 "-" "node" reqId=l8GwfXHE userId=anonymous

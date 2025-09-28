@@ -20,22 +20,22 @@ export { default as QuantityInput } from "./QuantityInput";
 export { default as UrgencyText } from "./UrgencyText";
 export { default as StockAvailabillity } from "./StockAvailabillity";
 export { default as ColorInput } from "./ColorInput";
-export { default as SingleProductRating } from "./SingleProductRating";
+
 export { default as ProductTabs } from "./ProductTabs";
-export { default as RatingPercentElement } from "./RatingPercentElement";
-export { default as SingleReview } from "./SingleReview";
+
+
 export { default as CustomButton } from "./CustomButton";
 export { default as QuantityInputCart } from "./QuantityInputCart";
 export { default as AddToCartSingleProductBtn } from "./AddToCartSingleProductBtn";
 export { default as BuyNowSingleProductBtn } from "./BuyNowSingleProductBtn";
 export { default as SingleProductDynamicFields } from "./SingleProductDynamicFields";
 export { default as CartElement } from "./CartElement";
-export { default as ProductItemRating } from "./ProductItemRating";
+
 export { default as SortBy } from "./SortBy";
-export { default as WishItem } from "./WishItem";
+
 export { default as SectionTitle } from "./SectionTitle";
 export { default as HeartElement } from "./HeartElement";
-export { default as AddToWishlistBtn } from "./AddToWishlistBtn";
+
 export { default as Hero } from "./Hero"; 
 export { default as IntroducingSection } from "./IntroducingSection";
 export { default as Heading } from "./Heading";
