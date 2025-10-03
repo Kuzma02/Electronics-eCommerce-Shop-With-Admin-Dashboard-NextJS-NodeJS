@@ -239,33 +239,34 @@ const demoCategories = [
 ];
 
 async function insertDemoData() {
-  // Gunakan Promise.all untuk menjalankan operasi secara paralel
-  const promises = [
-    // Operasi untuk menyisipkan merchant
-    ...demoMerchant.map((merchant) =>
-        prisma.merchant.create({ data: merchant })
-    ),
-    // Operasi untuk menyisipkan categories
-    ...demoCategories.map((category) =>
-        prisma.category.create({ data: category })
-    ),
-    // Operasi untuk menyisipkan products
-    ...demoProducts.map((product) =>
-        prisma.product.create({ data: product })
-    ),
-  ];
 
-  try {
-    // Tunggu semua promise selesai
-    await Promise.all(promises);
-
-    console.log("All demo data inserted successfully!");
-  } catch (error) {
-    console.error("Error inserting demo data:", error);
+  for (const merchant of demoMerchant) {
+    await prisma.merchant.create({
+      data: merchant,
+    });
   }
+  console.log("Demo merchant inserted successfully!");
+
+  for (const category of demoCategories) {
+    await prisma.category.create({
+      data: category,
+    });
+  }
+  console.log("Demo categories inserted successfully!");
+
+  for (const product of demoProducts) {
+    await prisma.product.create({
+      data: product,
+    });
+  }
+  console.log("Demo products inserted successfully!");
 }
 
 insertDemoData()
-    .finally(async () => {
-      await prisma.$disconnect(); // Pastikan koneksi Prisma ditutup setelah selesai
-    });
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
