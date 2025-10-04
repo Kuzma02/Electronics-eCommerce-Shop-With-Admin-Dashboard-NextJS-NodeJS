@@ -2,24 +2,54 @@
 @tailwind components;
 @tailwind utilities;
 
-
-.range{
-    --range-shdw: #3B82F6;
+.range {
+  --range-shdw: #3b82f6;
 }
 
-.checkbox:checked, .checkbox[checked="true"], .checkbox[aria-checked="true"] {
-    background-repeat: no-repeat;
-    animation: checkmark var(--animation-input, 0.2s) ease-out;
-    background-color: #3B82F6;
-    background-image: linear-gradient(-45deg, transparent 65%, #3B82F6 65.99%),
-      linear-gradient(45deg, transparent 75%, #3B82F6 75.99%),
-      linear-gradient(-45deg, #3B82F6 40%, transparent 40.99%),
-      linear-gradient(
-        45deg,
-        #3B82F6 30%,
-        white 30.99%,
-        white 40%,
-        transparent 40.99%
-      ),
-      linear-gradient(-45deg, white 50%, #3B82F6 50.99%);
+.checkbox:checked,
+.checkbox[checked="true"],
+.checkbox[aria-checked="true"] {
+  background-repeat: no-repeat;
+  animation: checkmark var(--animation-input, 0.2s) ease-out;
+  background-color: #3b82f6;
+  background-image: linear-gradient(-45deg, transparent 65%, #3b82f6 65.99%),
+    linear-gradient(45deg, transparent 75%, #3b82f6 75.99%),
+    linear-gradient(-45deg, #3b82f6 40%, transparent 40.99%),
+    linear-gradient(
+      45deg,
+      #3b82f6 30%,
+      white 30.99%,
+      white 40%,
+      transparent 40.99%
+    ),
+    linear-gradient(-45deg, white 50%, #3b82f6 50.99%);
+}
+
+/* Hero Carousel Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.6s ease-out forwards;
 }

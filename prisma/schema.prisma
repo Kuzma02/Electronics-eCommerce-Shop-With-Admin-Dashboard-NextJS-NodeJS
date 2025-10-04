@@ -84,3 +84,16 @@ model Wishlist {
   user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
 }
+
+model Ads {
+  id        String   @id @default(uuid())
+  image     String
+  name      String
+  title     String
+  desc      String   @db.Text
+  startDate DateTime
+  endDate   DateTime
+  isShow    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
