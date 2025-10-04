@@ -53,7 +53,7 @@ const DashboardSidebar = () => {
           <span className="font-normal">Users</span>
         </div>
       </Link>
-      <Link href="/admin/Merchant">
+      <Link href="/admin/merchant">
         <div className="flex gap-x-2 w-full hover:bg-blue-600 cursor-pointer items-center py-6 pl-5 text-xl text-white">
           <FaStore className="text-2xl" />{" "}
           <span className="font-normal">Merchant</span>
