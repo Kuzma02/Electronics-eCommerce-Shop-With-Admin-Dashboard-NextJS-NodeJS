@@ -92,26 +92,24 @@ const handleInputChange = (
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const response = await apiClient.put(`/api/merchants/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+ const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  try {
+    // This is the correct way to use apiClient.put
+    // It should just take the URL and the data object
+    const response = await apiClient.put(`/api/merchants/${id}`, formData);
 
-      if (!response.ok) {
-        throw new Error("Failed to update merchant");
-      }
-
-      toast.success("Merchant updated successfully");
-      fetchMerchant(); // Refresh data
-    } catch (error) {
-      console.error("Error updating merchant:", error);
-      toast.error("Failed to update merchant");
+    if (!response.ok) {
+      throw new Error("Failed to update merchant");
     }
-  };
+
+    toast.success("Merchant updated successfully");
+    fetchMerchant(); // Refresh data
+  } catch (error) {
+    console.error("Error updating merchant:", error);
+    toast.error("Failed to update merchant");
+  }
+};
 
   const handleDelete = async () => {
     if (!confirm("Are you sure you want to delete this merchant?")) {
