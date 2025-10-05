@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 
 const AddNewProduct = () => {
   const [product, setProduct] = useState<{
+    merchantId?: string;
     title: string;
     price: number;
     manufacturer: string;
@@ -18,6 +19,7 @@ const AddNewProduct = () => {
     slug: string;
     categoryId: string;
   }>({
+    merchantId: "",
     title: "",
     price: 0,
     manufacturer: "",
@@ -28,7 +30,7 @@ const AddNewProduct = () => {
     categoryId: "",
   });
   const [categories, setCategories] = useState<Category[]>([]);
-
+  const [merchants, setMerchants] = useState<Merchant[]>([]);
   const addProduct = async () => {
     if (
       product.title === "" ||
@@ -121,6 +123,22 @@ const AddNewProduct = () => {
       <DashboardSidebar />
       <div className="flex flex-col gap-y-7 xl:ml-5 max-xl:px-5 w-full">
         <h1 className="text-3xl font-semibold">Add new product</h1>
+        <div>
+          <label className="form-control w-full max-w-xs">
+            <div className="label">
+              <span className="label-text">Merchant Info:</span>
+            </div>
+            <input
+              type="text"
+              className="input input-bordered w-full max-w-xs"
+              value={product?.title}
+              onChange={(e) =>
+                setProduct({ ...product, title: e.target.value })
+              }
+            />
+          </label>
+        </div>
+
         <div>
           <label className="form-control w-full max-w-xs">
             <div className="label">

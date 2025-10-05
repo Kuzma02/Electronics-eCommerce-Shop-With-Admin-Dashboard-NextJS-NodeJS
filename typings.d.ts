@@ -12,6 +12,18 @@ interface Product {
   inStock: number;
 }
 
+interface Merchant {
+  id: string;
+  name: string;
+  email: string;
+  description: string;
+  phone: string;
+  address: string;
+  status: "active" | "inactive";
+  createdAt: string;
+  updatedAt: string;
+}
+
 interface SingleProductPageProps {
   params: {
     id: string;
