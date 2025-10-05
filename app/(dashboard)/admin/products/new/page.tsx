@@ -43,21 +43,18 @@ const AddNewProduct = () => {
       return;
     }
 
-    // Sanitize form data before sending to API
-    const sanitizedProduct = sanitizeFormData(product);
+    try {
+      // Sanitize form data before sending to API
+      const sanitizedProduct = sanitizeFormData(product);
 
-    const requestOptions: any = {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(sanitizedProduct),
-    };
-    apiClient.post(`/api/products`, requestOptions)
-      .then((response) => {
-        if (response.status === 201) {
-          return response.json();
-        }
-      })
-      .then((data) => {
+      console.log("Sending product data:", sanitizedProduct);
+
+      // Correct usage of apiClient.post
+      const response = await apiClient.post(`/api/products`, sanitizedProduct);
+
+      if (response.status === 201) {
+        const data = await response.json();
+        console.log("Product created successfully:", data);
         toast.success("Product added successfully");
         setProduct({
           merchantId: "",
@@ -68,12 +65,17 @@ const AddNewProduct = () => {
           mainImage: "",
           description: "",
           slug: "",
-          categoryId: "",
+          categoryId: categories[0]?.id || "",
         });
-      })
-      .catch((error) => {
-        toast.error("Error adding product");
-      });
+      } else {
+        const errorData = await response.json();
+        console.error("Failed to create product:", errorData);
+        toast.error(`"Error:" ${errorData.message || "Failed to add product"}`);
+      }
+    } catch (error) {
+      console.error("Error adding product:", error);
+      toast.error("Network error. Please try again.");
+    }
   };
 
   const fetchMerchants = async () => {
