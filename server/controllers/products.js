@@ -261,6 +261,7 @@ const getAllProductsOld = asyncHandler(async (request, response) => {
 
 const createProduct = asyncHandler(async (request, response) => {
   const {
+    merchantId,
     slug,
     title,
     mainImage,
@@ -271,13 +272,30 @@ const createProduct = asyncHandler(async (request, response) => {
     inStock,
   } = request.body;
 
+  if (!title) {
+    throw new AppError("Missing required field: title", 400);
+  }
+  
   // Basic validation
-  if (!title || !slug || !price || !categoryId) {
-    throw new AppError("Missing required fields: title, slug, price, and categoryId are required", 400);
+  if (!merchantId) {
+    throw new AppError("Missing required field: merchantId", 400);
+  }
+  
+  if (!slug) {
+    throw new AppError("Missing required field: slug", 400);
+  }
+
+  if (!price) {
+    throw new AppError("Missing required field: price", 400);
+  }
+
+  if (!categoryId) {
+    throw new AppError("Missing required field: categoryId", 400);
   }
 
   const product = await prisma.product.create({
     data: {
+      merchantId,
       slug,
       title,
       mainImage,
@@ -296,6 +314,7 @@ const createProduct = asyncHandler(async (request, response) => {
 const updateProduct = asyncHandler(async (request, response) => {
   const { id } = request.params;
   const {
+    merchantId,
     slug,
     title,
     mainImage,
@@ -329,6 +348,7 @@ const updateProduct = asyncHandler(async (request, response) => {
       id,
     },
     data: {
+      merchantId: merchantId,
       title: title,
       mainImage: mainImage,
       slug: slug,
