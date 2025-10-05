@@ -33,6 +33,7 @@ const AddNewProduct = () => {
   const [merchants, setMerchants] = useState<Merchant[]>([]);
   const addProduct = async () => {
     if (
+      !product.merchantId ||
       product.title === "" ||
       product.manufacturer === "" ||
       product.description == "" ||
@@ -59,6 +60,7 @@ const AddNewProduct = () => {
       .then((data) => {
         toast.success("Product added successfully");
         setProduct({
+          merchantId: "",
           title: "",
           price: 0,
           manufacturer: "",
@@ -72,6 +74,20 @@ const AddNewProduct = () => {
       .catch((error) => {
         toast.error("Error adding product");
       });
+  };
+
+  const fetchMerchants = async () => {
+    try {
+      const res = await apiClient.get("/api/merchants");
+      const data: Merchant[] = await res.json();
+      setMerchants(data || []);
+      setProduct((prev) => ({
+      ...prev,
+        merchantId: prev.merchantId || data?.[0]?.id || "",
+      }));
+    } catch (e) {
+      toast.error("Failed to load merchants");
+    }
   };
 
   const uploadFile = async (file: any) => {
@@ -102,6 +118,7 @@ const AddNewProduct = () => {
       .then((data) => {
         setCategories(data);
         setProduct({
+          merchantId: product.merchantId || "",
           title: "",
           price: 0,
           manufacturer: "",
@@ -116,6 +133,7 @@ const AddNewProduct = () => {
 
   useEffect(() => {
     fetchCategories();
+    fetchMerchants();
   }, []);
 
   return (
@@ -128,14 +146,24 @@ const AddNewProduct = () => {
             <div className="label">
               <span className="label-text">Merchant Info:</span>
             </div>
-            <input
-              type="text"
-              className="input input-bordered w-full max-w-xs"
-              value={product?.title}
+            <select
+              className="select select-bordered"
+              value={product?.merchantId}
               onChange={(e) =>
-                setProduct({ ...product, title: e.target.value })
+                setProduct({ ...product, merchantId: e.target.value })
               }
-            />
+            >
+              {merchants.map((merchant) => (
+                <option key={merchant.id} value={merchant.id}>
+                  {merchant.name}
+                </option>
+              ))}
+            </select>
+            {merchants.length === 0 && (
+              <span className="text-xs text-red-500 mt-1">
+                Please create a merchant first.
+              </span>
+            )}
           </label>
         </div>
 
