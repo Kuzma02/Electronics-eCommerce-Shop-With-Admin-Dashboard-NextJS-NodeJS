@@ -18,6 +18,7 @@ import Link from "next/link";
 import { FaBell } from "react-icons/fa6";
 
 import CartElement from "./CartElement";
+import NotificationBell from "./NotificationBell";
 import HeartElement from "./HeartElement";
 import { signOut, useSession } from "next-auth/react";
 import toast from "react-hot-toast";
@@ -81,7 +82,8 @@ const Header = () => {
             <img src="/logo v1 svg.svg" width={300} height={300} alt="singitronic logo" className="relative right-5 max-[1023px]:w-56" />
           </Link>
           <SearchInput />
-          <div className="flex gap-x-10">
+          <div className="flex gap-x-10 items-center">
+            <NotificationBell />
             <HeartElement wishQuantity={wishQuantity} />
             <CartElement />
           </div>
@@ -99,7 +101,7 @@ const Header = () => {
             />
           </Link>
           <div className="flex gap-x-5 items-center">
-            <FaBell className="text-xl" />
+            <NotificationBell />
             <div className="dropdown dropdown-end">
               <div tabIndex={0} role="button" className="w-10">
                 <Image

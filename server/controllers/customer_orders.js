@@ -1,6 +1,7 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const { validateOrderData, ValidationError } = require('../utills/validation');
+const { createOrderUpdateNotification } = require('../utills/notificationHelpers');
 
 async function createCustomerOrder(request, response) {
   try {
@@ -40,23 +41,23 @@ async function createCustomerOrder(request, response) {
       });
     }
 
-    // Check for duplicate orders (same email and total within last 5 minutes)
-    const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+    // Check for duplicate orders (same email and total within last 1 minute) - less strict
+    const oneMinuteAgo = new Date(Date.now() - 1 * 60 * 1000);
     const duplicateOrder = await prisma.customer_order.findFirst({
       where: {
         email: validatedData.email,
         total: validatedData.total,
         dateTime: {
-          gte: fiveMinutesAgo
+          gte: oneMinuteAgo
         }
       }
     });
 
     if (duplicateOrder) {
-      console.log("❌ Duplicate order detected");
+      console.log("❌ Duplicate order detected (same email, amount, within 1 minute)");
       return response.status(409).json({
         error: "Duplicate order detected",
-        details: "An order with the same email and total was created recently. Please wait before creating another order."
+        details: "An identical order was just created. Please wait a moment before creating another order with the same details."
       });
     }
 
@@ -83,6 +84,50 @@ async function createCustomerOrder(request, response) {
 
     console.log("✅ Order created successfully:", corder);
     console.log("Order ID:", corder.id);
+
+    // Create notification for the user if they have an account
+    try {
+      let user = null;
+      
+      // First, try to use userId if provided (from logged-in user)
+      if (request.body.userId) {
+        console.log(`🔍 Using provided userId: ${request.body.userId}`);
+        user = await prisma.user.findUnique({
+          where: { id: request.body.userId }
+        });
+        if (user) {
+          console.log(`✅ Found user by ID: ${user.email}`);
+        } else {
+          console.log(`❌ User not found with ID: ${request.body.userId}`);
+        }
+      }
+      
+      // Fallback: search by email if no userId or user not found
+      if (!user) {
+        console.log(`🔍 Searching user by email: ${validatedData.email}`);
+        user = await prisma.user.findUnique({
+          where: { email: validatedData.email }
+        });
+        if (user) {
+          console.log(`✅ Found user by email: ${user.email}`);
+        }
+      }
+      
+      if (user) {
+        await createOrderUpdateNotification(
+          user.id,
+          'confirmed',
+          corder.id,
+          validatedData.total
+        );
+        console.log(`📧 Order confirmation notification sent to user: ${user.email}`);
+      } else {
+        console.log(`ℹ️  No user account found for email: ${validatedData.email} - notification skipped`);
+      }
+    } catch (notificationError) {
+      console.error('❌ Failed to create order notification:', notificationError);
+      // Don't fail the order if notification fails
+    }
 
     // Log successful order creation (for monitoring)
     console.log(`Order created successfully: ID ${corder.id}, Email: ${validatedData.email}, Total: $${validatedData.total}`);
@@ -188,6 +233,27 @@ async function updateCustomerOrder(request, response) {
         total: validatedData.total,
       },
     });
+
+    // Create notification for status update if status changed
+    if (existingOrder.status !== validatedData.status) {
+      try {
+        const user = await prisma.user.findUnique({
+          where: { email: validatedData.email }
+        });
+        
+        if (user) {
+          await createOrderUpdateNotification(
+            user.id,
+            validatedData.status,
+            updatedOrder.id,
+            validatedData.total
+          );
+          console.log(`📧 Status update notification sent to user: ${user.email} - Status: ${validatedData.status}`);
+        }
+      } catch (notificationError) {
+        console.error('❌ Failed to create status update notification:', notificationError);
+      }
+    }
 
     console.log(`Order updated successfully: ID ${updatedOrder.id}`);
 

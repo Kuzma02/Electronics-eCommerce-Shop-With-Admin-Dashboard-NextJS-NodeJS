@@ -38,24 +38,37 @@ const Products = async ({ params, searchParams }: { params: { slug?: string[] },
     stockMode = "gt";
   }
 
-  // sending API request with filtering, sorting and pagination for getting all products
-  const data = await apiClient.get(`/api/products?filters[price][$lte]=${
-      searchParams?.price || 3000
-    }&filters[rating][$gte]=${
-      Number(searchParams?.rating) || 0
-    }&filters[inStock][$${stockMode}]=1&${
-      params?.slug?.length! > 0
-        ? `filters[category][$equals]=${params?.slug}&`
-        : ""
-    }sort=${searchParams?.sort}&page=${page}`
-  );
+  let products = [];
 
-  const products = await data.json();
+  try {
+    // sending API request with filtering, sorting and pagination for getting all products
+    const data = await apiClient.get(`/api/products?filters[price][$lte]=${
+        searchParams?.price || 3000
+      }&filters[rating][$gte]=${
+        Number(searchParams?.rating) || 0
+      }&filters[inStock][$${stockMode}]=1&${
+        params?.slug?.length! > 0
+          ? `filters[category][$equals]=${params?.slug}&`
+          : ""
+      }sort=${searchParams?.sort}&page=${page}`
+    );
+
+    if (!data.ok) {
+      console.error('Failed to fetch products:', data.statusText);
+      products = [];
+    } else {
+      const result = await data.json();
+      products = Array.isArray(result) ? result : [];
+    }
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    products = [];
+  }
 
   return (
     <div className="grid grid-cols-3 justify-items-center gap-x-2 gap-y-5 max-[1300px]:grid-cols-3 max-lg:grid-cols-2 max-[500px]:grid-cols-1">
       {products.length > 0 ? (
-        products.map((product: Product) => (
+        products.map((product: any) => (
           <ProductItem key={product.id} product={product} color="black" />
         ))
       ) : (
