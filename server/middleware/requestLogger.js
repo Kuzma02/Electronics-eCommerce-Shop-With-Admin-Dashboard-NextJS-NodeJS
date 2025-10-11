@@ -29,10 +29,19 @@ const errorLogStream = fs.createWriteStream(
 );
 
 // Middleware to add request ID
-const addRequestId = (req, res, next) => {
-  req.reqId = require('nanoid').nanoid(8);
-  res.setHeader('X-Request-ID', req.reqId);
-  next();
+const addRequestId = async (req, res, next) => {
+  try {
+    const { nanoid } = await import('nanoid');
+    req.reqId = nanoid(8);
+    res.setHeader('X-Request-ID', req.reqId);
+    next();
+  } catch (error) {
+    console.error('Error generating request ID:', error);
+    // Fallback ID
+    req.reqId = Math.random().toString(36).substr(2, 8);
+    res.setHeader('X-Request-ID', req.reqId);
+    next();
+  }
 };
 
 // Standard request logger
