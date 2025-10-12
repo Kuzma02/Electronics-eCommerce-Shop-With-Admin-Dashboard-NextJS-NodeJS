@@ -43,18 +43,11 @@ const AddNewProduct = () => {
     // Sanitize form data before sending to API
     const sanitizedProduct = sanitizeFormData(product);
 
-    const requestOptions: any = {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(sanitizedProduct),
-    };
-    apiClient.post(`/api/products`, requestOptions)
-      .then((response) => {
-        if (response.status === 201) {
-          return response.json();
-        }
-      })
-      .then((data) => {
+    try {
+      const response = await apiClient.post(`/api/products`, sanitizedProduct);
+
+      if (response.status === 201) {
+        const data = await response.json();
         toast.success("Product added successfully");
         setProduct({
           title: "",
@@ -66,10 +59,14 @@ const AddNewProduct = () => {
           slug: "",
           categoryId: "",
         });
-      })
-      .catch((error) => {
-        toast.error("Error adding product");
-      });
+      } else {
+        const errorData = await response.json();
+        toast.error(errorData.error || "Error adding product");
+      }
+    } catch (error) {
+      console.error("Error adding product:", error);
+      toast.error("Error adding product");
+    }
   };
 
   const uploadFile = async (file: any) => {
@@ -93,7 +90,8 @@ const AddNewProduct = () => {
   };
 
   const fetchCategories = async () => {
-    apiClient.get(`/api/categories`)
+    apiClient
+      .get(`/api/categories`)
       .then((res) => {
         return res.json();
       })

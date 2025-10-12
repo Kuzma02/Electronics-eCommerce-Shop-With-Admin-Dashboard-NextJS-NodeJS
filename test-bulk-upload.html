@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bulk Upload Test</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+      }
+      .upload-form {
+        border: 2px dashed #ccc;
+        padding: 30px;
+        text-align: center;
+        border-radius: 10px;
+      }
+      input[type="file"] {
+        margin: 20px 0;
+      }
+      button {
+        background: #007bff;
+        color: white;
+        padding: 10px 30px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      button:hover {
+        background: #0056b3;
+      }
+      button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+      #result {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 5px;
+      }
+      .success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+      .error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+      pre {
+        text-align: left;
+        background: #f4f4f4;
+        padding: 10px;
+        border-radius: 5px;
+        overflow-x: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🧪 Bulk Upload Test</h1>
+
+    <div class="upload-form">
+      <h2>Upload CSV File</h2>
+      <input type="file" id="fileInput" accept=".csv" />
+      <br />
+      <button id="uploadBtn" onclick="uploadFile()">Upload</button>
+      <p id="status"></p>
+    </div>
+
+    <div id="result"></div>
+
+    <script>
+      const fileInput = document.getElementById("fileInput");
+      const uploadBtn = document.getElementById("uploadBtn");
+      const status = document.getElementById("status");
+      const result = document.getElementById("result");
+
+      async function uploadFile() {
+        const file = fileInput.files[0];
+        if (!file) {
+          alert("Please select a file first");
+          return;
+        }
+
+        if (!file.name.endsWith(".csv")) {
+          alert("Please select a CSV file");
+          return;
+        }
+
+        uploadBtn.disabled = true;
+        status.textContent = "Uploading...";
+        result.innerHTML = "";
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        console.log("📤 Sending file:", file.name, file.size, "bytes");
+
+        try {
+          const response = await fetch(
+            "http://localhost:3001/api/bulk-upload",
+            {
+              method: "POST",
+              body: formData,
+            }
+          );
+
+          console.log("📡 Response status:", response.status);
+          const text = await response.text();
+          console.log("📄 Response body:", text);
+
+          let data;
+          try {
+            data = JSON.parse(text);
+          } catch (e) {
+            throw new Error("Invalid JSON response: " + text);
+          }
+
+          if (response.ok) {
+            status.textContent = "✅ Upload successful!";
+            result.className = "success";
+            result.innerHTML = `
+                        <h3>Success!</h3>
+                        <p><strong>Batch ID:</strong> ${data.batchId}</p>
+                        <p><strong>Status:</strong> ${data.status}</p>
+                        <p><strong>Total:</strong> ${data.total}</p>
+                        <p><strong>Created:</strong> ${data.created}</p>
+                        <p><strong>Errors:</strong> ${data.errors}</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+          } else {
+            throw new Error(data.error || "Upload failed");
+          }
+        } catch (error) {
+          console.error("❌ Upload error:", error);
+          status.textContent = "❌ Upload failed";
+          result.className = "error";
+          result.innerHTML = `
+                    <h3>Error</h3>
+                    <p>${error.message}</p>
+                    <pre>${error.stack || ""}</pre>
+                `;
+        } finally {
+          uploadBtn.disabled = false;
+        }
+      }
+    </script>
+  </body>
+</html>

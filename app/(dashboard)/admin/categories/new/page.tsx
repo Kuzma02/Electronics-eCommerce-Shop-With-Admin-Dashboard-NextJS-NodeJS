@@ -10,33 +10,29 @@ const DashboardNewCategoryPage = () => {
     name: "",
   });
 
-  const addNewCategory = () => {
+  const addNewCategory = async () => {
     if (categoryInput.name.length > 0) {
-      const requestOptions = {
-        method: "post",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+      try {
+        const response = await apiClient.post(`/api/categories`, {
           name: convertCategoryNameToURLFriendly(categoryInput.name),
-        }),
-      };
-      // sending API request for creating new cateogry
-      apiClient.post(`/api/categories`, requestOptions)
-        .then((response) => {
-          if (response.status === 201) {
-            return response.json();
-          } else {
-            throw Error("There was an error while creating category");
-          }
-        })
-        .then((data) => {
+        });
+
+        if (response.status === 201) {
+          await response.json();
           toast.success("Category added successfully");
           setCategoryInput({
             name: "",
           });
-        })
-        .catch((error) => {
-          toast.error("There was an error while creating category");
-        });
+        } else {
+          const errorData = await response.json();
+          toast.error(
+            errorData.error || "There was an error while creating category"
+          );
+        }
+      } catch (error) {
+        console.error("Error creating category:", error);
+        toast.error("There was an error while creating category");
+      }
     } else {
       toast.error("You need to enter values to add a category");
     }

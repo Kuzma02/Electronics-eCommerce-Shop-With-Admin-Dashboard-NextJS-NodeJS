@@ -91,6 +91,7 @@ model Wishlist {
 
 model bulk_upload_batch {
   id         String              @id @default(uuid())
+  fileName   String?
   createdAt  DateTime            @default(now())
   status     BulkUploadStatus    @default(PENDING)
   itemCount  Int                 @default(0)

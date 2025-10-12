@@ -15,7 +15,7 @@ import { FaRegUser } from "react-icons/fa6";
 import { FaGear } from "react-icons/fa6";
 import { FaBagShopping } from "react-icons/fa6";
 import { MdCategory } from "react-icons/md";
-
+import { FaFileUpload } from "react-icons/fa";
 
 import Link from "next/link";
 
@@ -38,6 +38,12 @@ const DashboardSidebar = () => {
         <div className="flex gap-x-2 w-full hover:bg-blue-600 cursor-pointer items-center py-6 pl-5 text-xl text-white">
           <FaTable className="text-2xl" />{" "}
           <span className="font-normal">Products</span>
+        </div>
+      </Link>
+      <Link href="/admin/bulk-upload">
+        <div className="flex gap-x-2 w-full hover:bg-blue-600 cursor-pointer items-center py-6 pl-5 text-xl text-white">
+          <FaFileUpload className="text-2xl" />{" "}
+          <span className="font-normal">Bulk Upload</span>
         </div>
       </Link>
       <Link href="/admin/categories">

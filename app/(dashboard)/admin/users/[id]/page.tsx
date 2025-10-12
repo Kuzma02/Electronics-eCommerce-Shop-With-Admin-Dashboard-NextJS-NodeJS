@@ -10,12 +10,10 @@ interface DashboardUserDetailsProps {
   params: Promise<{ id: string }>;
 }
 
-const DashboardSingleUserPage = ({
-  params,
-}: DashboardUserDetailsProps) => {
+const DashboardSingleUserPage = ({ params }: DashboardUserDetailsProps) => {
   const resolvedParams = use(params);
   const id = resolvedParams.id;
-  
+
   const [userInput, setUserInput] = useState<{
     email: string;
     newPassword: string;
@@ -31,7 +29,8 @@ const DashboardSingleUserPage = ({
     const requestOptions = {
       method: "DELETE",
     };
-    apiClient.delete(`/api/users/${id}`, requestOptions)
+    apiClient
+      .delete(`/api/users/${id}`, requestOptions)
       .then((response) => {
         if (response.status === 204) {
           toast.success("User deleted successfully");
@@ -57,27 +56,24 @@ const DashboardSingleUserPage = ({
       }
 
       if (userInput.newPassword.length > 7) {
-        const requestOptions = {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
+        try {
+          const response = await apiClient.put(`/api/users/${id}`, {
             email: userInput.email,
             password: userInput.newPassword,
             role: userInput.role,
-          }),
-        };
-        apiClient.put(`/api/users/${id}`, requestOptions)
-          .then((response) => {
-            if (response.status === 200) {
-              return response.json();
-            } else {
-              throw Error("Error while updating user");
-            }
-          })
-          .then((data) => toast.success("User successfully updated"))
-          .catch((error) => {
-            toast.error("There was an error while updating user");
           });
+
+          if (response.status === 200) {
+            await response.json();
+            toast.success("User successfully updated");
+          } else {
+            const errorData = await response.json();
+            toast.error(errorData.error || "Error while updating user");
+          }
+        } catch (error) {
+          console.error("Error updating user:", error);
+          toast.error("There was an error while updating user");
+        }
       } else {
         toast.error("Password must be longer than 7 characters");
         return;
@@ -90,7 +86,8 @@ const DashboardSingleUserPage = ({
 
   useEffect(() => {
     // sending API request for a single user
-    apiClient.get(`/api/users/${id}`)
+    apiClient
+      .get(`/api/users/${id}`)
       .then((res) => {
         return res.json();
       })

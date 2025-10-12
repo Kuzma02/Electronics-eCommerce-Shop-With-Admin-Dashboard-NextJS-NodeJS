@@ -11,12 +11,10 @@ interface DashboardSingleCategoryProps {
   params: Promise<{ id: string }>;
 }
 
-const DashboardSingleCategory = ({
-  params,
-}: DashboardSingleCategoryProps) => {
+const DashboardSingleCategory = ({ params }: DashboardSingleCategoryProps) => {
   const resolvedParams = use(params);
   const id = resolvedParams.id;
-  
+
   const [categoryInput, setCategoryInput] = useState<{ name: string }>({
     name: "",
   });
@@ -27,7 +25,8 @@ const DashboardSingleCategory = ({
       method: "DELETE",
     };
     // sending API request for deleting a category
-    apiClient.delete(`/api/categories/${id}`, requestOptions)
+    apiClient
+      .delete(`/api/categories/${id}`, requestOptions)
       .then((response) => {
         if (response.status === 204) {
           toast.success("Category deleted successfully");
@@ -43,26 +42,22 @@ const DashboardSingleCategory = ({
 
   const updateCategory = async () => {
     if (categoryInput.name.length > 0) {
-      const requestOptions = {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+      try {
+        const response = await apiClient.put(`/api/categories/${id}`, {
           name: convertCategoryNameToURLFriendly(categoryInput.name),
-        }),
-      };
-      // sending API request for updating a category
-      apiClient.put(`/api/categories/${id}`, requestOptions)
-        .then((response) => {
-          if (response.status === 200) {
-            return response.json();
-          } else {
-            throw Error("Error updating a category");
-          }
-        })
-        .then((data) => toast.success("Category successfully updated"))
-        .catch((error) => {
-          toast.error("There was an error while updating a category");
         });
+
+        if (response.status === 200) {
+          await response.json();
+          toast.success("Category successfully updated");
+        } else {
+          const errorData = await response.json();
+          toast.error(errorData.error || "Error updating a category");
+        }
+      } catch (error) {
+        console.error("Error updating category:", error);
+        toast.error("There was an error while updating a category");
+      }
     } else {
       toast.error("For updating a category you must enter all values");
       return;
@@ -71,7 +66,8 @@ const DashboardSingleCategory = ({
 
   useEffect(() => {
     // sending API request for getting single categroy
-    apiClient.get(`/api/categories/${id}`)
+    apiClient
+      .get(`/api/categories/${id}`)
       .then((res) => {
         return res.json();
       })
