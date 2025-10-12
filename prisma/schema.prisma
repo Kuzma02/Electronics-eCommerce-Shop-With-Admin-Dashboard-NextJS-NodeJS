@@ -27,6 +27,8 @@ model Product {
   category       Category                 @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   customerOrders customer_order_product[]
   Wishlist       Wishlist[]
+  // Back relation for bulk upload items
+  bulkUploadItems bulk_upload_item[]      @relation("ProductBulkItems")
 }
 
 model Image {
@@ -41,6 +43,8 @@ model User {
   password String?
   role     String?    @default("user")
   Wishlist Wishlist[]
+  // Back relation for bulk upload batches
+  bulkUploadBatches bulk_upload_batch[] @relation("UserBatches")
 }
 
 model Customer_order {
@@ -83,4 +87,53 @@ model Wishlist {
   productId String
   user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
+}
+
+model bulk_upload_batch {
+  id         String              @id @default(uuid())
+  createdAt  DateTime            @default(now())
+  status     BulkUploadStatus    @default(PENDING)
+  itemCount  Int                 @default(0)
+  errorCount Int                 @default(0)
+  items      bulk_upload_item[]
+
+  // optional uploader link if you later associate sessions/users
+  userId String?
+  user   User?                  @relation(name: "UserBatches", fields: [userId], references: [id])
+}
+
+model bulk_upload_item {
+  id        String            @id @default(uuid())
+  batchId   String
+  batch     bulk_upload_batch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+
+  // created product reference
+  productId String?
+  product   Product?          @relation(name: "ProductBulkItems", fields: [productId], references: [id], onDelete: SetNull)
+
+  // snapshot fields for auditing and re-commit edits
+  title         String
+  slug          String
+  price         Int
+  manufacturer  String?
+  description   String?
+  mainImage     String?
+  categoryId    String
+  inStock       Int
+
+  status        BulkUploadItemStatus @default(CREATED)
+  error         String?
+}
+
+enum BulkUploadStatus {
+  PENDING
+  COMPLETED
+  PARTIAL
+  FAILED
+}
+
+enum BulkUploadItemStatus {
+  CREATED
+  UPDATED
+  ERROR
 }

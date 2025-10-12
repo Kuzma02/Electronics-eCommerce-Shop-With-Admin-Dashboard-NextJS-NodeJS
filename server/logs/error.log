@@ -2,3 +2,14 @@
 ::1 - - [14/Sep/2025:09:33:02 +0000] "POST /api/products HTTP/1.1" 400 123 "http://localhost:3000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36" reqId=CeXxgK8e userId=anonymous
 ::1 - - [14/Sep/2025:09:34:44 +0000] "PUT /api/categories/659a91b9-3ff6-47d5-9830-5e7ac905b961 HTTP/1.1" 400 76 "http://localhost:3000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36" reqId=AMqL-rIC userId=anonymous
 ::1 - - [14/Sep/2025:09:40:16 +0000] "POST /api/wishlist HTTP/1.1" 400 70 "http://localhost:3000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36" reqId=xL1yQdrU userId=anonymous
+::1 - - [29/Sep/2025:08:09:40 +0000] "GET / HTTP/1.1" 404 50 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36" reqId=2z4hyU7q userId=anonymous
+::1 - - [29/Sep/2025:08:09:40 +0000] "GET /favicon.ico HTTP/1.1" 404 50 "http://localhost:3001/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36" reqId=nT7NMG5y userId=anonymous
+::ffff:127.0.0.1 - - [05/Oct/2025:12:48:29 +0000] "POST /api/bulk-upload HTTP/1.1" 400 92 "-" "node" reqId=xn9Cl2Zm userId=anonymous
+::ffff:127.0.0.1 - - [05/Oct/2025:12:48:29 +0000] "POST /api/bulk-upload HTTP/1.1" 500 97 "-" "node" reqId=0fm-HhlY userId=anonymous
+::ffff:127.0.0.1 - - [05/Oct/2025:13:00:54 +0000] "POST /api/bulk-upload HTTP/1.1" 500 97 "-" "curl/7.81.0" reqId=M4IEl0tK userId=anonymous
+::ffff:127.0.0.1 - - [05/Oct/2025:13:01:42 +0000] "POST /api/bulk-upload HTTP/1.1" 500 97 "-" "curl/7.81.0" reqId=nG5i6xv8 userId=anonymous
+::ffff:127.0.0.1 - - [05/Oct/2025:13:17:22 +0000] "POST /api/bulk-upload HTTP/1.1" 500 97 "-" "curl/7.81.0" reqId=STcqx1gU userId=anonymous
+::ffff:127.0.0.1 - - [05/Oct/2025:13:21:34 +0000] "POST /api/bulk-upload HTTP/1.1" 400 92 "-" "node" reqId=9t-i2Ewk userId=anonymous
+::ffff:127.0.0.1 - - [05/Oct/2025:13:21:34 +0000] "POST /api/bulk-upload HTTP/1.1" 500 97 "-" "node" reqId=F4zMvsAU userId=anonymous
+::ffff:127.0.0.1 - - [05/Oct/2025:13:23:08 +0000] "POST /api/bulk-upload HTTP/1.1" 400 92 "-" "node" reqId=1SKCKpbn userId=anonymous
+::ffff:127.0.0.1 - - [05/Oct/2025:13:32:51 +0000] "POST /api/bulk-upload HTTP/1.1" 400 92 "-" "node" reqId=icfO1-u4 userId=anonymous

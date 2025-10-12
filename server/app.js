@@ -1,4 +1,8 @@
 const express = require("express");
+const path = require('path');
+// Load env from server/.env then fallback to project root .env
+require('dotenv').config({ path: path.join(__dirname, '.env') });
+require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 const bcrypt = require('bcryptjs');
 const fileUpload = require("express-fileupload");
 const productsRouter = require("./routes/products");
@@ -11,6 +15,7 @@ const orderRouter = require("./routes/customer_orders");
 const slugRouter = require("./routes/slugs");
 const orderProductRouter = require('./routes/customer_order_product');
 const wishlistRouter = require('./routes/wishlist');
+const bulkUploadRouter = require('./routes/bulkUpload');
 var cors = require("cors");
 
 // Import logging middleware
@@ -108,6 +113,7 @@ app.use("/api/images", uploadLimiter);
 app.use("/api/main-image", uploadLimiter);
 app.use("/api/wishlist", wishlistLimiter);
 app.use("/api/products", productLimiter);
+app.use("/api/bulk-upload", uploadLimiter);
 
 // Apply stricter rate limiting to authentication-related routes
 app.use("/api/users/email", authLimiter); // For login attempts via email lookup
@@ -125,6 +131,7 @@ app.use("/api/orders", orderRouter);
 app.use('/api/order-product', orderProductRouter);
 app.use("/api/slugs", slugRouter);
 app.use("/api/wishlist", wishlistRouter);
+app.use("/api/bulk-upload", bulkUploadRouter);
 
 // Health check endpoint (no rate limiting)
 app.get('/health', (req, res) => {
