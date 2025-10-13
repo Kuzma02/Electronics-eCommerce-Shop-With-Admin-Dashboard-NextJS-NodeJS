@@ -1,107 +1,167 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = require("../utills/db");
 const bcrypt = require("bcryptjs");
+const { asyncHandler, AppError } = require("../utills/errorHandler");
 
-async function getAllUsers(request, response) {
-  try {
-    const users = await prisma.user.findMany({});
-    return response.json(users);
-  } catch (error) {
-    return response.status(500).json({ error: "Error fetching users" });
-  }
+// Helper function to exclude password from user object
+function excludePassword(user) {
+  if (!user) return user;
+  const { password, ...userWithoutPassword } = user;
+  return userWithoutPassword;
 }
 
-async function createUser(request, response) {
-  try {
-    const { email, password, role } = request.body;
-    const hashedPassword = await bcrypt.hash(password, 5);
+const getAllUsers = asyncHandler(async (request, response) => {
+  const users = await prisma.user.findMany({});
+  // Exclude password from all users
+  const usersWithoutPasswords = users.map(user => excludePassword(user));
+  return response.json(usersWithoutPasswords);
+});
 
-    const user = await prisma.user.create({
-      data: {
-        email,
-        password: hashedPassword,
-        role,
-      },
-    });
-    return response.status(201).json(user);
-  } catch (error) {
-    console.error("Error creating user:", error);
-    return response.status(500).json({ error: "Error creating user" });
+const createUser = asyncHandler(async (request, response) => {
+  const { email, password, role } = request.body;
+
+  // Basic validation
+  if (!email || !password) {
+    throw new AppError("Email and password are required", 400);
   }
-}
 
-async function updateUser(request, response) {
-  try {
-    const { id } = request.params;
-    const { email, password, role } = request.body;
-    const hashedPassword = await bcrypt.hash(password, 5);
-    const existingUser = await prisma.user.findUnique({
-      where: {
-        id: id,
-      },
-    });
-
-    if (!existingUser) {
-      return response.status(404).json({ error: "User not found" });
-    }
-
-    const updatedUser = await prisma.user.update({
-      where: {
-        id: existingUser.id,
-      },
-      data: {
-        email,
-        password: hashedPassword,
-        role,
-      },
-    });
-
-    return response.status(200).json(updatedUser);
-  } catch (error) {
-    return response.status(500).json({ error: "Error updating user" });
+  // Email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    throw new AppError("Invalid email format", 400);
   }
-}
 
-async function deleteUser(request, response) {
-  try {
-    const { id } = request.params;
-    await prisma.user.delete({
-      where: {
-        id: id,
-      },
-    });
-    return response.status(204).send();
-  } catch (error) {
-    console.log(error);
-    return response.status(500).json({ error: "Error deleting user" });
+  // Password validation
+  if (password.length < 8) {
+    throw new AppError("Password must be at least 8 characters long", 400);
   }
-}
 
-async function getUser(request, response) {
+  const hashedPassword = await bcrypt.hash(password, 14);
+
+  const user = await prisma.user.create({
+    data: {
+      email,
+      password: hashedPassword,
+      role: role || "user",
+    },
+  });
+  // Exclude password from response
+  return response.status(201).json(excludePassword(user));
+});
+
+const updateUser = asyncHandler(async (request, response) => {
   const { id } = request.params;
+  const { email, password, role } = request.body;
+
+  if (!id) {
+    throw new AppError("User ID is required", 400);
+  }
+
+  const existingUser = await prisma.user.findUnique({
+    where: {
+      id: id,
+    },
+  });
+
+  if (!existingUser) {
+    throw new AppError("User not found", 404);
+  }
+
+  // Prepare update data
+  const updateData = {};
+  if (email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      throw new AppError("Invalid email format", 400);
+    }
+    updateData.email = email;
+  }
+  if (password) {
+    if (password.length < 8) {
+      throw new AppError("Password must be at least 8 characters long", 400);
+    }
+    updateData.password = await bcrypt.hash(password, 14);
+  }
+  if (role) {
+    updateData.role = role;
+  }
+
+  const updatedUser = await prisma.user.update({
+    where: {
+      id: existingUser.id,
+    },
+    data: updateData,
+  });
+
+  // Exclude password from response
+  return response.status(200).json(excludePassword(updatedUser));
+});
+
+const deleteUser = asyncHandler(async (request, response) => {
+  const { id } = request.params;
+
+  if (!id) {
+    throw new AppError("User ID is required", 400);
+  }
+
+  const existingUser = await prisma.user.findUnique({
+    where: {
+      id: id,
+    },
+  });
+
+  if (!existingUser) {
+    throw new AppError("User not found", 404);
+  }
+
+  await prisma.user.delete({
+    where: {
+      id: id,
+    },
+  });
+  return response.status(204).send();
+});
+
+const getUser = asyncHandler(async (request, response) => {
+  const { id } = request.params;
+
+  if (!id) {
+    throw new AppError("User ID is required", 400);
+  }
+
   const user = await prisma.user.findUnique({
     where: {
       id: id,
     },
   });
+  
   if (!user) {
-    return response.status(404).json({ error: "User not found" });
+    throw new AppError("User not found", 404);
   }
-  return response.status(200).json(user);
-}
+  
+  // Exclude password from response
+  return response.status(200).json(excludePassword(user));
+});
 
-async function getUserByEmail(request, response) {
+const getUserByEmail = asyncHandler(async (request, response) => {
   const { email } = request.params;
+
+  if (!email) {
+    throw new AppError("Email is required", 400);
+  }
+
   const user = await prisma.user.findUnique({
     where: {
       email: email,
     },
   });
+  
   if (!user) {
-    return response.status(404).json({ error: "User not found" });
+    throw new AppError("User not found", 404);
   }
-  return response.status(200).json(user);
-}
+  
+  // Exclude password from response
+  return response.status(200).json(excludePassword(user));
+});
 
 module.exports = {
   createUser,

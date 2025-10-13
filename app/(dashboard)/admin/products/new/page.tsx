@@ -1,12 +1,15 @@
 "use client";
 import { DashboardSidebar } from "@/components";
+import apiClient from "@/lib/api";
 import { convertCategoryNameToURLFriendly as convertSlugToURLFriendly } from "@/utils/categoryFormating";
+import { sanitizeFormData } from "@/lib/form-sanitize";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 const AddNewProduct = () => {
   const [product, setProduct] = useState<{
+    merchantId?: string;
     title: string;
     price: number;
     manufacturer: string;
@@ -16,6 +19,7 @@ const AddNewProduct = () => {
     slug: string;
     categoryId: string;
   }>({
+    merchantId: "",
     title: "",
     price: 0,
     manufacturer: "",
@@ -26,9 +30,10 @@ const AddNewProduct = () => {
     categoryId: "",
   });
   const [categories, setCategories] = useState<Category[]>([]);
-
+  const [merchants, setMerchants] = useState<Merchant[]>([]);
   const addProduct = async () => {
     if (
+      !product.merchantId ||
       product.title === "" ||
       product.manufacturer === "" ||
       product.description == "" ||
@@ -38,22 +43,21 @@ const AddNewProduct = () => {
       return;
     }
 
-    const requestOptions: any = {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(product),
-    };
-    fetch(`http://localhost:3001/api/products`, requestOptions)
-      .then((response) => {
-        if (response.status === 201) {
-          return response.json();
-        } else {
-          throw Error("There was an error while creating product");
-        }
-      })
-      .then((data) => {
+    try {
+      // Sanitize form data before sending to API
+      const sanitizedProduct = sanitizeFormData(product);
+
+      console.log("Sending product data:", sanitizedProduct);
+
+      // Correct usage of apiClient.post
+      const response = await apiClient.post(`/api/products`, sanitizedProduct);
+
+      if (response.status === 201) {
+        const data = await response.json();
+        console.log("Product created successfully:", data);
         toast.success("Product added successfully");
         setProduct({
+          merchantId: "",
           title: "",
           price: 0,
           manufacturer: "",
@@ -61,12 +65,31 @@ const AddNewProduct = () => {
           mainImage: "",
           description: "",
           slug: "",
-          categoryId: "",
+          categoryId: categories[0]?.id || "",
         });
-      })
-      .catch((error) => {
-        toast.error("There was an error while creating product");
-      });
+      } else {
+        const errorData = await response.json();
+        console.error("Failed to create product:", errorData);
+        toast.error(`"Error:" ${errorData.message || "Failed to add product"}`);
+      }
+    } catch (error) {
+      console.error("Error adding product:", error);
+      toast.error("Network error. Please try again.");
+    }
+  };
+
+  const fetchMerchants = async () => {
+    try {
+      const res = await apiClient.get("/api/merchants");
+      const data: Merchant[] = await res.json();
+      setMerchants(data || []);
+      setProduct((prev) => ({
+      ...prev,
+        merchantId: prev.merchantId || data?.[0]?.id || "",
+      }));
+    } catch (e) {
+      toast.error("Failed to load merchants");
+    }
   };
 
   const uploadFile = async (file: any) => {
@@ -74,7 +97,7 @@ const AddNewProduct = () => {
     formData.append("uploadedFile", file);
 
     try {
-      const response = await fetch("http://localhost:3001/api/main-image", {
+      const response = await apiClient.post("/api/main-image", {
         method: "POST",
         body: formData,
       });
@@ -90,13 +113,14 @@ const AddNewProduct = () => {
   };
 
   const fetchCategories = async () => {
-    fetch(`http://localhost:3001/api/categories`)
+    apiClient.get(`/api/categories`)
       .then((res) => {
         return res.json();
       })
       .then((data) => {
         setCategories(data);
         setProduct({
+          merchantId: product.merchantId || "",
           title: "",
           price: 0,
           manufacturer: "",
@@ -111,6 +135,7 @@ const AddNewProduct = () => {
 
   useEffect(() => {
     fetchCategories();
+    fetchMerchants();
   }, []);
 
   return (
@@ -118,6 +143,32 @@ const AddNewProduct = () => {
       <DashboardSidebar />
       <div className="flex flex-col gap-y-7 xl:ml-5 max-xl:px-5 w-full">
         <h1 className="text-3xl font-semibold">Add new product</h1>
+        <div>
+          <label className="form-control w-full max-w-xs">
+            <div className="label">
+              <span className="label-text">Merchant Info:</span>
+            </div>
+            <select
+              className="select select-bordered"
+              value={product?.merchantId}
+              onChange={(e) =>
+                setProduct({ ...product, merchantId: e.target.value })
+              }
+            >
+              {merchants.map((merchant) => (
+                <option key={merchant.id} value={merchant.id}>
+                  {merchant.name}
+                </option>
+              ))}
+            </select>
+            {merchants.length === 0 && (
+              <span className="text-xs text-red-500 mt-1">
+                Please create a merchant first.
+              </span>
+            )}
+          </label>
+        </div>
+
         <div>
           <label className="form-control w-full max-w-xs">
             <div className="label">

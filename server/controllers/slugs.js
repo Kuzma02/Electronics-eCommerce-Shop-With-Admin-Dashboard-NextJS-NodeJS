@@ -1,5 +1,4 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = require("../utills/db"); // ✅ Use shared connection
 
 async function getProductBySlug(request, response) {
   const { slug } = request.params;

@@ -4,13 +4,14 @@ import { nanoid } from "nanoid";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { formatCategoryName } from "../../../../utils/categoryFormating";
+import apiClient from "@/lib/api";
 
 const DashboardCategory = () => {
   const [categories, setCategories] = useState<Category[]>([]);
 
   // getting all categories to be displayed on the all categories page
   useEffect(() => {
-    fetch("http://localhost:3001/api/categories")
+    apiClient.get("/api/categories")
       .then((res) => {
         return res.json();
       })

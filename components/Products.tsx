@@ -3,19 +3,20 @@
 // Name of the component: Products.tsx
 // Developer: Aleksandar Kuzmanovic
 // Version: 1.0
-// Component call: <Products slug={slug} />
-// Input parameters: { slug }: any
+// Component call: <Products params={params} searchParams={searchParams} />
+// Input parameters: { params, searchParams }: { params: { slug?: string[] }, searchParams: { [key: string]: string | string[] | undefined } }
 // Output: products grid
 // *********************
 
 import React from "react";
 import ProductItem from "./ProductItem";
+import apiClient from "@/lib/api";
 
-const Products = async ({ slug }: any) => {
+const Products = async ({ params, searchParams }: { params: { slug?: string[] }, searchParams: { [key: string]: string | string[] | undefined } }) => {
   // getting all data from URL slug and preparing everything for sending GET request
-  const inStockNum = slug?.searchParams?.inStock === "true" ? 1 : 0;
-  const outOfStockNum = slug?.searchParams?.outOfStock === "true" ? 1 : 0;
-  const page = slug?.searchParams?.page ? Number(slug?.searchParams?.page) : 1;
+  const inStockNum = searchParams?.inStock === "true" ? 1 : 0;
+  const outOfStockNum = searchParams?.outOfStock === "true" ? 1 : 0;
+  const page = searchParams?.page ? Number(searchParams?.page) : 1;
 
   let stockMode: string = "lte";
   
@@ -37,35 +38,37 @@ const Products = async ({ slug }: any) => {
     stockMode = "gt";
   }
 
-  // sending API request with filtering, sorting and pagination for getting all products
-  const data = await fetch(
-    `http://localhost:3001/api/products?filters[price][$lte]=${
-      slug?.searchParams?.price || 3000
-    }&filters[rating][$gte]=${
-      Number(slug?.searchParams?.rating) || 0
-    }&filters[inStock][$${stockMode}]=1&${
-      slug?.params?.slug?.length > 0
-        ? `filters[category][$equals]=${slug?.params?.slug}&`
-        : ""
-    }sort=${slug?.searchParams?.sort}&page=${page}`
-  );
+  let products = [];
 
-  const products = await data.json();
+  try {
+    // sending API request with filtering, sorting and pagination for getting all products
+    const data = await apiClient.get(`/api/products?filters[price][$lte]=${
+        searchParams?.price || 3000
+      }&filters[rating][$gte]=${
+        Number(searchParams?.rating) || 0
+      }&filters[inStock][$${stockMode}]=1&${
+        params?.slug?.length! > 0
+          ? `filters[category][$equals]=${params?.slug}&`
+          : ""
+      }sort=${searchParams?.sort}&page=${page}`
+    );
 
-  /*
-    const req = await fetch(
-    `http://localhost:1337/api/products?populate=*&filters[price][$lte]=${
-      searchParams?.price || 1000
-    }${searchParams.women === "true" ? "&filters[category][$eq]=women" : ""}${searchParams.womenNewEdition === "true" ? "&filters[category][$eq]=women%20new%20edition" : ""}&filters[rating][$gte]=${
-      searchParams?.rating || 1
-    }`
-  );
-  const products = await req.json();
-  */
+    if (!data.ok) {
+      console.error('Failed to fetch products:', data.statusText);
+      products = [];
+    } else {
+      const result = await data.json();
+      products = Array.isArray(result) ? result : [];
+    }
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    products = [];
+  }
+
   return (
     <div className="grid grid-cols-3 justify-items-center gap-x-2 gap-y-5 max-[1300px]:grid-cols-3 max-lg:grid-cols-2 max-[500px]:grid-cols-1">
       {products.length > 0 ? (
-        products.map((product: Product) => (
+        products.map((product: any) => (
           <ProductItem key={product.id} product={product} color="black" />
         ))
       ) : (

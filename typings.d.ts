@@ -12,8 +12,21 @@ interface Product {
   inStock: number;
 }
 
+interface Merchant {
+  id: string;
+  name: string;
+  email: string;
+  description: string;
+  phone: string;
+  address: string;
+  status: "active" | "inactive";
+  createdAt: string;
+  updatedAt: string;
+}
+
 interface SingleProductPageProps {
   params: {
+    id: string;
     productSlug: string;
   };
 }
@@ -79,4 +92,29 @@ interface WishListItem {
   userId: string;
   productId: string;
   product: Product;
+}
+
+
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string;
+      name: string;
+      email: string;
+      image: string;
+      role: string;
+    };
+  }
+
+  interface User {
+    id: string;
+    role: string;
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    id: string;
+    role: string;
+  }
 }

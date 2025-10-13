@@ -1,5 +1,6 @@
 "use client";
 import { CustomButton, DashboardSidebar } from "@/components";
+import apiClient from "@/lib/api";
 import { nanoid } from "nanoid";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -9,7 +10,7 @@ const DashboardUsers = () => {
 
   useEffect(() => {
     // sending API request for all users
-    fetch("http://localhost:3001/api/users")
+    apiClient.get("/api/users")
       .then((res) => {
         return res.json();
       })

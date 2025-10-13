@@ -12,15 +12,17 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import apiClient from "@/lib/api";
 
 const AdminOrders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
 
   useEffect(() => {
     const fetchOrders = async () => {
-      const response = await fetch("http://localhost:3001/api/orders");
+      const response = await apiClient.get("/api/orders");
       const data = await response.json();
-      setOrders(data);
+      
+      setOrders(data?.orders);
     };
     fetchOrders();
   }, []);
@@ -48,7 +50,7 @@ const AdminOrders = () => {
           </thead>
           <tbody>
             {/* row 1 */}
-            {orders &&
+            {orders && orders.length > 0 &&
               orders.map((order) => (
                 <tr key={order?.id}>
                   <th>

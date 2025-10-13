@@ -1,18 +1,22 @@
 "use client";
 import { DashboardSidebar } from "@/components";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, use } from "react";
 import toast from "react-hot-toast";
 import { formatCategoryName } from "../../../../../utils/categoryFormating";
 import { convertCategoryNameToURLFriendly } from "../../../../../utils/categoryFormating";
+import apiClient from "@/lib/api";
 
 interface DashboardSingleCategoryProps {
-  params: { id: number };
+  params: Promise<{ id: string }>;
 }
 
 const DashboardSingleCategory = ({
-  params: { id },
+  params,
 }: DashboardSingleCategoryProps) => {
+  const resolvedParams = use(params);
+  const id = resolvedParams.id;
+  
   const [categoryInput, setCategoryInput] = useState<{ name: string }>({
     name: "",
   });
@@ -23,7 +27,7 @@ const DashboardSingleCategory = ({
       method: "DELETE",
     };
     // sending API request for deleting a category
-    fetch(`http://localhost:3001/api/categories/${id}`, requestOptions)
+    apiClient.delete(`/api/categories/${id}`, requestOptions)
       .then((response) => {
         if (response.status === 204) {
           toast.success("Category deleted successfully");
@@ -47,7 +51,7 @@ const DashboardSingleCategory = ({
         }),
       };
       // sending API request for updating a category
-      fetch(`http://localhost:3001/api/categories/${id}`, requestOptions)
+      apiClient.put(`/api/categories/${id}`, requestOptions)
         .then((response) => {
           if (response.status === 200) {
             return response.json();
@@ -67,7 +71,7 @@ const DashboardSingleCategory = ({
 
   useEffect(() => {
     // sending API request for getting single categroy
-    fetch(`http://localhost:3001/api/categories/${id}`)
+    apiClient.get(`/api/categories/${id}`)
       .then((res) => {
         return res.json();
       })

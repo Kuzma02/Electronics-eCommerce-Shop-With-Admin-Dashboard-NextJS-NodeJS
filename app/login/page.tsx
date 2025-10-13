@@ -2,23 +2,30 @@
 import { CustomButton, SectionTitle } from "@/components";
 import { isValidEmailAddressFormat } from "@/lib/utils";
 import { signIn, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
 
 const LoginPage = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [error, setError] = useState("");
-  // const session = useSession();
   const { data: session, status: sessionStatus } = useSession();
 
   useEffect(() => {
+    // Check if session expired
+    const expired = searchParams.get('expired');
+    if (expired === 'true') {
+      setError("Your session has expired. Please log in again.");
+      toast.error("Your session has expired. Please log in again.");
+    }
+    
     // if user has already logged in redirect to home page
     if (sessionStatus === "authenticated") {
       router.replace("/");
     }
-  }, [sessionStatus, router]);
+  }, [sessionStatus, router, searchParams]);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();

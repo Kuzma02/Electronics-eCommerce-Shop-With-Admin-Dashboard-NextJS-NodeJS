@@ -14,6 +14,7 @@ import React, { useState } from "react";
 import RatingPercentElement from "./RatingPercentElement";
 import SingleReview from "./SingleReview";
 import { formatCategoryName } from "@/utils/categoryFormating";
+import { sanitize, sanitizeHtml } from "@/lib/sanitize";
 
 const ProductTabs = ({ product }: { product: Product }) => {
   const [currentProductTab, setCurrentProductTab] = useState<number>(0);
@@ -42,9 +43,12 @@ const ProductTabs = ({ product }: { product: Product }) => {
       </div>
       <div className="pt-5">
         {currentProductTab === 0 && (
-          <p className="text-lg max-sm:text-base max-sm:text-sm">
-            {product?.description}
-          </p>
+          <div 
+            className="text-lg max-sm:text-base max-sm:text-sm"
+            dangerouslySetInnerHTML={{ 
+              __html: sanitizeHtml(product?.description) 
+            }}
+          />
         )}
 
         {currentProductTab === 1 && (
@@ -54,14 +58,14 @@ const ProductTabs = ({ product }: { product: Product }) => {
                 {/* row 1 */}
                 <tr>
                   <th>Manufacturer:</th>
-                  <td>{product?.manufacturer}</td>
+                  <td>{sanitize(product?.manufacturer)}</td>
                 </tr>
                 {/* row 2 */}
                 <tr>
                   <th>Category:</th>
                   <td>
                     {product?.category?.name
-                      ? formatCategoryName(product?.category?.name)
+                      ? sanitize(formatCategoryName(product?.category?.name))
                       : "No category"}
                   </td>
                 </tr>

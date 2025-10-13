@@ -18,10 +18,12 @@ import Link from "next/link";
 import { FaBell } from "react-icons/fa6";
 
 import CartElement from "./CartElement";
+import NotificationBell from "./NotificationBell";
 import HeartElement from "./HeartElement";
 import { signOut, useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useWishlistStore } from "@/app/_zustand/wishlistStore";
+import apiClient from "@/lib/api";
 
 const Header = () => {
   const { data: session, status } = useSession();
@@ -35,7 +37,7 @@ const Header = () => {
 
   // getting all wishlist items by user id
   const getWishlistByUserId = async (id: string) => {
-    const response = await fetch(`http://localhost:3001/api/wishlist/${id}`, {
+    const response = await apiClient.get(`/api/wishlist/${id}`, {
       cache: "no-store",
     });
     const wishlist = await response.json();
@@ -57,7 +59,7 @@ const Header = () => {
   const getUserByEmail = async () => {
     if (session?.user?.email) {
       
-      fetch(`http://localhost:3001/api/users/email/${session?.user?.email}`, {
+      apiClient.get(`/api/users/email/${session?.user?.email}`, {
         cache: "no-store",
       })
         .then((response) => response.json())
@@ -80,7 +82,8 @@ const Header = () => {
             <img src="/logo v1 svg.svg" width={300} height={300} alt="singitronic logo" className="relative right-5 max-[1023px]:w-56" />
           </Link>
           <SearchInput />
-          <div className="flex gap-x-10">
+          <div className="flex gap-x-10 items-center">
+            <NotificationBell />
             <HeartElement wishQuantity={wishQuantity} />
             <CartElement />
           </div>
@@ -98,7 +101,7 @@ const Header = () => {
             />
           </Link>
           <div className="flex gap-x-5 items-center">
-            <FaBell className="text-xl" />
+            <NotificationBell />
             <div className="dropdown dropdown-end">
               <div tabIndex={0} role="button" className="w-10">
                 <Image

@@ -18,9 +18,10 @@ import toast from "react-hot-toast";
 import { FaHeartCrack } from "react-icons/fa6";
 import { deleteWishItem } from "@/app/actions";
 import { useSession } from "next-auth/react";
+import apiClient from "@/lib/api";
+import { sanitize } from "@/lib/sanitize";
 
 interface wishItemStateTrackers {
-  isWishItemDeleted: boolean;
   setIsWishItemDeleted: any;
 }
 
@@ -43,7 +44,7 @@ const WishItem = ({
 
   const getUserByEmail = async () => {
     if (session?.user?.email) {
-      fetch(`http://localhost:3001/api/users/email/${session?.user?.email}`, {
+      apiClient.get(`/api/users/email/${session?.user?.email}`, {
         cache: "no-store",
       })
         .then((response) => response.json())
@@ -54,17 +55,13 @@ const WishItem = ({
   };
 
   const deleteItemFromWishlist = async (productId: string) => {
-    
     if (userId) {
-
-      fetch(`http://localhost:3001/api/wishlist/${userId}/${productId}`, {method: "DELETE"}).then(
+      apiClient.delete(`/api/wishlist/${userId}/${productId}`, {method: "DELETE"}).then(
         (response) => {
           removeFromWishlist(productId);
           toast.success("Item removed from your wishlist");
         }
       );
-    }else{
-      toast.error("You need to be logged in to perform this action");
     }
   };
 
@@ -87,7 +84,7 @@ const WishItem = ({
             width={200}
             height={200}
             className="w-auto h-auto"
-            alt={title}
+            alt={sanitize(title)}
           />
         </div>
       </th>
@@ -95,7 +92,7 @@ const WishItem = ({
         className="text-black text-sm text-center"
         onClick={() => openProduct(slug)}
       >
-        {title}
+        {sanitize(title)}
       </td>
       <td
         className="text-black text-sm text-center"

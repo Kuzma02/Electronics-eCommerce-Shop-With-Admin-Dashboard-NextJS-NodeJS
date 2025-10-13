@@ -12,6 +12,7 @@ import Image from "next/image";
 import React from "react";
 import Link from "next/link";
 import ProductItemRating from "./ProductItemRating";
+import { sanitize } from "@/lib/sanitize";
 
 const ProductItem = ({
   product,
@@ -33,7 +34,7 @@ const ProductItem = ({
           height="0"
           sizes="100vw"
           className="w-auto h-[300px]"
-          alt={product?.title}
+          alt={sanitize(product?.title) || "Product image"}
         />
       </Link>
       <Link
@@ -44,7 +45,7 @@ const ProductItem = ({
             : `text-xl text-white font-normal mt-2 uppercase`
         }
       >
-        {product.title}
+        {sanitize(product.title)}
       </Link>
       <p
         className={
