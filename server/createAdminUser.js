@@ -7,9 +7,15 @@ const prisma = new PrismaClient();
 
 async function createAdminUser() {
   try {
-    // Get credentials from command line or use defaults
-    const email = process.argv[2] || "admin@admin.com";
-    const password = process.argv[3] || "admin123";
+    // Get credentials from command line
+    const email = process.argv[2];
+    const password = process.argv[3];
+
+    if (!email || !password) {
+      console.log("❌ Please provide email and password as command line arguments.");
+      console.log("Usage: node createAdminUser.js <email> <password>");
+      process.exit(1);
+    }
 
     console.log("🔐 Creating admin user...\n");
 
