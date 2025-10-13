@@ -167,7 +167,7 @@ const orderValidation = {
     return trimmedEmail;
   },
 
-  // Validate name format
+  // Validate name format - Updated to support Unicode and Indonesian names
   validateName: (name, fieldName = 'name') => {
     if (!name || typeof name !== 'string') {
       throw new ValidationError(`${fieldName} is required`, fieldName);
@@ -183,8 +183,22 @@ const orderValidation = {
       throw new ValidationError(`${fieldName} must be less than 50 characters`, fieldName);
     }
 
-    // Allow letters, spaces, hyphens, and apostrophes
-    if (!/^[a-zA-Z\s\-']+$/.test(trimmedName)) {
+    // Check for dangerous patterns first
+    const dangerousPatterns = [
+      /<script/i,
+      /javascript:/i,
+      /on\w+\s*=/i,
+      /data:/i,
+      /<\w+[^>]*>/,
+    ];
+    
+    if (dangerousPatterns.some(pattern => pattern.test(trimmedName))) {
+      throw new ValidationError(`${fieldName} contains invalid characters`, fieldName);
+    }
+
+    // Allow Unicode letters, spaces, hyphens, apostrophes, and dots
+    // This supports international names including Indonesian, Arabic, Chinese, etc.
+    if (!/^[\p{L}\p{M}\s\-'.]+$/u.test(trimmedName)) {
       throw new ValidationError(`${fieldName} contains invalid characters`, fieldName);
     }
 

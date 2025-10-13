@@ -144,6 +144,7 @@ const DashboardProductDetails = ({ params }: DashboardProductDetailsProps) => {
       <div className="flex flex-col gap-y-7 xl:ml-5 w-full max-xl:px-5">
         <h1 className="text-3xl font-semibold">Product details</h1>
         {/* Product name input div - start */}
+        
         <div>
           <label className="form-control w-full max-w-xs">
             <div className="label">
@@ -271,6 +272,7 @@ const DashboardProductDetails = ({ params }: DashboardProductDetailsProps) => {
             type="file"
             className="file-input file-input-bordered file-input-lg w-full max-w-sm"
             onChange={(e) => {
+              // @ts-ignore
               const selectedFile = e.target.files[0];
 
               if (selectedFile) {

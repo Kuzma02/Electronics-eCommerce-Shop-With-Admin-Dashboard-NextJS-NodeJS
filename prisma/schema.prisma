@@ -27,6 +27,9 @@ model Product {
   category       Category                 @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   customerOrders customer_order_product[]
   Wishlist       Wishlist[]
+
+  merchantId     String
+  merchant       Merchant @relation(fields: [merchantId], references: [id])
   // Back relation for bulk upload items
   bulkUploadItems bulk_upload_item[]      @relation("ProductBulkItems")
 }
@@ -38,11 +41,12 @@ model Image {
 }
 
 model User {
-  id       String     @id @default(uuid())
-  email    String     @unique
-  password String?
-  role     String?    @default("user")
-  Wishlist Wishlist[]
+  id            String         @id @default(uuid())
+  email         String         @unique
+  password      String?
+  role          String?        @default("user")
+  Wishlist      Wishlist[]
+  notifications Notification[]
   // Back relation for bulk upload batches
   bulkUploadBatches bulk_upload_batch[] @relation("UserBatches")
 }
@@ -87,6 +91,53 @@ model Wishlist {
   productId String
   user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
+}
+
+enum NotificationType {
+  ORDER_UPDATE
+  PAYMENT_STATUS
+  PROMOTION
+  SYSTEM_ALERT
+}
+
+enum NotificationPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+model Notification {
+  id        String               @id @default(uuid())
+  userId    String
+  user      User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String               @db.Text
+  type      NotificationType
+  isRead    Boolean              @default(false)
+  priority  NotificationPriority @default(NORMAL)
+  metadata  Json?
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
+
+  @@index([userId])
+  @@index([userId, isRead])
+  @@index([userId, type])
+  @@index([createdAt])
+}
+model Merchant {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  email       String?
+  phone       String?
+  address     String?
+  status      String   @default("ACTIVE")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // relasi
+  products Product[]
 }
 
 model bulk_upload_batch {

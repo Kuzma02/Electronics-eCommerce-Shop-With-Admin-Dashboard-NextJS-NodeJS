@@ -3,11 +3,13 @@ import { SectionTitle } from "@/components";
 import { useProductStore } from "../_zustand/store";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import apiClient from "@/lib/api";
 
 const CheckoutPage = () => {
+  const { data: session } = useSession();
   const [checkoutForm, setCheckoutForm] = useState({
     name: "",
     lastname: "",
@@ -125,6 +127,24 @@ const CheckoutPage = () => {
     try {
       console.log("🚀 Starting order creation...");
       
+      // Get user ID if logged in
+      let userId = null;
+      if (session?.user?.email) {
+        try {
+          console.log("🔍 Getting user ID for logged-in user:", session.user.email);
+          const userResponse = await apiClient.get(`/api/users/email/${session.user.email}`);
+          if (userResponse.ok) {
+            const userData = await userResponse.json();
+            userId = userData.id;
+            console.log("✅ Found user ID:", userId);
+          } else {
+            console.log("❌ Could not find user with email:", session.user.email);
+          }
+        } catch (userError) {
+          console.log("⚠️  Error getting user ID:", userError);
+        }
+      }
+      
       // Prepare the order data
       const orderData = {
         name: checkoutForm.name.trim(),
@@ -140,6 +160,7 @@ const CheckoutPage = () => {
         city: checkoutForm.city.trim(),
         country: checkoutForm.country.trim(),
         orderNotice: checkoutForm.orderNotice.trim(),
+        userId: userId // Add user ID for notifications
       };
 
       console.log("📋 Order data being sent:", orderData);
@@ -163,20 +184,29 @@ const CheckoutPage = () => {
           const errorData = JSON.parse(errorText);
           console.error("Parsed error data:", errorData);
           
-          // Show specific validation errors
-          if (errorData.details && Array.isArray(errorData.details)) {
+          // Handle different error types
+          if (response.status === 409) {
+            // Duplicate order error
+            toast.error(errorData.details || errorData.error || "Duplicate order detected");
+            return; // Don't throw, just return to stop execution
+          } else if (errorData.details && Array.isArray(errorData.details)) {
+            // Validation errors
             errorData.details.forEach((detail: any) => {
               toast.error(`${detail.field}: ${detail.message}`);
             });
+          } else if (typeof errorData.details === 'string') {
+            // Single error message in details
+            toast.error(errorData.details);
           } else {
-            toast.error(errorData.error || "Validation failed");
+            // Fallback error message
+            toast.error(errorData.error || "Order creation failed");
           }
         } catch (parseError) {
           console.error("Could not parse error as JSON:", parseError);
-          toast.error("Validation failed");
+          toast.error("Order creation failed. Please try again.");
         }
         
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        return; // Stop execution instead of throwing
       }
 
       const data = await response.json();
@@ -222,6 +252,14 @@ const CheckoutPage = () => {
         orderNotice: "",
       });
       clearCart();
+      
+      // Refresh notification count if user is logged in
+      try {
+        // This will trigger a refresh of notifications in the background
+        window.dispatchEvent(new CustomEvent('orderCompleted'));
+      } catch (error) {
+        console.log('Note: Could not trigger notification refresh');
+      }
       
       toast.success("Order created successfully! You will be contacted for payment.");
       setTimeout(() => {
