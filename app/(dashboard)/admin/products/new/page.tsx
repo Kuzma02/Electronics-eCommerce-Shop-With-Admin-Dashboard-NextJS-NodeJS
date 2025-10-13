@@ -113,7 +113,8 @@ const AddNewProduct = () => {
   };
 
   const fetchCategories = async () => {
-    apiClient.get(`/api/categories`)
+    apiClient
+      .get(`/api/categories`)
       .then((res) => {
         return res.json();
       })

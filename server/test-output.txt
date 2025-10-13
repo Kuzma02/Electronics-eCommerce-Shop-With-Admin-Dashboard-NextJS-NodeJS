@@ -1,0 +1,38 @@
+﻿node : node:internal/modules/cjs/loader:1404
+At line:1 char:1
++ node server/tests/bulk-upload-smoketest.js 2>&1 | 
+Out-File -FilePath  ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (node:inter 
+   nal/modules/cjs/loader:1404:String) [], RemoteExcep  
+  tion
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  throw err;
+  ^
+
+Error: Cannot find module 
+'D:\MyDocuments\Documents\Kuliah\Semester 
+5\Pengembangan WEB (T2-P2)\ETS-v2\Electronics-eCommerce-
+Shop-With-Admin-Dashboard-NextJS-NodeJS\server\server\te
+sts\bulk-upload-smoketest.js'
+    at Function._resolveFilename 
+(node:internal/modules/cjs/loader:1401:15)
+    at defaultResolveImpl 
+(node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks 
+(node:internal/modules/cjs/loader:1062:22)
+    at Function._load 
+(node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync 
+(node:diagnostics_channel:322:14)
+    at wrapModuleLoad 
+(node:internal/modules/cjs/loader:235:24)
+    at Function.executeUserEntryPoint [as runMain] 
+(node:internal/modules/run_main:171:5)
+    at node:internal/main/run_main_module:36:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v22.17.0

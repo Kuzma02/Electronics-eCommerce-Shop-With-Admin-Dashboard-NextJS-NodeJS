@@ -1,4 +1,12 @@
-const { PrismaClient } = require("@prisma/client");
+// Prefer the root-level Prisma Client (generated from ../prisma/schema.prisma),
+// which includes bulk upload models. Fallback to local if not available.
+let PrismaClient;
+try {
+    // When running server/* scripts, this resolves to project root node_modules
+    ({ PrismaClient } = require("../../node_modules/@prisma/client"));
+} catch (e) {
+    ({ PrismaClient } = require("@prisma/client"));
+}
 
 const prismaClientSingleton = () => {
     // Validate that DATABASE_URL is present
