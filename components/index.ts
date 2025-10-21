@@ -35,8 +35,8 @@ export { default as SortBy } from "./SortBy";
 
 export { default as SectionTitle } from "./SectionTitle";
 export { default as HeartElement } from "./HeartElement";
-
-export { default as Hero } from "./Hero"; 
+export { default as AddToWishlistBtn } from "./AddToWishlistBtn";
+export { default as Hero } from "./Hero";
 export { default as IntroducingSection } from "./IntroducingSection";
 export { default as Heading } from "./Heading";
 export { default as DashboardSidebar } from "./DashboardSidebar";
@@ -46,3 +46,4 @@ export { default as AdminOrders } from "./AdminOrders";
 export { default as OrderItem } from "./OrderItem";
 export { default as NotificationBell } from "./NotificationBell";
 export { default as NotificationCard } from "./NotificationCard";
+export { default as BulkUploadHistory } from "./BulkUploadHistory";

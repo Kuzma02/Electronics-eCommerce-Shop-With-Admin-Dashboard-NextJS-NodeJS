@@ -1,7 +1,20 @@
 const { PrismaClient } = require('@prisma/client');
-const { nanoid } = require('nanoid');
 
 const prisma = new PrismaClient();
+
+/**
+ * Generate ID using nanoid with dynamic import
+ */
+const generateId = async () => {
+  try {
+    const { nanoid } = await import('nanoid');
+    return nanoid();
+  } catch (error) {
+    console.error('Error generating nanoid:', error);
+    // Fallback ID generation
+    return Math.random().toString(36).substr(2, 10);
+  }
+};
 
 /**
  * Create an order update notification
@@ -47,9 +60,11 @@ const createOrderUpdateNotification = async (userId, orderStatus, orderId, total
       priority: 'NORMAL'
     };
 
+    const notificationId = await generateId();
+
     const notification = await prisma.notification.create({
       data: {
-        id: nanoid(),
+        id: notificationId,
         userId: userId,
         title: statusInfo.title,
         message: statusInfo.message,
@@ -101,9 +116,11 @@ const createPaymentNotification = async (userId, paymentStatus, amount, orderId)
       priority: 'NORMAL'
     };
 
+    const notificationId = await generateId();
+
     const notification = await prisma.notification.create({
       data: {
-        id: nanoid(),
+        id: notificationId,
         userId: userId,
         title: statusInfo.title,
         message: statusInfo.message,
@@ -131,9 +148,11 @@ const createPaymentNotification = async (userId, paymentStatus, amount, orderId)
  */
 const createPromotionNotification = async (userId, title, message, promoCode = null, discount = null) => {
   try {
+    const notificationId = await generateId();
+
     const notification = await prisma.notification.create({
       data: {
-        id: nanoid(),
+        id: notificationId,
         userId: userId,
         title: title,
         message: message,
@@ -160,9 +179,11 @@ const createPromotionNotification = async (userId, title, message, promoCode = n
  */
 const createSystemAlertNotification = async (userId, title, message, priority = 'HIGH') => {
   try {
+    const notificationId = await generateId();
+
     const notification = await prisma.notification.create({
       data: {
-        id: nanoid(),
+        id: notificationId,
         userId: userId,
         title: title,
         message: message,
@@ -188,23 +209,29 @@ const createSystemAlertNotification = async (userId, title, message, priority = 
  */
 const createBulkNotifications = async (userIds, title, message, type = 'SYSTEM_ALERT', priority = 'NORMAL', metadata = {}) => {
   try {
-    const notifications = userIds.map(userId => ({
-      id: nanoid(),
-      userId: userId,
-      title: title,
-      message: message,
-      type: type,
-      priority: priority,
-      isRead: false,
-      metadata: metadata
-    }));
+    // Generate all IDs first
+    const notificationData = await Promise.all(
+      userIds.map(async (userId) => {
+        const notificationId = await generateId();
+        return {
+          id: notificationId,
+          userId: userId,
+          title: title,
+          message: message,
+          type: type,
+          priority: priority,
+          isRead: false,
+          metadata: metadata
+        };
+      })
+    );
 
     await prisma.notification.createMany({
-      data: notifications
+      data: notificationData
     });
 
     console.log(`✅ Bulk notifications created for ${userIds.length} users: ${title}`);
-    return notifications.length;
+    return notificationData.length;
   } catch (error) {
     console.error('❌ Error creating bulk notifications:', error);
     throw error;
