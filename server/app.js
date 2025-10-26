@@ -39,12 +39,6 @@ const {
   orderLimiter
 } = require('./middleware/rateLimiter');
 
-const {
-  passwordResetLimiter,
-  adminLimiter,
-  wishlistLimiter,
-  productLimiter
-} = require('./middleware/advancedRateLimiter');
 
 const {
   handleServerError
@@ -122,7 +116,7 @@ app.use("/api/bulk-upload", uploadLimiter);
 app.use("/api/users/email", authLimiter); // For login attempts via email lookup
 
 // Apply admin rate limiting to admin routes
-app.use("/api/users", adminLimiter); // Admin user management
+
 
 app.use("/api/products", productsRouter);
 app.use("/api/categories", categoryRouter);

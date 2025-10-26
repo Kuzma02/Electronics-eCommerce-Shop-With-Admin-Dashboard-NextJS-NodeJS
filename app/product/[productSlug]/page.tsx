@@ -1,10 +1,10 @@
 import {
   StockAvailabillity,
   UrgencyText,
-  SingleProductRating,
+
   ProductTabs,
   SingleProductDynamicFields,
-  AddToWishlistBtn,
+  
 } from "@/components";
 import apiClient from "@/lib/api";
 import Image from "next/image";
@@ -69,13 +69,13 @@ const SingleProductPage = async ({ params }: SingleProductPageProps) => {
             </div>
           </div>
           <div className="flex flex-col gap-y-7 text-black max-[500px]:text-center">
-            <SingleProductRating rating={product?.rating} />
+        
             <h1 className="text-3xl">{sanitize(product?.title)}</h1>
             <p className="text-xl font-semibold">${product?.price}</p>
             <StockAvailabillity stock={94} inStock={product?.inStock} />
             <SingleProductDynamicFields product={product} />
             <div className="flex flex-col gap-y-2 max-[500px]:items-center">
-              <AddToWishlistBtn product={product} slug={paramsAwaited.productSlug} />
+             
               <p className="text-lg">
                 SKU: <span className="ml-1">abccd-18</span>
               </p>

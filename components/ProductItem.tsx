@@ -11,7 +11,7 @@
 import Image from "next/image";
 import React from "react";
 import Link from "next/link";
-import ProductItemRating from "./ProductItemRating";
+
 import { sanitize } from "@/lib/sanitize";
 
 const ProductItem = ({
@@ -57,7 +57,7 @@ const ProductItem = ({
         ${product.price}
       </p>
 
-      <ProductItemRating productRating={product?.rating} />
+  
       <Link
         href={`/product/${product?.slug}`}
         className="block flex justify-center items-center w-full uppercase bg-white px-0 py-2 text-base border border-black border-gray-300 font-bold text-blue-600 shadow-sm hover:bg-black hover:bg-gray-100 focus:outline-none focus:ring-2"
