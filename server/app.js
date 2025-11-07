@@ -113,7 +113,7 @@ app.use("/api/main-image", uploadLimiter);
 app.use("/api/bulk-upload", uploadLimiter);
 
 // Apply stricter rate limiting to authentication-related routes
-app.use("/api/users/email", authLimiter); // For login attempts via email lookup
+app.use("/api/users/email", authLimiter); // For login attempts via email lookup 
 
 // Apply admin rate limiting to admin routes
 
