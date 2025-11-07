@@ -49,6 +49,8 @@ const Header = () => {
       slug:string
       stockAvailabillity: number;
     }[] = [];
+
+    return; // temporary disable wishlist fetching while the issue is being resolved
     
     wishlist.map((item: any) => productArray.push({id: item?.product?.id, title: item?.product?.title, price: item?.product?.price, image: item?.product?.mainImage, slug: item?.product?.slug, stockAvailabillity: item?.product?.inStock}));
     
