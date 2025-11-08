@@ -36,8 +36,8 @@ const RegisterPage = () => {
     }
 
     if (!password || password.length < 8) {
-      setError("Password is invalid");
-      toast.error("Password is invalid");
+      setError("Password must be 8 characters long");
+      toast.error("Password must be 8 characters long");
       return;
     }
 
