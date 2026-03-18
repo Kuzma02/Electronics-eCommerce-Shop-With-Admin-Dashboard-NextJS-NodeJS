@@ -4,8 +4,8 @@
 Singitronic is a modern online shop that specializes in selling all types of electronic products. The goal of the project is to create a modern web application <b>by following key stages in software engineering</b>. 
 Originally created by me and my friend Bojan Cesnak (@cesnak02) as part of our college exam in Software Engineering, this project has now evolved into <strong>an open-source community project</strong>. Together with the application, we created detailed <b>40 pages software engineering documentation</b>. We will describe the main parts of the documentaion in the repository description. Main resource for the software engineering documentation is the book „Razvoj aplikativnog softvera“ by Singidunum University professor Violeta Tomašević. Also, college lectures by Violeta Tomašević and Petar Kresoja helped us a lot with the implementation of the application.</p>
 
-<h2>Other interesting open-source projects</h2>
-<a href="https://github.com/Kuzma02/All-For-Car-Ecommerce" target="_blank">High-performance Next.js eCommerce platform for automotive products</a><br />
+<h2>More work</h2>
+<a href="https://www.kuzmanovicaleksandar.com" target="_blank">www.kuzmanovicaleksandar.com</a><br />
 <a href="https://github.com/Kuzma02/VSD-Official-Website" target="_blank">Car Parts Company Official Website in Next.js</a><br />
 <a href="https://github.com/Kuzma02/Luxury-Cosmetics-eCommerce-NextJS" target="_blank">Luxury Cosmetics eCommerce Shop in Next.js</a><br />
 <a href="https://github.com/Kuzma02/Free-Admin-Dashboard" target="_blank">Premium Custom Admin Dashboard</a><br />
@@ -179,6 +179,7 @@ npm run dev
 ```
 
 <p>14. Open <a href="http://localhost:3000" target="_blank">http://localhost:3000</a> and see it live!</p>
+
 
 
 <h2>Project screenshots</h2>
