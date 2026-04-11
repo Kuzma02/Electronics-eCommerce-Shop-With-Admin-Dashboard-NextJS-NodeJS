@@ -32,3 +32,5 @@ temp/
 
 # Logs
 *.log
+
+logs/*.log

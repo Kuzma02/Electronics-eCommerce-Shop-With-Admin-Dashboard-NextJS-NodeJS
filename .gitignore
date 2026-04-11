@@ -55,3 +55,13 @@ logs/
 # OS
 Thumbs.db
 .DS_Store
+
+/server/logs/*.log
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/

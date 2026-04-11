@@ -32,8 +32,11 @@
     "morgan": "^1.10.1",
     "mysql": "^2.18.1",
     "nanoid": "^5.0.6",
-    "prisma": "6.16.3",
     "node-fetch": "^3.3.2",
+    "prisma": "6.16.3",
     "winston": "^3.8.2"
+  },
+  "devDependencies": {
+    "jest": "^30.3.0"
   }
 }
