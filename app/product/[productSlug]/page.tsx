@@ -27,6 +27,7 @@ interface SingleProductPageProps {
 
 const SingleProductPage = async ({ params }: SingleProductPageProps) => {
   const paramsAwaited = await params;
+
   // sending API request for a single product with a given product slug
   const data = await apiClient.get(
     `/api/slugs/${paramsAwaited?.productSlug}`
@@ -73,6 +74,7 @@ const SingleProductPage = async ({ params }: SingleProductPageProps) => {
             <h1 className="text-3xl">{sanitize(product?.title)}</h1>
             <p className="text-xl font-semibold">${product?.price}</p>
             <StockAvailabillity stock={94} inStock={product?.inStock} />
+            {/* add to cart buy now */}
             <SingleProductDynamicFields product={product} />
             <div className="flex flex-col gap-y-2 max-[500px]:items-center">
              

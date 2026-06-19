@@ -31,14 +31,7 @@ interface SingleProductPageProps {
   };
 }
 
-type ProductInWishlist = {
-  id: string;
-  title: string;
-  price: number;
-  image: string;
-  slug: string;
-  stockAvailabillity: number;
-};
+
 
 interface OtherImages {
   imageID: number;
@@ -76,6 +69,7 @@ interface Order {
   total: number;
 }
 
+
 interface SingleProductBtnProps {
   product: Product;
   quantityCount: number;
@@ -87,14 +81,28 @@ interface Category {
   name: string;
 }
 
+// wishlist
+interface WishListProps{
+  product : Product
+  isWishListed:boolean ;
+  handleAddToWishList :()=> void | Promise<void>;
+}
 interface WishListItem {
   id: string;
   userId: string;
   productId: string;
   product: Product;
 }
+type ProductInWishlist = {
+  id: string;
+  title: string;
+  price: number;
+  image: string;
+  slug: string;
+  stockAvailabillity: number;
+};
 
-
+interface wishlistProd
 declare module "next-auth" {
   interface Session {
     user: {

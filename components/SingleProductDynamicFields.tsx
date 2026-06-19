@@ -13,9 +13,47 @@ import React, { useState } from "react";
 import QuantityInput from "./QuantityInput";
 import AddToCartSingleProductBtn from "./AddToCartSingleProductBtn";
 import BuyNowSingleProductBtn from "./BuyNowSingleProductBtn";
+import WishlistButton from "./modules/wishlist/WishListButton";
+import WishListButton from "./modules/wishlist/WishListButton";
+import { useSession } from "next-auth/react";
+import { useWishlistStore } from "@/app/_zustand/wishlistStore";
+import toast from "react-hot-toast";
+import { addToWishlist } from "@/lib/services/wishlist";
 
 const SingleProductDynamicFields = ({ product }: { product: Product }) => {
   const [quantityCount, setQuantityCount] = useState<number>(1);
+  const [isWishListed, setIsWishListed] = useState(false);
+  const { data: session, status: sessionStatus } = useSession();
+  const { addToWishlistStore } = useWishlistStore();
+
+  const handleAddToWishList = async () => {
+  if (!session?.user) {
+    toast.error("Please log in to add items to your wishlist.");
+    return;
+  }
+  try {
+    const wishlistData = {
+      userId: session.user.id,
+      productId: product.id,
+    };
+    // Wishlist Api Call
+     await addToWishlist(wishlistData);
+    // Update UI
+    addToWishlistStore(product);
+    setIsWishListed(true);
+
+    toast.success("Added to wishlist ❤️");
+
+  } catch (error) {
+    toast.error(
+      error instanceof Error
+        ? error.message
+        : "Something went wrong"
+    );
+  }
+};
+  
+  
   return (
     <>
       <QuantityInput
@@ -28,9 +66,10 @@ const SingleProductDynamicFields = ({ product }: { product: Product }) => {
             quantityCount={quantityCount}
             product={product}
           />
-          <BuyNowSingleProductBtn
-            quantityCount={quantityCount}
+          <WishListButton
             product={product}
+            isWishListed ={isWishListed}
+            handleAddToWishList= {handleAddToWishList}
           />
         </div>
       )}
