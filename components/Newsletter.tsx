@@ -34,14 +34,14 @@ const Newsletter = () => {
           />
           <button
             type="submit"
-            className="flex-none rounded-md bg-custom-yellow px-3.5 py-2.5 text-sm font-semibold text-black shadow-sm hover:bg-black hover:text-custom-yellow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+            className="flex-none rounded-md bg-brand-accent px-3.5 py-2.5 text-sm font-semibold text-black shadow-sm hover:bg-black hover:text-brand-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
           >
             Subscribe
           </button>
         </div>
         <p className="mt-4 text-sm leading-6 text-gray-900">
           We care about your data. Read our{' '}
-          <a href="#" className="font-semibold hover:text-custom-yellow text-black">
+          <a href="#" className="font-semibold hover:text-brand-accent text-black">
             privacy&nbsp;policy
           </a>
           .
