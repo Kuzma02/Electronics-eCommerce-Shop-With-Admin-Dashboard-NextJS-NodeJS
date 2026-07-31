@@ -37,7 +37,7 @@ const QuantityInput = ({quantityCount, setQuantityCount} : QuantityInputProps) =
       <div className="flex items-center gap-1">
         <button
           type="button"
-          className="size-10 leading-10 text-gray-600 transition hover:opacity-75 flex justify-center items-center border"
+          className="size-10 leading-10 text-brand-primary transition hover:bg-brand-surface-alt hover:opacity-90 flex justify-center items-center border border-brand-border"
           onClick={() => handleQuantityChange("minus")}
         >
           <FaMinus />
@@ -48,12 +48,12 @@ const QuantityInput = ({quantityCount, setQuantityCount} : QuantityInputProps) =
           id="Quantity"
           disabled={true}
           value={quantityCount}
-          className="h-10 w-24 rounded border-gray-200 sm:text-sm"
+          className="h-10 w-24 rounded border-brand-border text-brand-on-surface sm:text-sm"
         />
 
         <button
           type="button"
-          className="size-10 leading-10 text-gray-600 transition hover:opacity-75 flex justify-center items-center border"
+          className="size-10 leading-10 text-brand-primary transition hover:bg-brand-surface-alt hover:opacity-90 flex justify-center items-center border border-brand-border"
           onClick={() => handleQuantityChange("plus")}
         >
           <FaPlus />
