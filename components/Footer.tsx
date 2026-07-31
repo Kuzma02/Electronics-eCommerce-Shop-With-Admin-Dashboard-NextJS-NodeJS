@@ -31,7 +31,7 @@ const Footer = () => {
             <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
               <div className="md:grid md:grid-cols-2 md:gap-8">
                 <div>
-                  <h3 className="text-lg font-bold leading-6 text-blue-600">
+                  <h3 className="text-lg font-bold leading-6 text-brand-primary">
                     Sale
                   </h3>
                   <ul role="list" className="mt-6 space-y-4">
@@ -48,7 +48,7 @@ const Footer = () => {
                   </ul>
                 </div>
                 <div className="mt-10 md:mt-0">
-                  <h3 className="text-base font-bold leading-6 text-blue-600">
+                  <h3 className="text-base font-bold leading-6 text-brand-primary">
                     About Us
                   </h3>
                   <ul role="list" className="mt-6 space-y-4">
@@ -67,7 +67,7 @@ const Footer = () => {
               </div>
               <div className="md:grid md:grid-cols-2 md:gap-8">
                 <div>
-                  <h3 className="text-base font-bold leading-6 text-blue-600">
+                  <h3 className="text-base font-bold leading-6 text-brand-primary">
                     Buying
                   </h3>
                   <ul role="list" className="mt-6 space-y-4">
@@ -84,7 +84,7 @@ const Footer = () => {
                   </ul>
                 </div>
                 <div className="mt-10 md:mt-0">
-                  <h3 className="text-base font-bold leading-6 text-blue-600">
+                  <h3 className="text-base font-bold leading-6 text-brand-primary">
                     Support
                   </h3>
                   <ul role="list" className="mt-6 space-y-4">
