@@ -9,7 +9,8 @@
     "lint": "next lint",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "test:a11y": "node scripts/accessibility/contrast-check.js"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.18",

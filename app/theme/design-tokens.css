@@ -19,9 +19,10 @@
 
 /* ---- DEFAULT THEME (existing blue look; keeps current appearance) ---- */
 :root {
-  /* Brand */
-  --brand-primary: #3b82f6;        /* blue-500 */
-  --brand-primary-hover: #2563eb;  /* blue-600 */
+  /* Brand — primary is blue-600 (not blue-500) so white-on-primary and
+     primary-on-white both clear WCAG AA 4.5:1 (5.17:1); see WO-08. */
+  --brand-primary: #2563eb;        /* blue-600 */
+  --brand-primary-hover: #1d4ed8;  /* blue-700 */
   --brand-primary-content: #ffffff;
   --brand-secondary: #1e3a8a;      /* blue-900 */
   --brand-accent: #fed700;         /* legacy custom-yellow */
