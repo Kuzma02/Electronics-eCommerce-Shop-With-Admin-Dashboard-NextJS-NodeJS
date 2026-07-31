@@ -25,6 +25,14 @@ export default async function RootLayout({
   return (
     <html lang="en" data-theme="light">
       <body className={inter.className}>
+        {/* Apply the persisted theme before paint to avoid a flash of the
+            default theme; falls back to the SSR default when none is set (WO-01). */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "(function(){try{var t=localStorage.getItem('app-theme');if(t==='light'||t==='purple-white'){document.documentElement.setAttribute('data-theme',t);}}catch(e){}})();",
+          }}
+        />
         <SessionProvider session={session}>
           <SessionTimeoutWrapper />
           <Header />
