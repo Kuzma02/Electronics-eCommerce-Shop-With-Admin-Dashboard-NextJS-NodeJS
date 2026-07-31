@@ -1,3 +1,4 @@
+require("../utills/register-ts"); // load ts-node so ../utills/db (db.ts) resolves
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 require('dotenv').config({ path: path.join(__dirname, '..', '..', '.env') });

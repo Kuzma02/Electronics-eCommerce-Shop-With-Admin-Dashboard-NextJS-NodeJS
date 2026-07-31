@@ -1,4 +1,4 @@
-const prisma = require("../utills/db"); // shared Prisma singleton (db.js); SSL is governed by DATABASE_URL
+const prisma = require("../utills/db"); // canonical Prisma singleton (utills/db.ts, loaded via ts-node); SSL is governed by DATABASE_URL
 const { asyncHandler, handleServerError, AppError } = require("../utills/errorHandler");
 
 // Security: Define whitelists for allowed filter types and operators

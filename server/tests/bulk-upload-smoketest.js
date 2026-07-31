@@ -1,3 +1,4 @@
+require("../utills/register-ts"); // load ts-node so ../utills/db (db.ts) resolves
 /* eslint-disable no-console */
 // Bulk Upload API Smoke Test
 // Endpoints:

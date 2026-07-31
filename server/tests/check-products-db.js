@@ -1,3 +1,4 @@
+require("../utills/register-ts"); // load ts-node so ../utills/db (db.ts) resolves
 // Test untuk verifikasi data masuk database
 const prisma = require("../utills/db");
 

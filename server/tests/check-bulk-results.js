@@ -1,3 +1,4 @@
+require("../utills/register-ts"); // load ts-node so ../utills/db (db.ts) resolves
 const prisma = require("../utills/db");
 
 async function checkBulkUploadResults() {

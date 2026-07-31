@@ -1,12 +1,4 @@
-// Prefer the root-level Prisma Client (generated from ../prisma/schema.prisma),
-// which includes bulk upload models. Fallback to local if not available.
-let PrismaClient;
-try {
-    // When running server/* scripts, this resolves to project root node_modules
-    ({ PrismaClient } = require("../../node_modules/@prisma/client"));
-} catch (e) {
-    ({ PrismaClient } = require("@prisma/client"));
-}
+import { PrismaClient } from "@prisma/client"; 
 
 const prismaClientSingleton = () => {
     // Validate that DATABASE_URL is present
@@ -32,10 +24,17 @@ const prismaClientSingleton = () => {
     });
 }
 
-const globalForPrisma = globalThis;
+type PrismaClientSingleton = ReturnType<typeof prismaClientSingleton>;
+
+const globalForPrisma = globalThis as unknown as {
+    prisma: PrismaClientSingleton | undefined;
+}
 
 const prisma = globalForPrisma.prisma ?? prismaClientSingleton();
 
-module.exports = prisma;
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
-if(process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+// CommonJS export (`export =`) so `const prisma = require("../utills/db")`
+// receives the client directly. The server loads this .ts module via the
+// ts-node loader registered at the top of app.js.
+export = prisma;

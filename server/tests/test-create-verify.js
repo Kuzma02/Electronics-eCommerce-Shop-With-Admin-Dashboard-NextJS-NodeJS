@@ -1,3 +1,4 @@
+require("../utills/register-ts"); // load ts-node so ../utills/db (db.ts) resolves
 // Test lengkap: Create product dan verify di database
 const prisma = require("../utills/db");
 
