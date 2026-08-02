@@ -4,16 +4,21 @@ const { asyncHandler, AppError } = require("../utills/errorHandler");
 
 const createCategory = asyncHandler(async (request, response) => {
   const { name } = request.body;
+  console.log("Received category name:", name);
 
   if (!name || name.trim().length === 0) {
     throw new AppError("Category name is required", 400);
   }
+  console.log("Creating category with name:", name.trim());
 
   const category = await prisma.category.create({
     data: {
       name: name.trim(),
     },
   });
+
+  console.log("Created category:", category);
+  
   return response.status(201).json(category);
 });
 

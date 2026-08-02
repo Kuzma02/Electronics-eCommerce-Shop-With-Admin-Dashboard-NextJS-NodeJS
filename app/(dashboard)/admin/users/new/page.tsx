@@ -17,6 +17,9 @@ const DashboardCreateNewUser = () => {
   });
 
   const addNewUser = async () => {
+    console.log("triggered ADD NEW USER");
+    console.log("User Input:", userInput);
+
     if (userInput.email === "" || userInput.password === "") {
       toast.error("You must enter all input values to add a user");
       return;
@@ -41,30 +44,35 @@ const DashboardCreateNewUser = () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(sanitizedUserInput),
         };
+        console.log("Request Options:", requestOptions);
         ap(`/api/users`, requestOptions)
           .then((response) => {
             if(response.status === 201){
+              console.log("Success Response from if:", response);
               return response.json();
-
             }else{
-              
+              console.log("Error Response from else:", response);
               throw Error("Error while creating user");
             }
           })
           .then((data) => {
+            console.log("User created successfully:", data);
             toast.success("User added successfully");
             setUserInput({
               email: "",
               password: "",
               role: "user",
             });
-          }).catch(error => {
+          }).catch((error: any) => {
+            console.log("Error Context:", error)
             toast.error("Error while creating user");
           });
       } else {
+        console.log("Password length error:", userInput.password.length);
         toast.error("Password must be longer than 7 characters");
       }
     } else {
+      console.log("Input validation error:", userInput)
       toast.error("You must enter all input values to add a user");
     }
   };

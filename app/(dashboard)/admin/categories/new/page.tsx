@@ -25,12 +25,14 @@ const DashboardNewCategoryPage = () => {
           });
         } else {
           const errorData = await response.json();
+          console.log("Error response from server:", errorData);
           toast.error(
             errorData.error || "There was an error while creating category"
           );
         }
       } catch (error) {
         console.error("Error creating category:", error);
+        console.log("Error response from server:", error);
         toast.error("There was an error while creating category");
       }
     } else {

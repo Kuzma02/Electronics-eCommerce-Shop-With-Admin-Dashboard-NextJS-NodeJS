@@ -94,7 +94,7 @@ const corsOptions = {
 };
 
 // Apply general rate limiting to all routes
-app.use(generalLimiter);
+// app.use(generalLimiter);
 
 app.use(express.json());
 app.use(cors(corsOptions));

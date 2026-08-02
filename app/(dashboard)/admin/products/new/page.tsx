@@ -32,6 +32,7 @@ const AddNewProduct = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [merchants, setMerchants] = useState<Merchant[]>([]);
   const addProduct = async () => {
+    console.log("Product data before sanitization:", product);
     if (
       !product.merchantId ||
       product.title === "" ||

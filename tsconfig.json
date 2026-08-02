@@ -13,6 +13,10 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
+        "types": [
+      "jest",
+      "node"
+    ],
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
