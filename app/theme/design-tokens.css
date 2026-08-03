@@ -1,0 +1,91 @@
+/* *********************************************************************
+ * Design Tokens — Purple/White theme (WO-01)
+ * ---------------------------------------------------------------------
+ * Single source of truth for palette + semantic color tokens.
+ *
+ * Tokens are exposed as CSS custom properties so that:
+ *   - Updating a value here reflects across every page with no per-page
+ *     code edits (theme is driven by the [data-theme] attribute on <html>).
+ *   - Tailwind consumes these vars via the `brand.*` color scale
+ *     (see tailwind.config.ts), e.g. `bg-brand-primary text-brand-on-primary`.
+ *
+ * :root holds the DEFAULT theme tokens (the app's existing blue look), so
+ * when no theme is explicitly selected the current default stays active.
+ * [data-theme="purple-white"] overrides them with the Purple & White palette.
+ *
+ * Contrast ratios below are measured against the token the text/icon sits on
+ * (WCAG 2.1). AA normal text needs >= 4.5:1, AA large/UI >= 3:1, AAA >= 7:1.
+ * ********************************************************************* */
+
+/* ---- DEFAULT THEME (existing blue look; keeps current appearance) ---- */
+:root {
+  /* Brand — primary is blue-600 (not blue-500) so white-on-primary and
+     primary-on-white both clear WCAG AA 4.5:1 (5.17:1); see WO-08. */
+  --brand-primary: #2563eb;        /* blue-600 */
+  --brand-primary-hover: #1d4ed8;  /* blue-700 */
+  --brand-primary-content: #ffffff;
+  --brand-secondary: #1e3a8a;      /* blue-900 */
+  --brand-accent: #fed700;         /* legacy custom-yellow */
+
+  /* Surfaces / neutrals */
+  --brand-surface: #ffffff;
+  --brand-surface-alt: #f8fafc;    /* slate-50 */
+  --brand-surface-raised: #ffffff;
+  --brand-border: #e2e8f0;         /* slate-200 */
+
+  /* Text */
+  --brand-on-surface: #0f172a;     /* slate-900 */
+  --brand-muted: #64748b;          /* slate-500 */
+
+  /* Semantic status */
+  --brand-success: #15803d;        /* green-700  */
+  --brand-error: #dc2626;          /* red-600    */
+  --brand-warning: #b45309;        /* amber-700  */
+  --brand-info: #2563eb;           /* blue-600   */
+
+  /* Status "content" (text/icon color placed on the status color) */
+  --brand-status-content: #ffffff;
+}
+
+/* ---- PURPLE & WHITE THEME ----
+ *
+ * Palette
+ *   primary          #6d28d9  violet-700  — on #FFFFFF ≈ 6.8:1  (AA text, AA+ UI)
+ *   primary-hover    #5b21b6  violet-800  — on #FFFFFF ≈ 8.6:1  (AAA)
+ *   primary-content  #ffffff              — on #6D28D9 ≈ 6.8:1  (AA text)
+ *   secondary        #7c3aed  violet-600  — on #FFFFFF ≈ 5.6:1  (AA text)
+ *   accent           #a78bfa  violet-400  — decorative / large only (≈ 2.4:1)
+ *   surface          #ffffff  white       — page/panel background
+ *   surface-alt      #f5f3ff  violet-50   — subtle panels / zebra rows
+ *   border           #ddd6fe  violet-200  — hairlines on white
+ *   on-surface       #2e1065  violet-950  — body text on white ≈ 14.8:1 (AAA)
+ *   muted            #6b7280  gray-500     — secondary text on white ≈ 4.8:1 (AA)
+ *
+ * Status (chosen to stay distinguishable against purple/white — AC6)
+ *   success          #15803d  green-700   — on #FFFFFF ≈ 5.0:1  (AA text)
+ *   error            #dc2626  red-600     — on #FFFFFF ≈ 4.5:1  (AA text)
+ *   warning          #b45309  amber-700   — on #FFFFFF ≈ 5.0:1  (AA text)
+ *   info             #6d28d9  violet-700  — on #FFFFFF ≈ 6.8:1  (AA text)
+ */
+[data-theme="purple-white"] {
+  --brand-primary: #6d28d9;
+  --brand-primary-hover: #5b21b6;
+  --brand-primary-content: #ffffff;
+  --brand-secondary: #7c3aed;
+  --brand-accent: #a78bfa;
+
+  --brand-surface: #ffffff;
+  --brand-surface-alt: #f5f3ff;
+  --brand-surface-raised: #ffffff;
+  --brand-border: #ddd6fe;
+
+  --brand-on-surface: #2e1065;
+  --brand-muted: #6b7280;
+
+  --brand-success: #15803d;
+  --brand-error: #dc2626;
+  --brand-warning: #b45309;
+  --brand-info: #6d28d9;
+
+  --brand-status-content: #ffffff;
+}

@@ -2,10 +2,11 @@
 import { Toaster } from "react-hot-toast";
 
 import React from "react";
+import ThemeProvider from "@/app/theme/ThemeProvider";
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
-    <>
+    <ThemeProvider>
       <Toaster
         toastOptions={{
           className: "",
@@ -15,7 +16,7 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
         }}
       />
       {children}
-    </>
+    </ThemeProvider>
   );
 };
 

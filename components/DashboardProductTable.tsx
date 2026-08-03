@@ -50,7 +50,7 @@ const DashboardProductTable = () => {
         <table className="table table-md table-pin-cols">
           {/* head */}
           <thead>
-            <tr>
+            <tr className="bg-brand-surface-alt text-brand-on-surface">
               <th>
                 <label>
                   <input type="checkbox" className="checkbox" />

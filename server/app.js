@@ -1,3 +1,7 @@
+// Register the ts-node loader FIRST so `require("./utills/db")` resolves the
+// canonical TypeScript DB module (utills/db.ts).
+require("./utills/register-ts");
+
 const express = require("express");
 const path = require('path');
 // Load env from server/.env then fallback to project root .env

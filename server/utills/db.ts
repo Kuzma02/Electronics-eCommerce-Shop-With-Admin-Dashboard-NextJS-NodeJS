@@ -32,6 +32,9 @@ const globalForPrisma = globalThis as unknown as {
 
 const prisma = globalForPrisma.prisma ?? prismaClientSingleton();
 
-export default prisma;
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
-if(process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+// CommonJS export (`export =`) so `const prisma = require("../utills/db")`
+// receives the client directly. The server loads this .ts module via the
+// ts-node loader registered at the top of app.js.
+export = prisma;

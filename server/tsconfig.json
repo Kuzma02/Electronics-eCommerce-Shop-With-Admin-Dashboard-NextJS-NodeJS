@@ -1,0 +1,16 @@
+{
+  "comment": "Config for the ts-node loader registered in app.js, so the CommonJS server can require the canonical TypeScript DB module (utills/db.ts).",
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "ES2019",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "allowJs": false,
+    "noEmit": true
+  },
+  "ts-node": {
+    "transpileOnly": true
+  },
+  "include": ["utills/db.ts"]
+}
