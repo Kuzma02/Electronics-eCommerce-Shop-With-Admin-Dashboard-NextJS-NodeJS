@@ -1,3 +1,4 @@
+import { get } from "http";
 import { create } from "zustand";
 
 export type State = {
@@ -6,7 +7,7 @@ export type State = {
 };
 
 export type Actions = {
-  addToWishlist: (product: ProductInWishlist) => void;
+  addToWishlistStore: (product: ProductInWishlist) => void;
   removeFromWishlist: (id: string) => void;
   setWishlist: (wishlist: ProductInWishlist[]) => void;
 };
@@ -14,12 +15,11 @@ export type Actions = {
 export const useWishlistStore = create<State & Actions>((set) => ({
   wishlist: [],
   wishQuantity: 0,
-  addToWishlist: (product) => {
+  addToWishlistStore: (product) => {
     set((state) => {
       const productInWishlist = state.wishlist.find(
         (item) => product.id === item.id
       );
-
       if (productInWishlist === undefined) {
         return { wishlist: [...state.wishlist, product], wishQuantity: state.wishlist.length };
       } else {
@@ -30,7 +30,6 @@ export const useWishlistStore = create<State & Actions>((set) => ({
   removeFromWishlist: (id) => {
     set((state) => {
       const productInWishlist = state.wishlist.find((item) => id === item.id);
-
       if (productInWishlist === undefined) {
         return { wishlist: [...state.wishlist], wishQuantity: state.wishlist.length };
       } else {
@@ -39,7 +38,7 @@ export const useWishlistStore = create<State & Actions>((set) => ({
       }
     });
   },
-  setWishlist: (wishlist: ProductInWishlist[]) => {
+  setWishlist: (id: ProductInWishlist[]) => {
     set((state) => {      
       return { wishlist: [...wishlist], wishQuantity: wishlist.length };
     });

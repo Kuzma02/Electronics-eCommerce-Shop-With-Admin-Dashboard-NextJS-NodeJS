@@ -21,7 +21,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "6.16.3",
+    "@prisma/client": "^6.19.3",
     "axios": "^1.12.1",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
@@ -32,8 +32,9 @@
     "morgan": "^1.10.1",
     "mysql": "^2.18.1",
     "nanoid": "^5.0.6",
-    "prisma": "6.16.3",
     "node-fetch": "^3.3.2",
+    "prisma": "^6.19.3",
+    "tedious": "^19.2.1",
     "winston": "^3.8.2"
   }
 }

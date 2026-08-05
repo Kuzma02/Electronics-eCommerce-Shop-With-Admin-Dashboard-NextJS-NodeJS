@@ -5,7 +5,6 @@ export const apiClient = {
   
   async request(endpoint: string, options: RequestInit = {}) {
     const url = `${this.baseUrl}${endpoint}`;
-    
     const defaultOptions: RequestInit = {
       headers: {
         'Content-Type': 'application/json',

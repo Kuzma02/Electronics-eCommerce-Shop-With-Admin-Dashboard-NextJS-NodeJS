@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "prisma generate && next dev",       
-    "build": "prisma generate && next build",   
+    "dev": "prisma generate && next dev",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "db:generate": "prisma generate",
@@ -24,6 +24,7 @@
     "express-fileupload": "^1.5.0",
     "express-rate-limit": "^8.1.0",
     "flowbite-react": "^0.7.2",
+    "lucide-react": "^1.20.0",
     "nanoid": "^5.0.6",
     "next": "^15.5.3",
     "next-auth": "^4.24.11",
