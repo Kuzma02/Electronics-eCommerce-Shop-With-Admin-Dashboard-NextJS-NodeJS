@@ -54,4 +54,4 @@ logs/
 
 # OS
 Thumbs.db
-.DS_Store
+.DS_Storeserver/logs/*.log

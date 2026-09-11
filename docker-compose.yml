@@ -1,0 +1,53 @@
+services:
+  db:
+    image: mariadb:latest
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MARIADB_DATABASE: ${DB_NAME}
+    volumes:
+      - db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  api:
+    build:
+      context: ./server
+      dockerfile: ../server.Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=mysql://root:${DB_ROOT_PASSWORD}@db:3306/${DB_NAME}?sslmode=disabled
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        DATABASE_URL: mysql://root:${DB_ROOT_PASSWORD}@db:3306/${DB_NAME}?sslmode=disabled
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      api:
+        condition: service_started
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=mysql://root:${DB_ROOT_PASSWORD}@db:3306/${DB_NAME}?sslmode=disabled
+      - NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - NEXTAUTH_URL=${NEXTAUTH_URL}
+
+volumes:
+  db-data:
